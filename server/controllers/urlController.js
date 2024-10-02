@@ -12,11 +12,19 @@ export const createurl = async (req, res) => {
    }
 }
 
-export const getUrl = async (req, res, next) => {
+export const getUrl = async (req, res) => {
    const { slug } = req.params
    const url = await Url.findOne({ slug })
    if (url)
       res.redirect(url.originalUrl)
    else
       res.status(404).send("Url not found")
+}
+
+export const getAll = async (req, res) => {
+   const urls = await Url.find()
+   if (urls)
+      res.send(urls)
+   else
+      res.status(404).send("No url found")
 }
