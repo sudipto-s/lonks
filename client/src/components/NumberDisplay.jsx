@@ -12,8 +12,9 @@ const NumberDisplay = () => {
       try {
          const { data } = await axios.post("/url/create", { slug, originalUrl })
          console.log(data)
-         setSlugUrl(`${window.location.origin}/${data.slug}`)
+         setSlugUrl(data.slugUrl)
       } catch (err) {
+         setSlugUrl(null)
          console.log(err)
          alert(err.response.data)
       }
