@@ -3,9 +3,8 @@ import Url from "../models/Url.js"
 export const createurl = async (req, res) => {
    const { slug, originalUrl } = req.body
    try {
-      let newUrl = await Url.create({ slug, originalUrl })
-      newUrl = { ...newUrl, slugUrl: `${req.protocol}://${req.get('host')}/${slug}`}
-      res.status(201).json(newUrl)
+      await Url.create({ slug, originalUrl })
+      res.status(201).json({ slugUrl: `${req.protocol}://${req.get('host')}/${slug}` })
    } catch (err) {
       console.log(err.message)
       res.status(400).send(err.message)

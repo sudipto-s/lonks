@@ -11,8 +11,6 @@ const NumberDisplay = () => {
 
       try {
          const { data } = await axios.post("/url/create", { slug, originalUrl })
-         for(a in data)
-            alert(a)
          console.log(data)
          setSlugUrl(data.slugUrl)
       } catch (err) {
@@ -30,7 +28,7 @@ const NumberDisplay = () => {
             <label htmlFor="slug">Original URL: </label>
             <input type="url" value={originalUrl} onChange={e => setOriginalUrl(e.target.value)} />
             <button type="submit">Submit</button>
-            <br />
+            <br /><br />
             {slugUrl && 
                <div>
                   <p>Shortened URL: <a href={slugUrl} target="_blank" rel="noopener noreferrer">{slugUrl}</a></p>
