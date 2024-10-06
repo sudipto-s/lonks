@@ -8,8 +8,7 @@ const urlSchema = new Schema({
    },
    originalUrl: {
       type: String,
-      required: true,
-      // validate: [url => /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(url), "Invalid URL"]
+      required: true
    }
 }, { timestamps: true })
 

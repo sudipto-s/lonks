@@ -8,6 +8,10 @@ const NumberDisplay = () => {
 
    const handleSubmit = async e => {
       e.preventDefault()
+      if (!slug || !originalUrl) {
+         alert("Please fill in both fields")
+         return
+      }
 
       try {
          const { data } = await axios.post("/url/create", { slug, originalUrl })
@@ -16,7 +20,10 @@ const NumberDisplay = () => {
       } catch (err) {
          setSlugUrl(null)
          console.log(err)
-         alert(err.response.data)
+         if (err.status === 400)
+            alert("Slug already exists! Please choose another one")
+         else
+            alert(err.message)
       }
    }
 
@@ -24,9 +31,9 @@ const NumberDisplay = () => {
       <div className="">
          <form onSubmit={handleSubmit}>
             <label htmlFor="slug">Slug: </label>
-            <input type="text" value={slug} onChange={e => setSlug(e.target.value)} /><br />
+            <input type="text" value={slug} onChange={e => setSlug(e.target.value?.trim())} /><br />
             <label htmlFor="slug">Original URL: </label>
-            <input type="url" value={originalUrl} onChange={e => setOriginalUrl(e.target.value)} />
+            <input type="url" value={originalUrl} onChange={e => setOriginalUrl(e.target.value?.trim())} />
             <button type="submit">Submit</button>
             <br /><br />
             {slugUrl && 

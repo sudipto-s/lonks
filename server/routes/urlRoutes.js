@@ -1,12 +1,14 @@
 import { Router } from "express"
-import urlController from "../controllers/urlController.js"
+import {
+   createUrl, getUrl, getAll, deleteUrl
+} from "../controllers/urlController.js"
 import limiter from "../utils/limiter.js"
 
 const router = Router()
 
-router.post("/url/create", limiter, urlController.createUrl)
-router.get("/:slug", urlController.getUrl)
-router.post("/url/all", urlController.getAll)
-router.delete("/url/delete/:slug", urlController.deleteUrl)
+router.post("/url/create", limiter, createUrl)
+router.get("/:slug", getUrl)
+router.post("/url/all", getAll)
+router.delete("/url/delete/:slug", deleteUrl)
 
 export default router

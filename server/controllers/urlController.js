@@ -1,6 +1,6 @@
 import Url from "../models/Url.js"
 
-const createUrl = async (req, res) => {
+export const createUrl = async (req, res) => {
    const { slug, originalUrl } = req.body
    try {
       await Url.create({ slug, originalUrl })
@@ -11,7 +11,7 @@ const createUrl = async (req, res) => {
    }
 }
 
-const getUrl = async (req, res) => {
+export const getUrl = async (req, res) => {
    const { slug } = req.params
    const url = await Url.findOne({ slug })
    if (url)
@@ -20,24 +20,19 @@ const getUrl = async (req, res) => {
       res.status(404).send("Url not found")
 }
 
-const deleteUrl = async (req, res) => {
+export const deleteUrl = async (req, res) => {
    const { slug } = req.params
-   const url = await Url.findOne({ slug })
-   if (url) {
-      await url.deleteOne()
+   const url = await Url.findOneAndDelete({ slug })
+   if (url)
       res.status(200).send("Url deleted")
-   } else
+   else
       res.status(404).send("Url not found")
 }
 
-const getAll = async (req, res) => {
+export const getAll = async (req, res) => {
    const urls = await Url.find()
    if (urls)
       res.send(urls)
    else
       res.status(404).send("No url found")
-}
-
-export default {
-   createUrl, getUrl, deleteUrl, getAll
 }

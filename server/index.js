@@ -13,10 +13,10 @@ const __dirname = path.resolve()
 //Middlewares
 app.use(cors())
 app.use(express.json())
-app.use(urlRoutes)
 app.use(express.static(path.join(__dirname, "client/dist")))
 
 // Routes
+app.use(urlRoutes)
 
 // Catches all routes
 app.use("*", (req, res) => {
