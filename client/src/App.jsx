@@ -1,9 +1,9 @@
-import NumberDisplay from "./components/NumberDisplay";
+import Shortener from "./components/Shortener";
 
 const App = () => {
    return (
       <div className="App">
-         <NumberDisplay />
+         <Shortener />
       </div>
    );
 }
