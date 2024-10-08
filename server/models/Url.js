@@ -9,6 +9,10 @@ const urlSchema = new Schema({
    originalUrl: {
       type: String,
       required: true
+   },
+   clicks: {
+      type: Number,
+      default: 0
    }
 }, { timestamps: true })
 

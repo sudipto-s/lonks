@@ -5,28 +5,29 @@ import generateShortId from "../utils/generateShortId.js"
 export const createUrl = async (req, res) => {
    let { slug, originalUrl } = req.body
    if (!slug)
-      slug = generateShortId()
+      slug = await generateShortId()
    try {
       await Url.create({ slug, originalUrl })
       res.status(201).json({ slugUrl: `${req.protocol}://${req.get('host')}/${slug}` })
    } catch (err) {
       console.log(err.message)
-      res.status(400).send(err.message)
+      if (err.message.includes("E11000"))
+         return res.status(409).send("Duplicate slug")
+      res.status(500).send(err.message)
    }
 }
 
-// Get all slugs
+// Redirect to original url
 export const getUrl = async (req, res) => {
    const { slug } = req.params
    try {
-      const url = await Url.findOne({ slug })
-      if (url)
-         res.redirect(url.originalUrl)
-      else
-         res.status(404).send("Url not found")
+      const url = await Url.findOneAndUpdate({ slug }, { $inc: { clicks: 1 } })
+      if (!url)
+         return res.status(404).send("Url not found")
+      return res.redirect(url.originalUrl)
    } catch (err) {
       console.log(err.message)
-      res.status(400).send("Server error")
+      res.status(500).send("Server error")
    }
 }
 
@@ -34,38 +35,39 @@ export const getUrl = async (req, res) => {
 export const updateUrl = async (req, res) => {
    const { slug } = req.params
    try {
-      await Url.updateOne({ slug }, { $set: req.body })
-      res.status(200).json({ message: "Url updated successfully" })
+      const updatedUrl = await Url.updateOne({ slug }, { $set: { ...req.body } })
+      if (!updatedUrl.modifiedCount)
+         return res.status(404).send("Url not found")
+      return res.status(200).json({ message: "Url updated successfully" })
    } catch (err) {
       console.log(err.message)
-      res.status(400).send("Server error")
+      res.status(500).send("Server error")
    }
 }
 
 // Delete a slug
-export const deleteUrl = async (req, res) => {
+export const deleteUrl = async (req, res) => {  
    const { slug } = req.params
    try {
       const url = await Url.findOneAndDelete({ slug })
-      if (url)
-         res.status(200).send("Url deleted")
-      else
-         res.status(404).send("Url not found")
+      if (!url)
+         return res.status(404).send("Url not found")
+      return res.status(200).send("Url deleted")
    } catch (err) {
       console.log(err.message)
-      res.status(400).send("Server error")
+      res.status(500).send("Server error")
    }
 }
 
+// Get all slugs
 export const getAll = async (req, res) => {
    try {
       const urls = await Url.find()
-      if (urls)
-         res.send(urls)
-      else
-         res.status(404).send("No url found")
+      if (!urls)
+         return res.status(404).send("No url found")
+      return res.send(urls)
    } catch (err) {
       console.log(err.message)
-      res.status(400).send("Server error")
+      res.status(500).send("Server error")
    }
 }

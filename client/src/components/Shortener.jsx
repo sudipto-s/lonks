@@ -5,6 +5,7 @@ const Shortener = () => {
    const [slug, setSlug] = useState("")
    const [originalUrl, setOriginalUrl] = useState("")
    const [slugUrl, setSlugUrl] = useState(null)
+   const [buttonTxt, setButtonTxt] = useState("Shorten URL")
 
    const handleSubmit = async e => {
       e.preventDefault()
@@ -14,6 +15,7 @@ const Shortener = () => {
       }
 
       try {
+         setButtonTxt("Loading..")
          const { data } = await axios.post("/url/create", { slug, originalUrl })
          console.log(data)
          setSlugUrl(data.slugUrl)
@@ -22,12 +24,14 @@ const Shortener = () => {
       } catch (err) {
          setSlugUrl(null)
          console.log(err)
-         if (err.status === 400)
+         if (err.status === 409)
             alert(`Slug '${slug}' already exists! Please choose another one or leave empty`)
          else if (err.status === 429)
             alert("Only 5 requests per minute is allowed")
          else
             alert(err.message)
+      } finally {
+         setButtonTxt("Shorten URL")
       }
    }
 
@@ -48,7 +52,7 @@ const Shortener = () => {
                placeholder="Enter a custom slug" 
                onChange={e => setSlug(e.target.value?.trim().toLocaleLowerCase())} 
             />
-            <button type="submit">Shorten URL</button>
+            <button type="submit">{buttonTxt}</button>
             {slugUrl && 
                <div className="result">
                   <p>Shortened URL: <a href={slugUrl} target="_blank" rel="noopener noreferrer">{slugUrl}</a></p>
