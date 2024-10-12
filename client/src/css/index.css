@@ -15,63 +15,91 @@
    padding: 0;
    box-sizing: border-box;
 }
+a {
+   text-decoration: none;
+}
 
-/* Login & Signup container 
-.auth-container {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   height: 100vh;
-   background-color: #f0f4f8;
+/* Container styling for the dashboard */
+.dashboard-container {
+   max-width: 1200px;
+   margin: 2rem auto;
+   padding: 2rem;
+   background-color: #f9f9f9;
+   border-radius: 10px;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
-.auth-form {
-   background-color: white;
-   padding: 20px;
-   border-radius: 8px;
-   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-   width: 100%;
-   max-width: 400px;
-}
-.auth-form h2 {
-   margin-bottom: 20px;
+.dashboard-container h2 {
    text-align: center;
-   font-size: 1.5rem;
+   margin-bottom: 1rem;
    color: #333;
 }
-.auth-form input {
-   width: 100%;
-   padding: 10px;
-   margin-bottom: 15px;
-   border: 1px solid #ccc;
-   border-radius: 5px;
-   font-size: 1rem;
+.dashboard-container h3 {
+   margin-bottom: 1.5rem;
+   color: #555;
 }
-.auth-form input:focus {
-   outline: none;
-   border-color: #007bff;
-   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-.auth-form button {
+/* Table styling */
+table {
    width: 100%;
-   padding: 10px;
+   border-collapse: collapse;
+   margin-bottom: 2rem;
+}
+thead {
    background-color: #007bff;
    color: white;
-   border: none;
-   border-radius: 5px;
-   font-size: 1rem;
-   cursor: pointer;
-   transition: background-color 0.3s ease;
 }
-.auth-form button:hover {
-   background-color: #0056b3;
+th, td {
+   padding: 12px 15px;
+   text-align: left;
+   border-bottom: 1px solid #ddd;
+}
+tbody tr:nth-child(even) {
+   background-color: #f3f3f3;
+}
+tbody tr:hover {
+   background-color: #f1f1f1;
+}
+th {
+   background-color: #007bff;
+   color: white;
+}
+td a {
+   color: #007bff;
+   text-decoration: none;
+}
+td a:hover {
+   text-decoration: underline;
 }
 .error {
    color: red;
+   font-size: 1.1rem;
    text-align: center;
-   margin-bottom: 10px;
-}*/
+}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+   table, thead, tbody, th, td, tr {
+      display: block;
+   }
+   thead {
+      display: none;
+   }
+   tr {
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 1rem;
+   }
+   td {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+   }
+   td::before {
+      content: attr(data-label);
+      font-weight: bold;
+      color: #555;
+   }
+}
 
-/* Container for the form */
+/* Container for the shortener form */
 .shortener-form-container {
    display: flex;
    justify-content: center;

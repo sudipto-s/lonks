@@ -1,4 +1,4 @@
-# A simple link shortener based on React.
+# Lonks - A simple link shortener application.
 
 
 ## Documentation
@@ -12,14 +12,14 @@ To run the documentation locally on your machine, you need [Node.js](https://nod
 
 ### 2. Clone your repo:
 ```bash
-git clone https://github.com/{YOUR_USERNAME}/link-shortener.git
+git clone https://github.com/{YOUR_USERNAME}/lonks.git
 ```
 
 ### 3. Refer ```.env.example``` file to setup your own ```.env``` file at root of the project.
 
 ### 4. Start the server:
 ```bash
-cd link-shortener/
+cd link-shortener
 npm install
 npm run dev
 ```
@@ -27,9 +27,9 @@ npm run dev
 
 <br>
 
-### 5. Start the server:
+### 5. Start the client:
 ```bash
-cd link-shortener/client
+cd client
 npm install
 npm run dev
 ```

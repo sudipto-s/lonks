@@ -10,6 +10,10 @@ const urlSchema = new Schema({
       type: String,
       required: true
    },
+   assoc: {
+      type: String,
+      required: true
+   },
    clicks: {
       type: Number,
       default: 0
