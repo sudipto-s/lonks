@@ -37,7 +37,7 @@ const Dashboard = ({ user, setUser }) => {
          <h2>Welcome, {user?.username}</h2>
          <h3>Your Shortened Links</h3>
          {error && <p className="error">{error}</p>}
-         {!urls.length ? (
+         {!urls?.length ? (
             <p>No shortened links yet. Start by creating one!</p>
          ) : (
             <table>
@@ -50,11 +50,11 @@ const Dashboard = ({ user, setUser }) => {
                   </tr>
                </thead>
                <tbody>
-                  {urls.map((url) => (
+                  {urls?.map((url) => (
                      <tr key={url._id}>
                         <td>{url.slug}</td>
                         <td>{url.originalUrl}</td>
-                        <td><a href={`/lonks/${url.slug}`} target="_blank" rel="noopener noreferrer">{`/lonks/${url.slug}`}</a></td>
+                        <td><a href={`/${url.slug}`} target="_blank" rel="noopener noreferrer">{`/${url.slug}`}</a></td>
                         <td>{url.clicks}</td>
                      </tr>
                   ))}
