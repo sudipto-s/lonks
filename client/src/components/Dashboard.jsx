@@ -27,7 +27,7 @@ const Dashboard = ({ user, setUser }) => {
          setUrls(null)
          setError(errors)
       }
-   }, [fetchUrls, errors])
+   }, [])
 
    const truncateUrl = url =>
       url.length > 25 ? url.slice(0, 30) + '...' : url
