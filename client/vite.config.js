@@ -9,7 +9,7 @@ export default defineConfig({
    },
    server: {
       proxy: {
-         '/api/v1': {
+         '/api': {
             target: 'http://localhost:5000',  // Your Express backend
             changeOrigin: true,
             secure: false,
