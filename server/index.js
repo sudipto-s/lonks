@@ -24,8 +24,7 @@ app.use("/api/v1/auth", authRoutes)
 
 // Catches all routes
 app.use("*", (req, res) => {
-   // res.sendFile(path.join(__dirname, "client/dist/index.html"))
-   res.status(404).json({ message: "Route not found" })
+   res.sendFile(path.join(__dirname, "client/dist/index.html"))
 })
 
 // Constants
