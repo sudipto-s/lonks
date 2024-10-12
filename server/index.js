@@ -3,7 +3,6 @@ import mongoose from "mongoose"
 import "dotenv/config"
 import path from "path"
 import cookieParser from "cookie-parser"
-import cors from 'cors'
 
 // Routes
 import urlRoutes from "./routes/urlRoutes.js"
@@ -14,10 +13,6 @@ const app = express()
 const __dirname = path.resolve()
 
 //Middlewares
-app.use(cors({
-   origin: 'http://localhost:5173', // Allow requests from Vite
-   credentials: true,
-}))
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.static(path.join(__dirname, "client/dist")))

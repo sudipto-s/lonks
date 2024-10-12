@@ -42,7 +42,7 @@ export const getUrl = async (req, res) => {
 
 // Update a slug
 export const updateUrl = async (req, res) => {
-   const { slug } = req.params
+   const { slug } = req.body
    try {
       const updatedUrl = await Url.updateOne({ slug }, { $set: { ...req.body } })
       if (!updatedUrl.modifiedCount)
@@ -56,11 +56,11 @@ export const updateUrl = async (req, res) => {
 
 // Delete a slug
 export const deleteUrl = async (req, res) => {  
-   const { slug } = req.params
+   const { slug } = req.body
    try {
       const url = await Url.findOneAndDelete({ slug })
       if (!url)
-         return res.status(404).send("Url not found")
+         return res.status(404).send({ message: "Url not found" })
       return res.status(200).send("Url deleted")
    } catch (err) {
       console.log(err.message)

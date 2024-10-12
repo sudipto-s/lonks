@@ -8,9 +8,6 @@ import { getCookie } from './utils/userCookie';
 const App = () => {
    const [user, setUser] = useState(null)
 
-   useState(() => {
-      console.log(user)
-   }, [user])
    useEffect(() => {
       const cok = getCookie()
       cok && setUser({ ...cok })

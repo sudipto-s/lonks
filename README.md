@@ -19,7 +19,7 @@ git clone https://github.com/{YOUR_USERNAME}/lonks.git
 
 ### 4. Start the server:
 ```bash
-cd link-shortener
+cd lonks
 npm install
 npm run dev
 ```

@@ -2,10 +2,10 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getCookie } from "../utils/userCookie"
 import axios from "axios"
-
+import useFetchUrls from "./hooks/useFetchUrls"
 
 const Dashboard = ({ user, setUser }) => {
-   const [urls, setUrls] = useState([])
+   const [urls, setUrls] = useState(null)
    const [error, setError] = useState("")
 
    const navigate = useNavigate()
@@ -17,20 +17,37 @@ const Dashboard = ({ user, setUser }) => {
       cok && setUser({ ...cok })
    }, [setUser])
 
+   const { data: fetchUrls, errors } = useFetchUrls("/url/all", { assoc: user?.email })
    useEffect(() => {
-      const fetchUrls = async () => {
-         try {
-            const { data } = await axios.post("/url/all", { assoc: user?.email })
-            setUrls(data)
-            setError("")
-         } catch (err) {
-            console.error(err)
-            setError(err.response?.data?.message || "Failed to fetch URLs")
+      if (fetchUrls) {
+         setUrls(fetchUrls)
+         setError("")
+      }
+      if (errors) {
+         setUrls(null)
+         setError(errors)
+      }
+   }, [fetchUrls, errors])
+
+   const truncateUrl = url =>
+      url.length > 25 ? url.slice(0, 30) + '...' : url
+
+   const handleDelete = async (e, slug) => {
+      const action = e.target.value
+      if (action === "delete") {
+         if (confirm(`Do you want to delete /${slug}`)) {
+            try {
+               const { data } = await axios.delete("/api/v1/url/delete", { slug })
+               console.log(data)
+               alert(data)
+               setError("")
+            } catch (err) {
+               setError(err.response?.data?.message)
+               alert(err.response?.data?.message)
+            }
          }
       }
-
-      user?.logged && fetchUrls()
-   }, [user])
+   }
 
    return (
       <div className="dashboard-container">
@@ -40,6 +57,37 @@ const Dashboard = ({ user, setUser }) => {
             <p>No shortened links yet. Start by creating one!</p>
          ) : (
             <table>
+               <thead>
+                  <tr>
+                     <th>Original URL</th>
+                     <th>Shortened URL</th>
+                     <th>Clicks</th>
+                     <th>Actions</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {urls?.map(link => (
+                     <tr key={link._id}>
+                        <td data-label="Original URL" title={link.originalUrl}>
+                           {truncateUrl(link.originalUrl)}
+                        </td>
+                        <td data-label="Shortened URL">
+                           <a href={`/${link.slug}`} target="_blank" rel="noopener noreferrer">
+                              /{link.slug}
+                           </a>
+                        </td>
+                        <td data-label="Clicks">{link.clicks}</td>
+                        <td data-label="Actions" className="action-dropdown">
+                           <select onChange={e => handleDelete(e, link.slug)}>
+                              <option value="">Actions</option>
+                              <option value="delete">Delete</option>
+                           </select>
+                        </td>
+                     </tr>
+                  ))}
+               </tbody>
+            </table>
+            /*<table>
                <thead>
                   <tr>
                      <th>Slug</th>
@@ -58,7 +106,7 @@ const Dashboard = ({ user, setUser }) => {
                      </tr>
                   )}
                </tbody>
-            </table>
+            </table>*/
          )}
       </div>
    )
