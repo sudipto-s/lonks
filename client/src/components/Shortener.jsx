@@ -42,7 +42,7 @@ const Shortener = ({ user, setUser }) => {
          else if (err.status === 429)
             setError("Only 5 requests per minute is allowed")
          else
-            setError(err.response?.data?.message)
+            setError(err.response?.data?.message || "A server error has occured")
       } finally {
          setButtonTxt("Shorten URL")
       }

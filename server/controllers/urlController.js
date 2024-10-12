@@ -3,7 +3,7 @@ import generateShortId from "../utils/generateShortId.js"
 
 // Create a short link
 export const createUrl = async (req, res) => {
-   const { slug, originalUrl } = req.body
+   let { slug, originalUrl } = req.body
    const { email: assoc } = res.user
 
    // slug 'app' is restricted value
@@ -56,7 +56,7 @@ export const updateUrl = async (req, res) => {
 
 // Delete a slug
 export const deleteUrl = async (req, res) => {  
-   const { slug } = req.body
+   const { slug } = req.params
    try {
       const url = await Url.findOneAndDelete({ slug })
       if (!url)

@@ -42,10 +42,13 @@ const Dashboard = ({ user, setUser }) => {
       if (action === "delete") {
          if (confirm(`Do you want to delete /${slug}`)) {
             try {
-               const { data } = await axios.delete("/url/delete", { slug })
+               const { data } = await axios.delete(`/url/delete/${slug}`)
                console.log(data)
                alert(data)
                setError("")
+
+               // Update the URLs state to remove the deleted URL
+               setUrls((prevUrls) => prevUrls.filter(link => link.slug !== slug))
             } catch (err) {
                console.log(err)
                setError(err.response?.data?.message)
