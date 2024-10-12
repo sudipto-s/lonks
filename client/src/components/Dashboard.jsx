@@ -35,7 +35,7 @@ const Dashboard = ({ user, setUser }) => {
    }, [user])
 
    const truncateUrl = url =>
-      url.length > 25 ? url.slice(0, 30) + '...' : url
+      url.slice(0, innerWidth/(innerWidth > 600 ? 30 : 18)) + '...'
 
    const handleDelete = async (e, slug) => {
       const action = e.target.value
@@ -48,7 +48,7 @@ const Dashboard = ({ user, setUser }) => {
                setError("")
 
                // Update the URLs state to remove the deleted URL
-               setUrls((prevUrls) => prevUrls.filter(link => link.slug !== slug))
+               setUrls(prevUrls => prevUrls.filter(link => link.slug !== slug))
             } catch (err) {
                console.log(err)
                setError(err.response?.data?.message)
@@ -60,11 +60,11 @@ const Dashboard = ({ user, setUser }) => {
 
    return (
       <div className="dashboard-container">
-         <h2>Welcome, {user?.username}</h2>
+         <h2>Welcome, {user?.username}! ✨</h2>
          {loading && <p>Loading your shortened links...</p>}
-         {error ? <p className="error">{error}</p> : <h3>Your Shortened Links</h3>}
-         {!urls?.length && !loading ? (
-            <p>No shortened links yet. Start by creating one!</p>
+         {error || loading ? <p className="error">{error}</p> : <h3>Your Shortened Links</h3>}
+         {!urls?.length ? (
+            !loading && <p>No shortened links yet. Start by creating one!</p>
          ) : (
             <table>
                <thead>
@@ -76,8 +76,8 @@ const Dashboard = ({ user, setUser }) => {
                   </tr>
                </thead>
                <tbody>
-                  {urls?.map(link => (
-                     <tr key={link._id}>
+                  {urls?.map((link, i) => (
+                     <tr key={i}>
                         <td data-label="Original URL" title={link.originalUrl}>
                            {truncateUrl(link.originalUrl)}
                         </td>
@@ -87,36 +87,16 @@ const Dashboard = ({ user, setUser }) => {
                            </a>
                         </td>
                         <td data-label="Clicks">{link.clicks}</td>
-                        <td data-label="Actions" className="action-dropdown">
-                           <select onChange={e => handleDelete(e, link.slug)}>
-                              <option value="">Actions</option>
-                              <option value="delete">Delete</option>
-                           </select>
+                        <td data-label="Actions" className="">
+                           <button
+                              value={"delete"} className="delete-button"
+                              onClick={e => handleDelete(e, link.slug)}
+                           >Delete</button>
                         </td>
                      </tr>
                   ))}
                </tbody>
             </table>
-            /*<table>
-               <thead>
-                  <tr>
-                     <th>Slug</th>
-                     <th>Original URL</th>
-                     <th>Shortened URL</th>
-                     <th>Clicks</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  {urls?.map(url =>
-                     <tr key={url._id}>
-                        <td>{url.slug}</td>
-                        <td>{url.originalUrl}</td>
-                        <td><a href={`/${url.slug}`} target="_blank" rel="noopener noreferrer">{`/${url.slug}`}</a></td>
-                        <td>{url.clicks}</td>
-                     </tr>
-                  )}
-               </tbody>
-            </table>*/
          )}
       </div>
    )

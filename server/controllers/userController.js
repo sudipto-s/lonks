@@ -4,7 +4,7 @@ export const getUsers = async (req, res) => {
    try {
       const response = await User.find()
       if (!response)
-         return res.status(404).send("No users found")
+         return res.status(404).send({ message: "No users found" })
       res.status(200).send(response)
    } catch (err) {
       res.status(500).send({ message: err.message })
@@ -28,7 +28,7 @@ export const updateUsers = async (req, res) => {
    try {
       const response = await User.findOneAndUpdate({ username }, { $set: { username: newUsername }})
       if (!response)
-         return res.status(404).send("User not found")
+         return res.status(404).send({ message: "User not found" })
       res.status(200).send(response)
    } catch (err) {
       res.status(500).send({ message: err.message })
@@ -41,7 +41,7 @@ export const deleteUsers = async (req, res) => {
    try {
       const response = await User.findOneAndDelete({ username })
       if (!response)
-         return res.status(404).send("User not found")
+         return res.status(404).send({ message: "User not found" })
       res.status(200).send(response)
    } catch (err) {
       res.status(500).send({ message: err.message })
