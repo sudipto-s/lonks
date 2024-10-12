@@ -8,10 +8,10 @@ import { checkUser, requireAuth } from "../middlewares/authMiddleware.js"
 const router = Router()
 
 router.get("/:slug", getUrl)
+router.post("/url/all", getAll)
+router.delete("/url/delete/:slug", deleteUrl)
 router.use(limiter, requireAuth, checkUser)
 router.post("/url/create", createUrl)
-router.post("/url/all", getAll)
 router.patch("/url/update", updateUrl)
-router.delete("/url/delete/:slug", deleteUrl)
 
 export default router

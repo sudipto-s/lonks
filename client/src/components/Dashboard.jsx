@@ -34,8 +34,12 @@ const Dashboard = ({ user, setUser }) => {
       user?.email && fetchUrls()
    }, [user])
 
-   const truncateUrl = url =>
-      url.slice(0, innerWidth/(innerWidth > 600 ? 30 : 18)) + '...'
+   const truncateUrl = url => {
+      const screenWidth = window.innerWidth;
+      const charLimit = Math.floor(screenWidth / (screenWidth > 600 ? 30 : 18)); // Adjust the divisor to fine-tune
+
+      return url.length > charLimit ? url.slice(0, charLimit) + '...' : url;
+   }
 
    const handleDelete = async (e, slug) => {
       const action = e.target.value
