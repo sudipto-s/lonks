@@ -70,10 +70,10 @@ export const deleteUrl = async (req, res) => {
 
 // Get slugs
 export const getAll = async (req, res) => {
-   const { email } = req.body
+   const { assoc } = req.body
    try {
-      const urls = await Url.find(email ? { email } : {})
-      if (!urls || !urls.length)
+      const urls = await Url.find(assoc ? { assoc } : {})
+      if (!urls)
          return res.status(404).send({ message: "No URLs found" })
       return res.status(200).send(urls)
    } catch (err) {

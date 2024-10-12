@@ -20,7 +20,7 @@ const Dashboard = ({ user, setUser }) => {
    useEffect(() => {
       const fetchUrls = async () => {
          try {
-            const { data } = await axios.post("/api/v1/url/all", { email: user?.email })
+            const { data } = await axios.post("/url/all", { assoc: user?.email })
             setUrls(data)
             setError("")
          } catch (err) {
