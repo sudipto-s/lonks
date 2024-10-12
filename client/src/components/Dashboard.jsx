@@ -2,11 +2,11 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getCookie } from "../utils/userCookie"
 import axios from "axios"
-import useFetchUrls from "./hooks/useFetchUrls"
 
 const Dashboard = ({ user, setUser }) => {
    const [urls, setUrls] = useState(null)
    const [error, setError] = useState("")
+   const [loading, setLoading] = useState(false)
 
    const navigate = useNavigate()
    useEffect(() => {
@@ -17,16 +17,22 @@ const Dashboard = ({ user, setUser }) => {
       cok && setUser({ ...cok })
    }, [setUser])
 
-   const { data: fetchUrls, errors } = useFetchUrls("/url/all", { assoc: user?.email })
    useEffect(() => {
-      if (fetchUrls) {
-         setUrls(fetchUrls)
-         setError("")
+      const fetchUrls = async () => {
+         try {
+            setLoading(true)
+            const { data } = await axios.post("/url/all", { assoc: user?.email })
+            setUrls(data)
+            setError(null)
+         } catch (err) {
+            setUrls(null)
+            setError(err.response?.data?.message)
+         } finally {
+            setLoading(false)
+         }
       }
-      if (errors) {
-         setError(errors)
-      }
-   }, [errors, fetchUrls])
+      user?.email && fetchUrls()
+   }, [user])
 
    const truncateUrl = url =>
       url.length > 25 ? url.slice(0, 30) + '...' : url
@@ -36,11 +42,12 @@ const Dashboard = ({ user, setUser }) => {
       if (action === "delete") {
          if (confirm(`Do you want to delete /${slug}`)) {
             try {
-               const { data } = await axios.delete("/api/v1/url/delete", { slug })
+               const { data } = await axios.delete("/url/delete", { slug })
                console.log(data)
                alert(data)
                setError("")
             } catch (err) {
+               console.log(err)
                setError(err.response?.data?.message)
                alert(err.response?.data?.message)
             }
@@ -51,8 +58,9 @@ const Dashboard = ({ user, setUser }) => {
    return (
       <div className="dashboard-container">
          <h2>Welcome, {user?.username}</h2>
+         {loading && <p>Loading your shortened links...</p>}
          {error ? <p className="error">{error}</p> : <h3>Your Shortened Links</h3>}
-         {!urls?.length ? (
+         {!urls?.length && !loading ? (
             <p>No shortened links yet. Start by creating one!</p>
          ) : (
             <table>
