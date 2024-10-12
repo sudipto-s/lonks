@@ -6,6 +6,7 @@ const useFetchUrls = (path, body) => {
    const [errors, setError] = useState("")
 
    useEffect(() => {
+      if (!body?.assoc) return
       const fetchUrls = async () => {
          const controller = new AbortController()
          const signal = controller.signal
