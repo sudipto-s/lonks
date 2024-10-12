@@ -24,7 +24,6 @@ const Dashboard = ({ user, setUser }) => {
          setError("")
       }
       if (errors) {
-         setUrls(null)
          setError(errors)
       }
    }, [errors, fetchUrls])
