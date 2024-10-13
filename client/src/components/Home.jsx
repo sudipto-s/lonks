@@ -1,7 +1,7 @@
 const Home = () => {
    return (
       <div className="Home">
-         Home Page
+         <h2>Lonks - A Simple Link Shortener</h2>
       </div>
    );
 }

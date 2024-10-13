@@ -14,7 +14,7 @@ const Main = ({ user, setUser }) => {
          <Route path="/app/signup" element={ <Signup user={user} setUser={setUser} /> } />
          <Route path="/app/dashboard" element={ <Dashboard user={user} setUser={setUser} /> } />
          <Route path="/app/shorten" element={ <Shortener user={user} setUser={setUser} /> } />
-         <Route path="/app/*" element={ <NotFound /> } />
+         <Route path="*" element={ <NotFound /> } />
       </Routes>
    );
 }

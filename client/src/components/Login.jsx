@@ -45,6 +45,7 @@ const Login = ({ user, setUser }) => {
             error={error} buttonText={buttonText}
             handleSubmit={handleSubmit}
          />
+         
       </div>
    )
 }

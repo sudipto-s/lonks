@@ -1,6 +1,10 @@
 /* Header Styles */
 .header {
    display: flex;
+   position: fixed;
+   width: 100%;
+   top: 0;
+   left: 0;
    justify-content: space-between;
    align-items: center;
    background-color: #007bff;

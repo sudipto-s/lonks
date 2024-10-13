@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { getCookie, setCookie } from '../utils/userCookie'
 import "../css/LoginSignup.css"
 
@@ -50,25 +50,31 @@ const Signup = ({ user, setUser }) => {
          <form onSubmit={handleSubmit} className="auth-form">
             <h2>Signup</h2>
             {error && <p className="error">{error}</p>}
-            <input 
-               type="email" value={email} 
-               placeholder="Email" 
-               onChange={e => setEmail(e.target.value)} 
-               required 
-            />
-            <input 
-               type="password" value={password} 
-               placeholder="Password" 
-               onChange={e => setPassword(e.target.value?.trim())} 
-               required 
-            />
-            <input 
-               type="password" value={confirmPassword} 
-               placeholder="Confirm Password" 
-               onChange={e => setConfirmPassword(e.target.value?.trim())} 
-               required 
-            />
-            <button type="submit">{buttonText}</button>
+            <div>
+               <input
+                  type="email" value={email} 
+                  placeholder="Email" 
+                  onChange={e => setEmail(e.target.value)} 
+                  required 
+               />
+               <input 
+                  type="password" value={password} 
+                  placeholder="Password" 
+                  onChange={e => setPassword(e.target.value?.trim())} 
+                  required 
+               />
+               <input 
+                  type="password" value={confirmPassword} 
+                  placeholder="Confirm Password" 
+                  onChange={e => setConfirmPassword(e.target.value?.trim())} 
+                  required 
+               />
+               <button type="submit">{buttonText}</button>
+            </div>
+            <div className="already-have-account form-links">
+               <span>Already have an account? </span>
+               <Link className="login-link" to="/app/login">Login</Link>
+            </div>
          </form>
       </div>
    )

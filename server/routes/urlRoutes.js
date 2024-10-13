@@ -10,8 +10,8 @@ const router = Router()
 router.get("/:slug", getUrl)
 router.post("/url/all", getAll)
 router.delete("/url/delete/:slug", deleteUrl)
-router.use(limiter, requireAuth, checkUser)
-router.post("/url/create", createUrl)
-router.patch("/url/update", updateUrl)
+router.use(limiter)
+router.post("/url/create", requireAuth, checkUser, createUrl)
+router.patch("/url/update", requireAuth, checkUser, updateUrl)
 
 export default router
