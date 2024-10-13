@@ -7,9 +7,11 @@ export const login = async (req, res) => {
       const { email, password } = req.body
 
       const user = await User.findOne({ email })
+      if (!user)
+         return res.status(401).json({ message: "Invalid email" })
       const isPassMatch = await bcrypt.compare(password, user.password)
-      if (!user || !isPassMatch)
-         return res.status(401).json({ message: "Invalid email or password" })
+      if (!isPassMatch)
+         return res.status(401).json({ message: "Invalid password" })
 
       const token = createToken(user._id, email)
       res.cookie("lonks-jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
