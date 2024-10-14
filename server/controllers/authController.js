@@ -27,6 +27,11 @@ let otpStore = {}
 export const signup = async (req, res) => {
    try {
       const { email } = req.body
+
+      const existingUser = await User.find({ email })
+      if (existingUser)
+         return res.status(400).json({ message: "Email already exists" })
+      
       const otp = crypto.randomInt(100000, 999999) // 6-digit OTP
 
       // Store the OTP in memory
@@ -40,8 +45,6 @@ export const signup = async (req, res) => {
    } catch (err) {
       if (err.message.includes("User validation failed: email:"))
          return res.status(400).json({ message: "Please enter a valid email format" })
-      else if (err.code === 11000)
-         return res.status(400).json({ message: "Email already exists" })
       res.status(400).json({ message: err.message })
    }
 }
