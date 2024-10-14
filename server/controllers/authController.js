@@ -24,21 +24,6 @@ export const login = async (req, res) => {
 }
 
 let otpStore = {}
-/*export const signup = async (req, res) => {
-   try {
-      const { username, email, password } = req.body
-      const newUser = await User.create({ username, email, password: await bcrypt.hash(password, 10) })
-      const token = createToken(newUser._id, email)
-      res.cookie("lonks-jwt", token, { httpOnly: true, maxAge })
-      res.status(201).json({ userId: newUser._id })
-   } catch (err) {
-      if (err.message.includes("User validation failed: email:"))
-         return res.status(400).json({ message: "Please enter a valid email format" })
-      else if (err.code === 11000)
-         return res.status(400).json({ message: "Email already exists" })
-      res.status(400).json({ message: err.message })
-   }
-}*/
 export const signup = async (req, res) => {
    try {
       const { email } = req.body
@@ -74,7 +59,7 @@ export const verifyOtp = async (req, res) => {
 
    try {
       // OTP verified, create user
-      const newUser = await User.create({ username, email, password })
+      const newUser = await User.create({ username, email, password: await bcrypt.hash(password, 10) })
 
       // Generate JWT
       const token = createToken(newUser._id)
