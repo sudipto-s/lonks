@@ -9,7 +9,7 @@ const LoginForm = ({ email, setEmail, password, setPassword, error, buttonText, 
             <input 
                type="email" value={email}
                placeholder="Email" 
-               onChange={e => setEmail(e.target.value)} 
+               onChange={e => setEmail(e.target.value?.trim().toLowerCase())}
                required 
             />
             <input 

@@ -24,6 +24,15 @@ const Login = ({ user, setUser }) => {
       e.preventDefault()
       setButtonText("Loading..")
 
+      // Regular expression for email validation
+      const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+      // Validate the email
+      if (!emailRegex.test(email)) {
+         setError("Please enter a valid email address")
+         return
+      } else 
+         setError("")
+
       try {
          const { data } = await axios.post("/api/v1/auth/login", { email, password })
          setUser({ ...data, email, logged: true })

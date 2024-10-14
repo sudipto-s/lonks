@@ -7,6 +7,7 @@ const Dashboard = ({ user, setUser }) => {
    const [urls, setUrls] = useState(null)
    const [error, setError] = useState("")
    const [loading, setLoading] = useState(false)
+   const [deleteSlug, setDeleteSlug] = useState(null)
 
    const navigate = useNavigate()
    useEffect(() => {
@@ -48,8 +49,9 @@ const Dashboard = ({ user, setUser }) => {
             try {
                const { data } = await axios.delete(`/url/delete/${slug}`)
                console.log(data)
-               alert(data)
+               setDeleteSlug(slug)
                setError("")
+               setTimeout(() => setDeleteSlug(null), 2000)
 
                // Update the URLs state to remove the deleted URL
                setUrls(prevUrls => prevUrls.filter(link => link.slug !== slug))
@@ -66,6 +68,7 @@ const Dashboard = ({ user, setUser }) => {
       <div className="dashboard-container">
          <h2>Welcome, {user?.username}! ✨</h2>
          {loading && <p>Loading your shortened links...</p>}
+         {deleteSlug && <h3 className="delete-slug-msg">Slug /{deleteSlug} deleted successfully!</h3>}
          {error || loading ? <p className="error">{error}</p> : <h3>Your Shortened Links</h3>}
          {!urls?.length ? (
             !loading && <p>No shortened links yet. Start by creating one!</p>

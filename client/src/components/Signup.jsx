@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { getCookie, setCookie } from '../utils/userCookie'
 import "../css/LoginSignup.css"
+import SignupForm from './forms/SignupForm'
+import OtpForm from "./forms/OtpForm"
 
 const Signup = ({ user, setUser }) => {
-   const [email, setEmail] = useState("")
-   const [password, setPassword] = useState("")
-   const [confirmPassword, setConfirmPassword] = useState("")
+   const [newUser, setNewUser] = useState({username:"",email:"",password:"",confirmPassword:""})
+   const [otp, setOtp] = useState("")
+   const [otpSent, setOtpSent] = useState(false)
    const [error, setError] = useState("")
    const [buttonText, setButtonText] = useState("Login")
    
@@ -17,6 +19,9 @@ const Signup = ({ user, setUser }) => {
       navigate(user?.logged && "/app/dashboard")
    }, [user, setUser, navigate])
    useEffect(() => {
+      console.log(user)
+   }, [user])
+   useEffect(() => {
       const cok = getCookie()
       cok && setUser({ ...cok })
    }, [setUser, navigate])
@@ -24,57 +29,64 @@ const Signup = ({ user, setUser }) => {
    const handleSubmit = async (e) => {
       e.preventDefault()
       setButtonText("Loading..")
+      const { email, password, confirmPassword } = newUser
 
+      if (password.length < 6) {
+         setError("Minimun passoword length is 6")
+         return
+      }
       if (password !== confirmPassword) {
          setError("Passwords do not match")
          return
       }
       const username = email.split("@")[0]
+      setNewUser(prev => ({ ...prev, username }))
 
       try {
          const { data } = await axios.post("/api/v1/auth/signup", { username, email, password })
          console.log(data)
-         setUser({ ...data, username, email, logged: true })
-         setCookie({ ...data, username, email, logged: true })
+         setOtpSent(true)
          setError("")
       } catch (err) {
          console.error(err)
          setError(err.response?.data?.message || "Signup failed")
       } finally {
-         setButtonText("Signup")
+         setButtonText("Verify")
+      }
+   }
+
+   const handleOtpVerify = async e => {
+      e.preventDefault()
+      setButtonText("Verifying OTP..")
+      const { username, email, password } = newUser
+
+      try {
+         const { data } = await axios.post("/api/v1/auth/verify", { username, email, otp, password })
+         setUser({ ...data, username, email, logged: true })
+         setCookie({ ...data, username, email, logged: true })
+      } catch (err) {
+         setButtonText('Verify')
+         console.error(err)
+         setError(err.response?.data?.message || 'OTP verification failed')
       }
    }
 
    return (
       <div className="auth-container">
-         <form onSubmit={handleSubmit} className="auth-form">
-            <h2>Signup</h2>
+         <form onSubmit={otpSent ? handleOtpVerify : handleSubmit} className="auth-form">
+            <h2>{otpSent ? "Verify" : "Signup"}</h2>
             {error && <p className="error">{error}</p>}
-            <div>
-               <input
-                  type="email" value={email} 
-                  placeholder="Email" 
-                  onChange={e => setEmail(e.target.value)} 
-                  required 
+            {
+               !otpSent ?
+               <SignupForm
+                  newUser={newUser} setNewUser={setNewUser}
+                  error={error} buttonText={buttonText}
+               /> :
+               <OtpForm
+                  otp={otp} setOtp={setOtp}
+                  error={error} buttonText={buttonText}
                />
-               <input 
-                  type="password" value={password} 
-                  placeholder="Password" 
-                  onChange={e => setPassword(e.target.value?.trim())} 
-                  required 
-               />
-               <input 
-                  type="password" value={confirmPassword} 
-                  placeholder="Confirm Password" 
-                  onChange={e => setConfirmPassword(e.target.value?.trim())} 
-                  required 
-               />
-               <button type="submit">{buttonText}</button>
-            </div>
-            <div className="already-have-account form-links">
-               <span>Already have an account? </span>
-               <Link className="login-link" to="/app/login">Login</Link>
-            </div>
+            }
          </form>
       </div>
    )
