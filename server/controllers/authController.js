@@ -10,10 +10,10 @@ export const login = async (req, res) => {
 
       const user = await User.findOne({ email })
       if (!user)
-         return res.status(401).json({ message: "Invalid email" })
+         return res.status(401).json({ message: "User is not registered!" })
       const isPassMatch = await bcrypt.compare(password, user.password)
       if (!isPassMatch)
-         return res.status(401).json({ message: "Invalid password" })
+         return res.status(401).json({ message: "Please provide a valid password." })
 
       const token = createToken(user._id, email)
       res.cookie("lonks-jwt", token, { httpOnly: true, maxAge })
@@ -28,7 +28,7 @@ export const signup = async (req, res) => {
    try {
       const { email } = req.body
 
-      const existingUser = await User.find({ email })
+      const existingUser = await User.findOne({ email })
       if (existingUser)
          return res.status(400).json({ message: "Email already exists" })
       
@@ -43,8 +43,6 @@ export const signup = async (req, res) => {
       // Respond with success message
       res.status(200).json({ message: 'OTP sent to email' })
    } catch (err) {
-      if (err.message.includes("User validation failed: email:"))
-         return res.status(400).json({ message: "Please enter a valid email format" })
       res.status(400).json({ message: err.message })
    }
 }

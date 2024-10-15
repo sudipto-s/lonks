@@ -4,7 +4,9 @@ import generateShortId from "../utils/generateShortId.js"
 // Create a short link
 export const createUrl = async (req, res) => {
    let { slug, originalUrl } = req.body
-   const { email: assoc } = res.user
+   if (!res.user)
+      return res.status(401).json({ message: "Unauthorized! Please re-login" })
+   const { email } = res.user
 
    // slug 'app' is restricted value
    if (slug === "app")
@@ -13,7 +15,7 @@ export const createUrl = async (req, res) => {
       slug = await generateShortId()
 
    try {
-      await Url.create({ slug, originalUrl, assoc })
+      await Url.create({ slug, originalUrl, assoc: email })
       res.status(201).json({ slugUrl: `https://${req.get('host')}/${slug}` })
    } catch (err) {
       console.log(err.message)
@@ -43,6 +45,9 @@ export const getUrl = async (req, res) => {
 // Update a slug
 export const updateUrl = async (req, res) => {
    const { slug } = req.body
+   if (!res.user)
+      return res.status(401).json({ message: "Unauthorized! Please re-login" })
+   
    try {
       const updatedUrl = await Url.updateOne({ slug }, { $set: { ...req.body } })
       if (!updatedUrl.modifiedCount)
@@ -57,6 +62,9 @@ export const updateUrl = async (req, res) => {
 // Delete a slug
 export const deleteUrl = async (req, res) => {  
    const { slug } = req.params
+   if (!res.user)
+      return res.status(401).json({ message: "Unauthorized! Please re-login" })
+
    try {
       const url = await Url.findOneAndDelete({ slug })
       if (!url)
@@ -71,6 +79,9 @@ export const deleteUrl = async (req, res) => {
 // Get slugs
 export const getAll = async (req, res) => {
    const { assoc } = req.body
+   if (!res.user)
+      return res.status(401).json({ message: "Unauthorized! Please re-login" })
+
    try {
       const urls = await Url.find(assoc ? { assoc } : {})
       if (!urls)

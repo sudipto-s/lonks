@@ -11,7 +11,7 @@ const Signup = ({ user, setUser }) => {
    const [otp, setOtp] = useState("")
    const [otpSent, setOtpSent] = useState(false)
    const [error, setError] = useState("")
-   const [buttonText, setButtonText] = useState("Login")
+   const [buttonText, setButtonText] = useState("Signup")
    
    const navigate = useNavigate()
    useEffect(() => {
@@ -28,9 +28,13 @@ const Signup = ({ user, setUser }) => {
 
    const handleSubmit = async (e) => {
       e.preventDefault()
-      setButtonText("Loading..")
       const { email, password, confirmPassword } = newUser
 
+      const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
+      if (!emailRegex.test(email)) {
+         setError("Please enter a valid Email format")
+         return
+      }
       if (password.length < 6) {
          setError("Minimun passoword length is 6")
          return
@@ -43,7 +47,8 @@ const Signup = ({ user, setUser }) => {
       setNewUser(prev => ({ ...prev, username }))
 
       try {
-         const { data } = await axios.post("/api/v1/auth/signup", { username, email, password })
+         setButtonText("Loading..")
+         const { data } = await axios.post("/api/v1/auth/signup", { email })
          console.log(data)
          setOtpSent(true)
          setError("")
@@ -51,16 +56,16 @@ const Signup = ({ user, setUser }) => {
          console.error(err)
          setError(err.response?.data?.message || "Signup failed")
       } finally {
-         setButtonText("Verify")
+         setButtonText("Signup")
       }
    }
 
    const handleOtpVerify = async e => {
       e.preventDefault()
-      setButtonText("Verifying OTP..")
       const { username, email, password } = newUser
-
+      
       try {
+         setButtonText("Verifying OTP..")
          const { data } = await axios.post("/api/v1/auth/verify", { username, email, otp, password })
          setUser({ ...data, username, email, logged: true })
          setCookie({ ...data, username, email, logged: true })

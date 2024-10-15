@@ -22,7 +22,6 @@ const Login = ({ user, setUser }) => {
 
    const handleSubmit = async (e) => {
       e.preventDefault()
-      setButtonText("Loading..")
 
       // Regular expression for email validation
       const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
@@ -34,6 +33,7 @@ const Login = ({ user, setUser }) => {
          setError("")
 
       try {
+         setButtonText("Loading..")
          const { data } = await axios.post("/api/v1/auth/login", { email, password })
          setUser({ ...data, email, logged: true })
          setCookie({ ...data, email, logged: true })

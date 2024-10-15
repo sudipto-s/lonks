@@ -1,4 +1,5 @@
 import User from "../models/User.js"
+import Url from "../models/Url.js"
 
 export const getUsers = async (req, res) => {
    try {
@@ -42,6 +43,7 @@ export const deleteUsers = async (req, res) => {
       const response = await User.findOneAndDelete({ username })
       if (!response)
          return res.status(404).send({ message: "User not found" })
+      await Url.deleteMany({ assoc: response.email })
       res.status(200).send(response)
    } catch (err) {
       res.status(500).send({ message: err.message })
