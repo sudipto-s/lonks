@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer"
-import "dotenv/config"
+import { OTP_TEMPLATE } from "./templates.js"
 
 const sendOtp = async (to, otp) => {
    const transporter = nodemailer.createTransport({
@@ -17,7 +17,7 @@ const sendOtp = async (to, otp) => {
          from: `Lonks <${process.env.EMAIL}>`,
          to,
          subject: "Lonks Registration OTP",
-         text: `Your verification OTP is: ${otp}`
+         html: OTP_TEMPLATE.replace("[[OTP]]", otp)
       })
       return response.messageId
    } catch (err) {

@@ -12,7 +12,7 @@ const urlSchema = new Schema({
    },
    assoc: {
       type: String,
-      required: true
+      default: null
    },
    clicks: {
       type: Number,

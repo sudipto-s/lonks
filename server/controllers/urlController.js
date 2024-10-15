@@ -6,7 +6,7 @@ export const createUrl = async (req, res) => {
    let { slug, originalUrl } = req.body
    if (!res.user)
       return res.status(401).json({ message: "Unauthorized! Please re-login" })
-   const { email } = res.user
+   const { email: assoc } = res.user
 
    // slug 'app' is restricted value
    if (slug === "app")
@@ -15,7 +15,7 @@ export const createUrl = async (req, res) => {
       slug = await generateShortId()
 
    try {
-      await Url.create({ slug, originalUrl, assoc: email })
+      await Url.create({ slug, originalUrl, assoc })
       res.status(201).json({ slugUrl: `https://${req.get('host')}/${slug}` })
    } catch (err) {
       console.log(err.message)
