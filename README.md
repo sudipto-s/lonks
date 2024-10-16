@@ -1,36 +1,9 @@
 # Lonks - A simple link shortener application.
 
 
-## Documentation
-To run the documentation locally on your machine, you need [Node.js](https://nodejs.org/en/) installed on your computer.
+### Exhausted of not getting custom slugs in some popular link shortener applications, I thought of creating my own application. 
+### So I made "Lonks" a simple link shortener application where users can login to their account, shorten links & get a dashboard to manage them.
 
-### Running documentation locally
+[Visit site](https://lonks.vercel.app/)
 
-#### Run these commands to set up the documentation:
-
-### 1. Fork the repo.
-
-### 2. Clone your repo:
-```bash
-git clone https://github.com/{YOUR_USERNAME}/lonks.git
-```
-
-### 3. Refer ```.env.example``` file to setup your own ```.env``` file at root of the project.
-
-### 4. Start the server:
-```bash
-cd lonks
-npm install
-npm run dev
-```
-> Server starts on port 5000
-
-<br>
-
-### 5. Start the client:
-```bash
-cd client
-npm install
-npm run dev
-```
-> Client starts on port 5173
+In development stage.
