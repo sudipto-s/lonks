@@ -8,7 +8,7 @@ const LoginForm = ({ email, setEmail, password, setPassword, error, buttonText, 
          <div>
             <input 
                type="email" value={email}
-               placeholder="Email/Username" 
+               placeholder="Email" 
                onChange={e => setEmail(e.target.value?.trim().toLowerCase())}
                required 
             />
