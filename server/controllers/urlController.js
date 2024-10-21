@@ -1,5 +1,6 @@
 import Url from "../models/Url.js"
 import generateShortId from "../utils/generateShortId.js"
+import botUserAgents from "../utils/botList.js"
 
 // Create a short link
 export const createUrl = async (req, res) => {
@@ -31,10 +32,24 @@ export const getUrl = async (req, res) => {
    if (slug === "app")
       return res.status(301).redirect("/")
 
+   // Check if the request is from a bot or pre-fetching service
+   const userAgent = req.headers['user-agent']
+
+   // Check if the request comes from one of these bots
+   const isBot = botUserAgents.some(bot => userAgent.toLowerCase().includes(bot.toLowerCase()))
+
    try {
-      const url = await Url.findOneAndUpdate({ slug }, { $inc: { clicks: 1 } })
+      const url = await Url.findOne({ slug })
+
       if (!url)
          return res.status(404).send("Url not found")
+
+      // Increment the click count if request is not from a bot
+      if (!isBot) {
+         url.clicks++
+         await url.save()
+      }
+
       return res.redirect(url.originalUrl)
    } catch (err) {
       console.log(err.message)
