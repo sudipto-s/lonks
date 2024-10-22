@@ -2,7 +2,7 @@ import User from "../models/User.js"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import crypto from "crypto"
-import otpSender from "../utils/otpSender.js"
+import { otpSender, welcomeSender } from "../utils/emailSender.js"
 
 export const login = async (req, res) => {
    try {
@@ -32,7 +32,7 @@ export const signup = async (req, res) => {
       if (existingUser)
          return res.status(400).json({ message: "Email already exists" })
       
-      const otp = crypto.randomInt(100000, 999999) // 6-digit OTP
+      const otp = crypto.randomInt(100000, 999999).toString() // 6-digit OTP
 
       // Store the OTP in memory
       otpStore[email] = { otp, expiresAt: Date.now() + 10 * 60 * 1000 } // OTP expires in 10 minutes
@@ -55,7 +55,7 @@ export const verifyOtp = async (req, res) => {
    if (!storedOtp || storedOtp.expiresAt < Date.now())
       return res.status(400).json({ message: 'OTP expired or invalid' })
 
-   if (storedOtp.otp !== parseInt(otp))
+   if (storedOtp.otp !== otp)
       return res.status(400).json({ message: 'Incorrect OTP' })
 
    try {
@@ -68,6 +68,9 @@ export const verifyOtp = async (req, res) => {
 
       // Remove OTP from memory
       delete otpStore[email]
+
+      // Send welcome email
+      await welcomeSender(email, username)
 
       res.status(201).json({ userId: newUser._id })
    } catch (err) {

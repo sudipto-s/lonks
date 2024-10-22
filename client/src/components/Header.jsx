@@ -10,7 +10,7 @@ const Header = ({ user, setUser }) => {
          </div>
          <nav className="nav">
             <ul>
-               <li><Link to="/">Home</Link></li>
+               {!user?.logged && <li><Link to="/">Home</Link></li>}
                {!user?.logged && <li><Link to="/app/login">Login</Link></li>}
                {!user?.logged && <li><Link to="/app/signup">Signup</Link></li>}
                {user?.logged && <li><Link to="/app/dashboard">Dashboard</Link></li>}

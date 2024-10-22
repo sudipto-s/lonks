@@ -9,7 +9,7 @@ import Dashboard from "./Dashboard";
 const Main = ({ user, setUser }) => {
    return (
       <Routes>
-         <Route path="/" element={ <Home /> } />
+         <Route path="/" element={ <Home user={user} setUser={setUser} /> } />
          <Route path="/app/login" element={ <Login user={user} setUser={setUser} />} />
          <Route path="/app/signup" element={ <Signup user={user} setUser={setUser} /> } />
          <Route path="/app/dashboard" element={ <Dashboard user={user} setUser={setUser} /> } />

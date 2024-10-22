@@ -89,7 +89,115 @@ export const OTP_TEMPLATE = `<!DOCTYPE html>
          <p>&copy;
             <script>document.write(new Date().getFullYear())</script>
             Lonks. All rights reserved. Need help?
-            <a href="//linkedin.com/in/sudipto-singha">Contact Us</a>
+            <a href="https://linkedin.com/in/sudipto-singha">Contact Us</a>
+         </p>
+      </div>
+   </div>
+</body>
+</html>`
+
+export const WELCOME_TEMPLATE = `<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Welcome to Lonks!</title>
+   <style>
+      body {
+         background-color: #f7f7f7;
+         font-family: Arial, sans-serif;
+         margin: 0;
+         padding: 0;
+         color: #333;
+      }
+      .email-container {
+         max-width: 600px;
+         margin: 20px auto;
+         background-color: #ffffff;
+         border-radius: 8px;
+         overflow: hidden;
+         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+         background-color: #007bff;
+         padding: 20px;
+         text-align: center;
+         color: white;
+      }
+      .header h1 {
+         margin: 0;
+      }
+      .content {
+         padding: 30px;
+         text-align: center;
+      }
+      .content h2 {
+         color: #007bff;
+         margin-bottom: 20px;
+      }
+      .content p {
+         font-size: 16px;
+         line-height: 1.5;
+         margin-bottom: 15px;
+      }
+      .content a {
+         display: inline-block;
+         padding: 10px 20px;
+         background-color: #007bff;
+         color: white;
+         text-decoration: none;
+         border-radius: 5px;
+         margin-top: 20px;
+      }
+      .username {
+         font-size: 24px;
+         font-weight: bold;
+         padding: 15px 30px;
+         background-color: #f1f1f1;
+         border-radius: 8px;
+         display: inline-block;
+         letter-spacing: 5px;
+         margin-bottom: 40px;
+      }
+      .footer {
+         background-color: #007bff;
+         color: white;
+         text-align: center;
+         padding: 15px;
+      }
+      .footer p {
+         margin: 0;
+         font-size: 14px;
+      }
+      .footer a {
+         color: white;
+         text-decoration: underline;
+      }
+      @media (max-width: 600px) {
+         .content {
+            padding: 20px;
+         }
+      }
+   </style>
+</head>
+<body>
+   <div class="email-container">
+      <div class="header">
+         <h1>Welcome to Lonks!</h1>
+      </div>
+      <div class="content">
+         <h2>Hello, and welcome!</h2>
+         <p>We’re excited to have you on board. You’ve taken the first step towards making your link management easier with Lonks.</p>
+         <p>Your username is:</p>
+         <div class="username">[[USERNAME]]</div>
+         <p>Feel free to explore your dashboard and start creating your shortened links today!</p>
+         <a href="https://lonks.vercel.app/app/dashboard" target="_blank">Go to Your Dashboard</a>
+      </div>
+      <div class="footer">
+         <p>&copy;
+            <script>document.write(new Date().getFullYear())</script>
+            Lonks. All rights reserved. Need help?
+            <a href="https://linkedin.com/in/sudipto-singha" target="_blank">Contact Us</a>
          </p>
       </div>
    </div>
