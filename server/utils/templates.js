@@ -156,7 +156,7 @@ export const WELCOME_TEMPLATE = `<!DOCTYPE html>
          background-color: #f1f1f1;
          border-radius: 8px;
          display: inline-block;
-         letter-spacing: 5px;
+         letter-spacing: 2px;
          margin-bottom: 40px;
       }
       .footer {
