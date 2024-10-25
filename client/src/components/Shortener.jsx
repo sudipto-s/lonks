@@ -69,7 +69,9 @@ const Shortener = ({ user, setUser }) => {
             <button type="submit">{buttonTxt}</button>
             {slugUrl && 
                <div className="result">
-                  <p>Shortened URL: <a href={slugUrl} target="_blank" rel="noopener noreferrer">{slugUrl}</a></p>
+                  <p>Shortened URL: <a href={slugUrl} target="_blank" rel="noopener noreferrer">
+                     {window.location.origin}/{slugUrl}
+                  </a></p>
                </div>
             }
          </form>
