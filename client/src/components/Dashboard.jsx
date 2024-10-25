@@ -11,15 +11,14 @@ const Dashboard = ({ user, setUser }) => {
    const [loading, setLoading] = useState(false)
    const [deleteSlug, setDeleteSlug] = useState(null)
    const [isModalOpen, setModalOpen] = useState(null)
-   const [socket, setSocket] = useState(null)
+   
+   const newSocket = io(
+      import.meta.env.MODE === "development" ?
+      "http://localhost:5000" : window.location.origin
+   )
 
    useEffect(() => {
-      const newSocket = io(
-         import.meta.env.MODE === "development" ?
-         "http://localhost:5000" : window.location.origin
-      )
-      setSocket(newSocket)
-
+      if (newSocket)
       newSocket.on("click-update", ({ slug, clicks }) => {
          setUrls(prevUrls =>
             prevUrls?.map(url =>
@@ -28,8 +27,8 @@ const Dashboard = ({ user, setUser }) => {
          )
       })
 
-      return () => newSocket.disconnect()
-   }, [])
+      return () => newSocket && newSocket.off("click-update")
+   }, [newSocket])
 
    const navigate = useNavigate()
    useEffect(() => {
