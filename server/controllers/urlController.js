@@ -59,17 +59,26 @@ export const getUrl = async (req, res) => {
 
 // Update a slug
 export const updateUrl = async (req, res) => {
-   const { slug } = req.body
+   let { slug, newSlug, originalUrl } = req.body
    if (!res.user)
       return res.status(401).json({ message: "Unauthorized! Please re-login" })
+
+   if (!newSlug)
+      newSlug = await generateShortId()
    
    try {
-      const updatedUrl = await Url.updateOne({ slug }, { $set: { ...req.body } })
-      if (!updatedUrl.modifiedCount)
-         return res.status(404).send("Url not found")
-      return res.status(200).json({ message: "Url updated successfully" })
+      const updatedUrl = await Url.findOneAndUpdate(
+         { slug },
+         { slug: newSlug, originalUrl },
+         { new: true }
+      )
+      if (!updatedUrl)
+         return res.status(404).send("Url not found. Error deleting url")
+      res.status(200).send(updatedUrl)
    } catch (err) {
       console.log(err.message)
+      if (err.message.includes("E11000"))
+         return res.status(409).send("Duplicate slug")
       res.status(500).json({ message: err.message })
    }
 }

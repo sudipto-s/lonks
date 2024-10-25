@@ -2,12 +2,14 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getCookie } from "../utils/userCookie"
 import axios from "axios"
+import EditUrlModal from "./EditUrlModal"
 
 const Dashboard = ({ user, setUser }) => {
    const [urls, setUrls] = useState(null)
    const [error, setError] = useState("")
    const [loading, setLoading] = useState(false)
    const [deleteSlug, setDeleteSlug] = useState(null)
+   const [isModalOpen, setModalOpen] = useState(null)
 
    const navigate = useNavigate()
    useEffect(() => {
@@ -100,15 +102,27 @@ const Dashboard = ({ user, setUser }) => {
                         </td>
                         <td data-label="Clicks">{link.clicks}</td>
                         <td data-label="Actions" className="">
-                           <button
-                              className="delete-button"
-                              onClick={() => handleDelete(link.slug)}
-                           >Delete</button>
+                           <div className="actions-div">
+                              <button
+                                 className="delete-button"
+                                 onClick={() => handleDelete(link.slug)}
+                              >Delete</button> | &nbsp;
+                              <button
+                                 className="delete-button"
+                                 onClick={() => setModalOpen(link)}
+                              >Update</button>
+                           </div>
                         </td>
                      </tr>
                   ))}
                </tbody>
             </table>
+         )}
+         {isModalOpen && (
+            <EditUrlModal
+               link={isModalOpen} setUrls={setUrls}
+               setModalOpen={setModalOpen}
+            />
          )}
       </div>
    )

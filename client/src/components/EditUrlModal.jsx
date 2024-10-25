@@ -1,22 +1,40 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const EditUrlModal = ({ link, closeModal, fetchUrls }) => {
-   const [originalUrl, setOriginalUrl] = useState(link.originalUrl)
+const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
+   const [newOriginalUrl, setNewOriginalUrl] = useState(link.originalUrl)
    const [newSlug, setNewSlug] = useState(link.slug)
+   const [error, setError] = useState(null)
+   const [btnText, setBtnText] = useState("Save Changes")
 
-   const handleUpdate = async (e) => {
+   const handleUpdate = async e => {
       e.preventDefault()
       try {
-         await axios.patch('/url/update', {
-            originalUrl,
+         setBtnText("Updating..")
+
+         const { data } = await axios.patch('/url/update', {
+            originalUrl: newOriginalUrl,
             slug: link.slug,
             newSlug,
          })
-         fetchUrls()
-         closeModal()
+         setUrls(prevUrls =>
+            prevUrls.map(item =>
+               item.slug === link.slug ? {
+                  ...item, slug: data.slug, originalUrl: newOriginalUrl
+               } : item
+            )
+         )
+         setModalOpen(null)
+         setError(null)
       } catch (err) {
+         setBtnText("Save Changes")
          console.error(err)
+         if (err.status === 409)
+            setError(`Slug '${newSlug}' already exists! Please choose another one or leave empty`)
+         else if (err.status === 429)
+            setError("Only 5 requests per minute is allowed")
+         else
+            setError(err.response?.data?.message || "A server error has occured")
       }
    }
 
@@ -24,26 +42,29 @@ const EditUrlModal = ({ link, closeModal, fetchUrls }) => {
       <div className="modal-overlay">
          <div className="modal-content">
             <h2>Edit URL</h2>
+            {error && <p className="error">{error}</p>}
             <form onSubmit={handleUpdate}>
                <label>
                   Original URL:
                   <input
-                     type="text"
-                     value={originalUrl}
-                     onChange={(e) => setOriginalUrl(e.target.value)}
+                     type="url"
+                     value={newOriginalUrl} required
+                     onChange={e => setNewOriginalUrl(e.target.value?.trim().toLocaleLowerCase())}
                   />
                </label>
                <label>
-                  New Slug:
+                  Slug:
                   <input
                      type="text"
                      value={newSlug}
-                     onChange={(e) => setNewSlug(e.target.value)}
+                     onChange={e => setNewSlug(e.target.value?.trim().toLocaleLowerCase())}
                   />
                </label>
                <div className="modal-actions">
-                  <button type="submit">Save Changes</button>
-                  <button type="button" onClick={closeModal}>Cancel</button>
+                  <button type="submit">{btnText}</button>
+                  <button type="button"
+                     onClick={() => setModalOpen(null)}
+                  >Cancel</button>
                </div>
             </form>
          </div>
