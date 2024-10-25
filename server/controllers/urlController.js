@@ -1,6 +1,7 @@
 import Url from "../models/Url.js"
 import generateShortId from "../utils/generateShortId.js"
 import botUserAgents from "../utils/botList.js"
+import { emitClickCountUpdate } from "../index.js"
 
 // Create a short link
 export const createUrl = async (req, res) => {
@@ -48,6 +49,9 @@ export const getUrl = async (req, res) => {
       if (!isBot) {
          url.clicks++
          await url.save()
+
+         // Emit the updated click count to connected clients
+         emitClickCountUpdate(slug, url.clicks)
       }
 
       return res.redirect(url.originalUrl)
