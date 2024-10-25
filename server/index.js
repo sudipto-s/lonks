@@ -4,7 +4,8 @@ import "dotenv/config"
 import path from "path"
 import cookieParser from "cookie-parser"
 import http from "http"
-import { Server } from "socket.io"
+// import { Server } from "socket.io"
+import { WebSocketServer } from "ws"
 
 // Routes
 import urlRoutes from "./routes/urlRoutes.js"
@@ -13,11 +14,7 @@ import authRoutes from "./routes/authRoutes.js"
 
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server, {
-   cors: {
-      methods: ['GET', 'POST', 'PATCH', "DELETE"],
-   }
-})
+const wss = new WebSocketServer({server})
 const __dirname = path.resolve()
 
 //Middlewares
@@ -35,17 +32,25 @@ app.use("*", (req, res) => {
    res.sendFile(path.join(__dirname, "client/dist/index.html"))
 })
 
-io.on("connection", (socket) => {
+wss.on("connection", (ws) => {
    console.log("Client connected")
 
    // Handle disconnects
-   socket.on("disconnect", () => {
+   ws.on("disconnect", () => {
       console.log("Client disconnected")
    })
 })
 
-export const emitClickCountUpdate = (slug, clicks) =>
-   io.emit("click-update", { slug, clicks })
+// export const emitClickCountUpdate = (slug, clicks) =>
+//    io.emit("click-update", { slug, clicks })
+// Emit click update function
+export const emitClickCountUpdate = (slug, clicks) => {
+   wss.clients.forEach((client) => {
+      if (client.readyState === client.OPEN) {
+         client.send(JSON.stringify({ slug, clicks }));
+      }
+   });
+}
 
 // Constants
 const PORT = process.env.PORT || 5000
