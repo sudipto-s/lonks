@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { getCookie } from "../utils/userCookie"
 import axios from "axios"
 import EditUrlModal from "./EditUrlModal"
-// import { io } from "socket.io-client"
+import { io } from "socket.io-client"
 
 const Dashboard = ({ user, setUser }) => {
    const [urls, setUrls] = useState(null)
@@ -12,25 +12,25 @@ const Dashboard = ({ user, setUser }) => {
    const [deleteSlug, setDeleteSlug] = useState(null)
    const [isModalOpen, setModalOpen] = useState(null)
    const [socket, setSocket] = useState(null)
-
-   // Initialize WebSocket connection
+   
    useEffect(() => {
-      const ws = new WebSocket(
-         import.meta.env.MODE === "development"
-            ? "ws://localhost:5000"
-            : window.location.origin.replace(/^http/, "ws")
-      );
+      const newSocket = io(
+         import.meta.env.MODE === "development" ?
+         "http://localhost:5000" : window.location.origin
+      )
+      setSocket(newSocket)
 
-      ws.onmessage = (event) => {
-         const { slug, clicks } = JSON.parse(event.data);
-         setUrls((prevUrls) =>
-            prevUrls.map((url) => (url.slug === slug ? { ...url, clicks } : url))
-         );
-      };
-      setSocket(ws);
+      if (newSocket)
+      newSocket.on("click-update", ({ slug, clicks }) => {
+         setUrls(prevUrls =>
+            prevUrls?.map(url =>
+               url.slug === slug ? { ...url, clicks } : url
+            )
+         )
+      })
 
-      return () => ws.close()
-   }, []);
+      return () => newSocket && newSocket.disconnect()
+   }, [])
 
    const navigate = useNavigate()
    useEffect(() => {
