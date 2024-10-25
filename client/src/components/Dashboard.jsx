@@ -11,7 +11,7 @@ const Dashboard = ({ user, setUser }) => {
    const [loading, setLoading] = useState(false)
    const [deleteSlug, setDeleteSlug] = useState(null)
    const [isModalOpen, setModalOpen] = useState(null)
-   const [_, setSocket] = useState(null)
+   const [socket, setSocket] = useState(null)
 
    useEffect(() => {
       const newSocket = io(
