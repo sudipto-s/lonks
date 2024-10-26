@@ -13,12 +13,18 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
       if (newSlug === "app") {
          setError("Slug 'app' is restricted")
          return
-      } else if (newSlug.includes("/") || newSlug.includes("\\")) {
+      }
+      if (!/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s]*)?$/.test(newOriginalUrl)) {
+         setError("Invalid url format")
+         return
+      }
+      if (newSlug.includes("/") || newSlug.includes("\\")) {
          setError("Invalid slug format")
          return
       }
 
       try {
+         setError(null)
          setBtnText("Updating..")
 
          const { data } = await axios.patch('/url/update', {

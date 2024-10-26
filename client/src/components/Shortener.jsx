@@ -29,12 +29,18 @@ const Shortener = ({ user, setUser }) => {
       if (slug === "app") {
          setError("Slug 'app' is restricted")
          return
-      } else if (slug.includes("/") || slug.includes("\\")) {
+      }
+      if (!/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s]*)?$/.test(originalUrl)) {
+         setError("Invalid url format")
+         return
+      }
+      if (slug.includes("/") || slug.includes("\\")) {
          setError("Invalid slug format")
          return
       }
 
       try {
+         setError(null)
          setButtonTxt("Loading..")
          const { data } = await axios.post("/url/create", { slug, originalUrl })
          console.log(data)

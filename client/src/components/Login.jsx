@@ -33,6 +33,7 @@ const Login = ({ user, setUser }) => {
          setError("")
 
       try {
+         setError(null)
          setButtonText("Loading..")
          const { data } = await axios.post("/api/v1/auth/login", { email, password })
          setUser({ ...data, email, logged: true })

@@ -47,6 +47,7 @@ const Signup = ({ user, setUser }) => {
       setNewUser(prev => ({ ...prev, username }))
 
       try {
+         setError(null)
          setButtonText("Loading..")
          const { data } = await axios.post("/api/v1/auth/signup", { email })
          console.log(data)
@@ -65,6 +66,7 @@ const Signup = ({ user, setUser }) => {
       const { username, email, password } = newUser
       
       try {
+         setError(null)
          setButtonText("Verifying OTP..")
          const { data } = await axios.post("/api/v1/auth/verify", { username, email, otp, password })
          setUser({ ...data, username, email, logged: true })
