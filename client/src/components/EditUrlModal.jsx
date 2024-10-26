@@ -9,6 +9,15 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
 
    const handleUpdate = async e => {
       e.preventDefault()
+
+      if (newSlug === "app") {
+         setError("Slug 'app' is restricted")
+         return
+      } else if (newSlug.includes("/") || newSlug.includes("\\")) {
+         setError("Invalid slug format")
+         return
+      }
+
       try {
          setBtnText("Updating..")
 
@@ -18,7 +27,7 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
             newSlug,
          })
          setUrls(prevUrls =>
-            prevUrls.map(item =>
+            prevUrls?.map(item =>
                item.slug === link.slug ? {
                   ...item, slug: data.slug, originalUrl: newOriginalUrl
                } : item

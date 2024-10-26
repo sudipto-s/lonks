@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 const NotFound = () => {
    return (
       <div className="NotFound">
@@ -17,7 +19,7 @@ const NotFound = () => {
                      </g>
                   </svg>
             </div>
-            <a href="/" className="home-btn">Go Home</a>
+            <Link to="/" className="home-btn">Go Home</Link>
          </div>
       </div>
    );

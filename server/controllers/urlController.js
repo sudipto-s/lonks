@@ -10,10 +10,8 @@ export const createUrl = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized! Please re-login" })
    const { email: assoc } = res.user
 
-   // slug 'app' is restricted value
-   if (slug === "app")
-      return res.status(400).json({ message: "Slug 'app' is restricted"})
-   else if (!slug)
+   // Generate a 4 character unique slug if user doesn't provide
+   if (!slug)
       slug = await generateShortId()
 
    try {
@@ -67,6 +65,7 @@ export const updateUrl = async (req, res) => {
    if (!res.user)
       return res.status(401).json({ message: "Unauthorized! Please re-login" })
 
+   // Generate a 4 character unique slug if user doesn't provide
    if (!newSlug)
       newSlug = await generateShortId()
    
