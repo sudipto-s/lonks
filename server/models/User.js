@@ -21,4 +21,7 @@ const userSchema = new Schema({
    }
 }, { timestamps: true })
 
+// Indexing for fast querying
+userSchema.index({ username: 1, email: 1 })
+
 export default model("User", userSchema)

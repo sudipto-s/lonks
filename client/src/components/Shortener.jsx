@@ -7,6 +7,7 @@ const Shortener = ({ user, setUser }) => {
    const [slug, setSlug] = useState("")
    const [originalUrl, setOriginalUrl] = useState("")
    const [slugUrl, setSlugUrl] = useState(null)
+   const [expires, setExpires] = useState("never")
    const [error, setError] = useState(null)
    const [buttonTxt, setButtonTxt] = useState("Shorten URL")
 
@@ -42,7 +43,7 @@ const Shortener = ({ user, setUser }) => {
       try {
          setError(null)
          setButtonTxt("Loading..")
-         const { data } = await axios.post("/url/create", { slug, originalUrl })
+         const { data } = await axios.post("/url/create", { slug, originalUrl, expires })
          console.log(data)
          setSlug("")
          setError("")
@@ -80,6 +81,16 @@ const Shortener = ({ user, setUser }) => {
                placeholder="Enter a custom slug" 
                onChange={e => setSlug(e.target.value?.trim().toLocaleLowerCase())} 
             />
+            <label htmlFor="expiresin">Expires in:</label>
+            <select
+               value={expires}
+               onChange={e => setExpires(e.target.value)}
+            >
+               <option value="never">Never</option>
+               <option value="1d">1 day</option>
+               <option value="2d">2 days</option>
+               <option value="7d">7 days</option>
+            </select>
             <button type="submit">{buttonTxt}</button>
             {slugUrl && 
                <div className="result">

@@ -17,7 +17,17 @@ const urlSchema = new Schema({
    clicks: {
       type: Number,
       default: 0
+   },
+   expires: {
+      type: Date,
+      default: null
    }
 }, { timestamps: true })
+
+// Indexing for fast querying
+urlSchema.index({ slug: 1, assoc: 1 })
+
+// Create a TTL index on expiryDate
+urlSchema.index({ expires: 1 }, { expireAfterSeconds: 0 })
 
 export default model("Url", urlSchema)

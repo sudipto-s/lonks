@@ -5,7 +5,7 @@ import { emitClickCountUpdate } from "../index.js"
 
 // Create a short link
 export const createUrl = async (req, res) => {
-   let { slug, originalUrl } = req.body
+   let { slug, originalUrl, expires } = req.body
    if (!res.user)
       return res.status(401).json({ message: "Unauthorized! Please re-login" })
    const { email: assoc } = res.user
@@ -15,7 +15,17 @@ export const createUrl = async (req, res) => {
       slug = await generateShortId()
 
    try {
-      await Url.create({ slug, originalUrl, assoc })
+      const newUrl = new Url({ slug, originalUrl, assoc })
+
+      // Set expiry of url
+      if (expires === "never")
+         newUrl.expires = null
+      else {
+         const days = expires.split("d")[0]
+         newUrl.expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000)
+      }
+
+      await newUrl.save()
       res.status(201).json({ slugUrl: slug })
    } catch (err) {
       console.log(err.message)
