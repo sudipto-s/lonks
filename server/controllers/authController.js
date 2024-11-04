@@ -23,6 +23,17 @@ export const login = async (req, res) => {
    }
 }
 
+//logout route
+export const logout = async (req, res) => {
+   try {
+      res.clearCookie("lonks-jwt")
+      res.clearCookie("lonks-user")
+      res.status(200).json({ message: "Logged out successfully!" })
+   } catch (err) {
+      res.status(400).json({ message: err.message })
+   }
+}
+
 let otpStore = {}
 export const signup = async (req, res) => {
    try {

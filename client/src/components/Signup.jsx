@@ -7,6 +7,7 @@ import SignupForm from './forms/SignupForm'
 import OtpForm from "./forms/OtpForm"
 
 const Signup = ({ user, setUser }) => {
+   document.title = "Signup - Lonks"
    const [newUser, setNewUser] = useState({username:"",email:"",password:"",confirmPassword:""})
    const [otp, setOtp] = useState("")
    const [otpSent, setOtpSent] = useState(false)

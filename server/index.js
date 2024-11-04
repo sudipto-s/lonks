@@ -1,10 +1,10 @@
 import express from "express"
-import mongoose from "mongoose"
 import "dotenv/config"
 import path from "path"
 import cookieParser from "cookie-parser"
 import http from "http"
 import { Server } from "socket.io"
+import dbConnect from "./utils/dbConnect.js"
 
 // Routes
 import urlRoutes from "./routes/urlRoutes.js"
@@ -43,6 +43,6 @@ export const emitClickCountUpdate = (slug, clicks) =>
 const PORT = process.env.PORT || 5000
 
 // Connect to database & start the server
-mongoose.connect(process.env.DATABASE_URL)
-  .then(() => server.listen(PORT, () => console.log("http://localhost:5000")))
+dbConnect(process.env.DATABASE_URL)
+  .then(() => server.listen(PORT, () => console.log(`http://localhost:${PORT}`)))
   .catch((err) => console.log(err))

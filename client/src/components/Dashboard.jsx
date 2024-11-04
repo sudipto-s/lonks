@@ -4,14 +4,21 @@ import { getCookie } from "../utils/userCookie"
 import axios from "axios"
 import EditUrlModal from "./EditUrlModal"
 import { io } from "socket.io-client"
+import visit from "../assets/visit.png"
+import edit from "../assets/edit.png"
+import share from "../assets/share.png"
+import copy from "../assets/copy.png"
+import deleteimg from "../assets/delete.png"
+import { copyLink, getDaysCreatedAge, getFaviconUrl } from "../utils/dashboardUtils"
 
 const Dashboard = ({ user, setUser }) => {
+   document.title = "Dashboard - Lonks"
    const [urls, setUrls] = useState(null)
    const [error, setError] = useState("")
    const [loading, setLoading] = useState(false)
+   const [copySlug, setCopySlug] = useState(null) 
    const [deleteSlug, setDeleteSlug] = useState(null)
    const [isModalOpen, setModalOpen] = useState(null)
-   const [socket, setSocket] = useState(null)
 
    useEffect(() => {
       // Create a new socket connection
@@ -19,7 +26,6 @@ const Dashboard = ({ user, setUser }) => {
          import.meta.env.MODE === "development" ?
          "http://localhost:5000" : window.location.origin
       )
-      setSocket(newSocket)
 
       // Receive updated data from via socket
       newSocket.on("click-update", ({ slug, clicks }) => {
@@ -59,13 +65,6 @@ const Dashboard = ({ user, setUser }) => {
       user?.email && fetchUrls()
    }, [user])
 
-   const truncateUrl = url => {
-      const screenWidth = window.innerWidth;
-      const charLimit = Math.floor(screenWidth / (screenWidth > 600 ? 30 : 18)); // Adjust the divisor to fine-tune
-
-      return url.length > charLimit ? url.slice(0, charLimit) + '...' : url;
-   }
-
    const handleDelete = async slug => {
       if (confirm(`Do you want to delete /${slug}`)) {
          try {
@@ -91,6 +90,11 @@ const Dashboard = ({ user, setUser }) => {
          <h2>Welcome, {user?.username}! ✨</h2>
          {loading && <p>Loading your shortened links...</p>}
 
+         {copySlug && (
+            <h3 className={`delete-slug-msg ${copySlug ? 'show' : ''}`}>
+               Link copied successfully!
+            </h3>
+         )}
          {deleteSlug && (
             <h3 className={`delete-slug-msg ${deleteSlug ? 'show' : ''}`}>
                Slug /{deleteSlug} deleted successfully!
@@ -102,43 +106,49 @@ const Dashboard = ({ user, setUser }) => {
          {!urls?.length ? (
             !loading && <p>No shortened links yet. Start by creating one!</p>
          ) : (
-            <table>
-               <thead>
-                  <tr>
-                     <th>Original URL</th>
-                     <th>Shortened URL</th>
-                     <th>Clicks</th>
-                     <th>Actions</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  {urls?.map((link, i) => (
-                     <tr key={i}>
-                        <td data-label="Original URL" title={link.originalUrl}>
-                           {truncateUrl(link.originalUrl)}
-                        </td>
-                        <td data-label="Shortened URL">
-                           <a href={`/${link.slug}`} target="_blank" rel="noopener noreferrer">
-                              /{link.slug}
-                           </a>
-                        </td>
-                        <td data-label="Clicks">{link.clicks}</td>
-                        <td data-label="Actions" className="">
-                           <div className="actions-div">
-                              <button
-                                 className="delete-button"
-                                 onClick={() => handleDelete(link.slug)}
-                              >Delete</button> | &nbsp;
-                              <button
-                                 className="delete-button"
-                                 onClick={() => setModalOpen(link)}
-                              >Update</button>
-                           </div>
-                        </td>
-                     </tr>
-                  ))}
-               </tbody>
-            </table>
+            <div className="url-container">
+            {urls?.map((link, i) => (
+               <div key={i} className="url-card">
+                  <div className="top">
+                     <div className="host-logo">
+                        <img src={getFaviconUrl(link.originalUrl)} alt="host-logo" />
+                     </div>
+                     <div className="url-links">
+                        <a href={`/${link.slug}`} className="short-url" target="_blank" rel="noopener noreferrer">
+                           {window.origin}/{link.slug}
+                        </a>
+                        <p className="dest-url" title="DestinationURL">
+                           {link.originalUrl}
+                        </p>
+                     </div>
+                  </div>
+                  <div className="middle">
+                     <span className="clicks">{link.clicks} click{link.clicks > 1 ? "s" : ""}</span> |&nbsp;
+                     <span className="created">Created {getDaysCreatedAge(link.createdAt)}</span>
+                     {/* | <span className="expires">Expires in t days</span> */}
+                  </div>
+                  <div className="bottom">
+                     <span title="Visit link">
+                        <a href={`/${link.slug}`} target="_blank" rel="noopener noreferrer">
+                           <img src={visit} className="link-visit" alt="visit" />
+                        </a>
+                     </span>
+                     <span onClick={() => setModalOpen(link)} title="Edit link">
+                        <img src={edit} className="link-edit" alt="edit" />
+                     </span>
+                     <span title="Share link">
+                        <img src={share} className="link-share" alt="share" />
+                     </span>
+                     <span onClick={() => copyLink(`${window.origin}/${link.slug}`, setCopySlug)} title="Copy link">
+                        <img src={copy} className="link-copy" alt="copy" />
+                     </span>
+                     <span onClick={() => handleDelete(link.slug)} data-tip="Delete link">
+                        <img src={deleteimg} className="link-delete" alt="delete" />
+                     </span>
+                  </div>
+               </div>
+            ))}
+            </div>
          )}
          {isModalOpen && (
             <EditUrlModal

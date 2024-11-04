@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 
 const NotFound = () => {
+   document.title = "404 - Page Not Found"
    return (
       <div className="NotFound">
          <div className="notfound-container">

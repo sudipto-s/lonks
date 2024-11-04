@@ -6,6 +6,7 @@ import { getCookie, setCookie } from '../utils/userCookie'
 import LoginForm from './forms/LoginForm'
 
 const Login = ({ user, setUser }) => {
+   document.title = "Login - Lonks"
    const [email, setEmail] = useState("")
    const [password, setPassword] = useState("")
    const [error, setError] = useState("")

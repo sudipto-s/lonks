@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { getCookie } from '../utils/userCookie'
 
 const Shortener = ({ user, setUser }) => {
+   document.title = "Shorten - Lonks"
    const [slug, setSlug] = useState("")
    const [originalUrl, setOriginalUrl] = useState("")
    const [slugUrl, setSlugUrl] = useState(null)

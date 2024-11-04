@@ -49,6 +49,10 @@
    font-size: 0.9rem;
 }
 
+.footer a  {
+   color: white;
+}
+
 .footer .social-media {
    margin-top: 10px;
 }
