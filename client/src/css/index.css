@@ -1,3 +1,8 @@
+@font-face {
+   font-family: 'RRa';
+   /* src: url("../assets/Birchie.otf") format(opentype); */
+   src: url("../assets/ZTGatha.ttf") format(truetype);
+}
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -14,6 +19,7 @@
    margin: 0;
    padding: 0;
    box-sizing: border-box;
+   font-family: "RRa", sans-serif;
 }
 a {
    text-decoration: none;

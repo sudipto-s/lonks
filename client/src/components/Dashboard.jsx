@@ -9,7 +9,7 @@ import edit from "../assets/edit.png"
 import share from "../assets/share.png"
 import copy from "../assets/copy.png"
 import deleteimg from "../assets/delete.png"
-import { copyLink, getDaysCreatedAge, getFaviconUrl } from "../utils/dashboardUtils"
+import { copyLink, getDaysCreatedAge, getFaviconUrl, shareLink } from "../utils/dashboardUtils"
 
 const Dashboard = ({ user, setUser }) => {
    document.title = "Dashboard - Lonks"
@@ -114,10 +114,10 @@ const Dashboard = ({ user, setUser }) => {
                         <img src={getFaviconUrl(link.originalUrl)} alt="host-logo" />
                      </div>
                      <div className="url-links">
-                        <a href={`/${link.slug}`} className="short-url" target="_blank" rel="noopener noreferrer">
+                        <span className="short-url">
                            {window.origin}/{link.slug}
-                        </a>
-                        <p className="dest-url" title="DestinationURL">
+                        </span>
+                        <p className="dest-url" title="Destination URL">
                            {link.originalUrl}
                         </p>
                      </div>
@@ -136,7 +136,7 @@ const Dashboard = ({ user, setUser }) => {
                      <span onClick={() => setModalOpen(link)} title="Edit link">
                         <img src={edit} className="link-edit" alt="edit" />
                      </span>
-                     <span title="Share link">
+                     <span onClick={() => shareLink(`${window.origin}/${link.slug}`)} title="Share link">
                         <img src={share} className="link-share" alt="share" />
                      </span>
                      <span onClick={() => copyLink(`${window.origin}/${link.slug}`, setCopySlug)} title="Copy link">

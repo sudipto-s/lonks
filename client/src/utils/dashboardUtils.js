@@ -37,3 +37,20 @@ export const copyLink = async (link, setCopySlug) => {
       console.log(err)
    }
 }
+
+export const shareLink = async (url, setCopySlug) => {
+   if (navigator.share) {
+      try {
+         await navigator.share({
+            title: 'Check out this link!',
+            text: 'Here’s something interesting for you!',
+            url
+         })
+      } catch (err) {
+         console.error('Error sharing the link:', err)
+      }
+   } else {
+      if(confirm('Your browser does not support the Web Share API! Copy URl to clipboard?'))
+         copyLink(url, setCopySlug)
+   }
+}
