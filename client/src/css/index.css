@@ -44,7 +44,7 @@ a {
    max-width: 1200px;
    height: 100svh;
    margin: 0 auto;
-   padding: 4rem 2rem;
+   padding: 4rem 1.2rem;
    background-color: #f9f9f9;
    border-radius: 10px;
    overflow-y: scroll;
