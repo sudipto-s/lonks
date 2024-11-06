@@ -1,7 +1,7 @@
 // Returns favicon of the host
 export const getFaviconUrl = originalUrl => {
    const url = new URL(originalUrl)
-   return `https://www.google.com/s2/favicons?sz=64&domain=${url.hostname}`
+   return `https://icon.horse/icon/${url.hostname}`
 }
 
 // Returns created ago
@@ -43,14 +43,13 @@ export const shareLink = async (url, setCopySlug) => {
       try {
          await navigator.share({
             title: 'Check out this link!',
-            text: 'Here’s something interesting for you!',
             url
          })
       } catch (err) {
          console.error('Error sharing the link:', err)
       }
    } else {
-      if(confirm('Your browser does not support the Web Share API! Copy URl to clipboard?'))
+      if(confirm('Your browser does not support sharing! Copy URL to clipboard?'))
          copyLink(url, setCopySlug)
    }
 }
