@@ -115,7 +115,7 @@ const Dashboard = ({ user, setUser }) => {
                      </div>
                      <div className="url-links">
                         <span className="short-url">
-                           {window.origin}/{link.slug}
+                           {window.origin.replace(/https?:\/\//, "")}/{link.slug}
                         </span>
                         <p className="dest-url" title="Destination URL">
                            {link.originalUrl}
