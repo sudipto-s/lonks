@@ -51,6 +51,7 @@
 
 .footer a  {
    color: white;
+   text-decoration: underline;
 }
 
 .footer .social-media {
