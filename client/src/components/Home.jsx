@@ -14,7 +14,7 @@ const Home = ({ user, setUser }) => {
 
    return (
       <div className="Home">
-         <h2>Lonks - A Simple Link Shortener</h2>
+         <h2>Lonks <br /> A Simple Link Shortener</h2>
       </div>
    );
 }

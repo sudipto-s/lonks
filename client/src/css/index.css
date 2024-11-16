@@ -1,10 +1,14 @@
 @font-face {
-   font-family: 'RRa';
+   font-family: 'ZT Gatha';
    /* src: url("../assets/Birchie.otf") format(opentype); */
    src: url("../assets/ZTGatha.ttf") format(truetype);
 }
+@font-face {
+   font-family: "Rutan";
+   src: url("../assets/Ruttan.otf") format(opentype);
+}
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "ZT Gatha", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   /* color-scheme: light dark;
@@ -19,7 +23,6 @@
    margin: 0;
    padding: 0;
    box-sizing: border-box;
-   font-family: "RRa", sans-serif;
 }
 a {
    text-decoration: none;
@@ -27,6 +30,7 @@ a {
 
 /* Home page */
 .Home {
+   font-family: "Rutan";
    display: flex;
    justify-content: center;
    align-items: center;
