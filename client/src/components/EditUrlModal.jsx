@@ -68,7 +68,7 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
                   />
                </label>
                <label>
-                  Slug:
+                  Slug (optional):
                   <input
                      type="text"
                      value={newSlug}

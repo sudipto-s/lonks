@@ -114,7 +114,7 @@ const Dashboard = ({ user, setUser }) => {
                         <img src={getFaviconUrl(link.originalUrl)} alt="host-logo" />
                      </div>
                      <div className="url-links">
-                        <span className="short-url">
+                        <span className="short-url" title="Short link">
                            {window.origin.replace(/https?:\/\//, "")}/{link.slug}
                         </span>
                         <p className="dest-url" title="Destination URL">
@@ -142,7 +142,7 @@ const Dashboard = ({ user, setUser }) => {
                      <span onClick={() => copyLink(`${window.origin}/${link.slug}`, setCopySlug)} title="Copy link">
                         <img src={copy} className="link-copy" alt="copy" />
                      </span>
-                     <span onClick={() => handleDelete(link.slug)} data-tip="Delete link">
+                     <span onClick={() => handleDelete(link.slug)} title="Delete link">
                         <img src={deleteimg} className="link-delete" alt="delete" />
                      </span>
                   </div>

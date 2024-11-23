@@ -5,7 +5,7 @@ const Footer = () => {
       <footer className="footer">
          <p className="s-lonk">
             &copy; {new Date().getFullYear()} &nbsp;
-            <a href="/s-lonk">Lonks</a>. All rights reserved.
+            <a href="//github.com/sudipto-s/lonks">Lonks</a>. All rights reserved.
             @Sudipto
          </p>
          <div className="social-media">
