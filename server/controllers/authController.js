@@ -6,18 +6,20 @@ import { otpSender, welcomeSender } from "../utils/emailSender.js"
 
 export const login = async (req, res) => {
    try {
-      const { email, password } = req.body
+      const { identifier, password } = req.body
 
-      const user = await User.findOne({ email })
+      const isEmail = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(identifier)
+
+      const user = await User.findOne({ [isEmail ? "email" : "username"]: identifier })
       if (!user)
          return res.status(401).json({ message: "User is not registered!" })
       const isPassMatch = await bcrypt.compare(password, user.password)
       if (!isPassMatch)
          return res.status(401).json({ message: "Please provide a valid password." })
 
-      const token = createToken(user._id, email)
+      const token = createToken(user._id, identifier)
       res.cookie("lonks-jwt", token, { httpOnly: true, maxAge })
-      res.status(200).json({ userId: user._id, username: user.username })
+      res.status(200).json({ userId: user._id, username: user.username, email: user.email })
    } catch (err) {
       res.status(400).json({ message: err.message})
    }

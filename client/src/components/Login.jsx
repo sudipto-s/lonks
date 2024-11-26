@@ -7,7 +7,7 @@ import LoginForm from './forms/LoginForm'
 
 const Login = ({ user, setUser }) => {
    document.title = "Login - Lonks"
-   const [email, setEmail] = useState("")
+   const [identifier, setIdentifier] = useState("")
    const [password, setPassword] = useState("")
    const [error, setError] = useState("")
    const [buttonText, setButtonText] = useState("Login")
@@ -24,21 +24,12 @@ const Login = ({ user, setUser }) => {
    const handleSubmit = async (e) => {
       e.preventDefault()
 
-      // Regular expression for email validation
-      const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
-      // Validate the email
-      if (!emailRegex.test(email)) {
-         setError("Please enter a valid email address")
-         return
-      } else 
-         setError("")
-
       try {
          setError(null)
          setButtonText("Loading..")
-         const { data } = await axios.post("/api/v1/auth/login", { email, password })
-         setUser({ ...data, email, logged: true })
-         setCookie({ ...data, email, logged: true })
+         const { data } = await axios.post("/api/v1/auth/login", { identifier, password })
+         setUser({ ...data, logged: true })
+         setCookie({ ...data, logged: true })
          setError("")
       } catch (err) {
          console.error(err)
@@ -51,12 +42,11 @@ const Login = ({ user, setUser }) => {
    return (
       <div className="auth-container">
          <LoginForm
-            email={email} setEmail={setEmail}
+            identifier={identifier} setIdentifier={setIdentifier}
             password={password} setPassword={setPassword}
             error={error} buttonText={buttonText}
             handleSubmit={handleSubmit}
          />
-         
       </div>
    )
 }
