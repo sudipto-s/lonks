@@ -9,7 +9,9 @@ import edit from "../assets/edit.svg"
 import share from "../assets/share.svg"
 import copy from "../assets/copy.svg"
 import deleteimg from "../assets/delete.svg"
-import { copyLink, getDaysCreatedAge, getFaviconUrl, shareLink } from "../utils/dashboardUtils"
+import {
+   copyLink, getDaysCreatedAge, getExpiresIn, getFaviconUrl, shareLink
+} from "../utils/dashboardUtils"
 
 const Dashboard = ({ user, setUser }) => {
    document.title = "Dashboard - Lonks"
@@ -123,9 +125,9 @@ const Dashboard = ({ user, setUser }) => {
                      </div>
                   </div>
                   <div className="middle">
-                     <span className="clicks">{link.clicks} click{link.clicks > 1 ? "s" : ""}</span> |&nbsp;
-                     <span className="created">Created {getDaysCreatedAge(link.createdAt)}</span>
-                     {/* | <span className="expires">Expires in t days</span> */}
+                     <span className="clicks">{link.clicks} click{link.clicks > 1 ? "s" : ""}</span>
+                     <span className="created"> | Created {getDaysCreatedAge(link.createdAt)}</span>
+                     { link?.expires && <span className="expires"> | Expires {getExpiresIn(link.expires)}</span>}
                   </div>
                   <div className="bottom">
                      <span title="Visit link">

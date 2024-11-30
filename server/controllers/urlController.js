@@ -120,7 +120,7 @@ export const getAll = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized! Please re-login" })
 
    try {
-      const urls = await Url.find(assoc ? { assoc } : {})
+      const urls = await Url.find({ assoc })
       if (!urls)
          return res.status(404).send({ message: "No URLs found" })
       return res.status(200).send(urls)

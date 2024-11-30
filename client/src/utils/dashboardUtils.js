@@ -27,6 +27,22 @@ export const getDaysCreatedAge = date => {
    }
 }
 
+// Returns expires in days
+export const getExpiresIn = expirationDate => {
+   const timeDiff = new Date(expirationDate) - new Date();
+   const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+   if (daysDiff <= 0)
+      return "today";
+   else if (daysDiff === 1)
+      return "in 1 day";
+   else if (daysDiff <= 3)
+      return `in ${daysDiff} days`;
+   else if (daysDiff <= 7)
+      return "in 1 week";
+   return `in ${daysDiff} days`;
+}
+
 // Copies link to clipboard
 export const copyLink = async (link, setCopySlug) => {
    try {
@@ -38,11 +54,12 @@ export const copyLink = async (link, setCopySlug) => {
    }
 }
 
+// Shows share option or copies link if Web Share API is not available
 export const shareLink = async (url, setCopySlug) => {
    if (navigator.share) {
       try {
          await navigator.share({
-            title: 'Check out this link!',
+            title: 'Check out this link! Shorten your links with Lonks for free',
             url
          })
       } catch (err) {

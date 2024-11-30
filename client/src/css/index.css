@@ -160,7 +160,9 @@ a {
    height: 50px;
    border-radius: 50%;
 }
-.url-card .middle,
+.url-card .middle {
+   margin: 5px 0 0 60px;
+}
 .url-card .bottom {
    margin: 15px 0 0 60px;
 }
