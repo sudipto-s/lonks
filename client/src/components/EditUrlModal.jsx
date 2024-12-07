@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
@@ -52,6 +52,16 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
             setError(err.response?.data?.message || "A server error has occured")
       }
    }
+
+   useEffect(() => {
+      const handleKeyDown = e => {
+         if (e.keyCode === 27) setModalOpen(null);
+      }
+      document.addEventListener("keydown", handleKeyDown)
+      
+      return () =>
+         document.removeEventListener("keydown", handleKeyDown)
+   }, [setModalOpen])
 
    return (
       <div className="modal-overlay">
