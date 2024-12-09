@@ -45,10 +45,10 @@ const Shortener = ({ user, setUser }) => {
          setError(null)
          setButtonTxt("Loading..")
          const { data } = await axios.post("/url/create", { slug, originalUrl, expires })
-         console.log(data)
          setSlug("")
          setError("")
          setOriginalUrl("")
+         setExpires("never")
          setSlugUrl(data.slugUrl)
       } catch (err) {
          setSlugUrl(null)

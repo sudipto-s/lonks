@@ -41,3 +41,10 @@ export const welcomeSender = async (to, username) => {
       WELCOME_TEMPLATE.replace("[[USERNAME]]", username),
    )
 }
+
+export const resetPasswordEmail = async (to, resetLink) =>
+   await emailSender(
+   to,
+   "Password reset request",
+   `<p>Click <a href="${resetLink}">here</a> to reset your password. This link will expire in 10 minutes.</p>`
+)

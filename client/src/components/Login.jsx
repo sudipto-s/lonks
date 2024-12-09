@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import "../css/LoginSignup.css"
+import "../css/Auth.css"
 import { getCookie, setCookie } from '../utils/userCookie'
 import LoginForm from './forms/LoginForm'
 

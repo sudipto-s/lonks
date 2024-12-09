@@ -21,7 +21,7 @@ const LoginForm = ({ identifier, setIdentifier, password, setPassword, error, bu
             <button type="submit">{buttonText}</button>
          </div>
          <div className="forgot-password">
-            <Link to="/app/login">Forgot password?</Link>
+            <Link to="/app/forgot-password">Forgot password?</Link>
          </div>
          <div className="dont-have-account form-links">
             <span>Don&apos;t have an account? </span>

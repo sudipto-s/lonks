@@ -1,7 +1,14 @@
+import defaultLink from "../assets/default-link.png"
+
 // Returns favicon of the host
 export const getFaviconUrl = originalUrl => {
-   const url = new URL(originalUrl)
-   return `https://icon.horse/icon/${url.hostname}`
+   try {
+      const url = new URL(originalUrl)
+      return `https://icon.horse/icon/${url.hostname}`
+   } catch (err) {
+      console.log(err)
+      return defaultLink
+   }
 }
 
 // Returns created ago

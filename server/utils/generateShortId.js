@@ -1,11 +1,11 @@
-import shortid from "shortid"
+import { nanoid } from "nanoid"
 import Url from "../models/Url.js"
 
 // Generates a 4 characters long ID
 export default async () => {
    try {
       while (true) {
-         const slug = shortid.generate().slice(0, 4).toLowerCase()
+         const slug = nanoid().slice(0, 4).toLowerCase()
          const existingUrl = await Url.findOne({ slug })
          if (!existingUrl)
             return slug

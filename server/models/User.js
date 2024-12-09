@@ -18,7 +18,9 @@ const userSchema = new Schema({
       type: String,
       required: true,
       minlength: 6,
-   }
+   },
+   resetPasswordToken: String,
+   resetPasswordExpires: Date,
 }, { timestamps: true })
 
 // Indexing for fast querying

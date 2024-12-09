@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { getCookie, setCookie } from '../utils/userCookie'
-import "../css/LoginSignup.css"
+import "../css/Auth.css"
 import SignupForm from './forms/SignupForm'
 import OtpForm from "./forms/OtpForm"
 
@@ -19,9 +19,6 @@ const Signup = ({ user, setUser }) => {
       setUser(getCookie())
       navigate(user?.logged && "/app/dashboard")
    }, [user, setUser, navigate])
-   useEffect(() => {
-      console.log(user)
-   }, [user])
    useEffect(() => {
       const cok = getCookie()
       cok && setUser({ ...cok })
