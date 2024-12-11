@@ -15,8 +15,14 @@ const ResetPassword = () => {
    const handleSubmit = async e => {
       e.preventDefault()
       setBtnTxt("Loading..")
+      if (password.length < 6) {
+         setMessage("Minimun passoword length is 6")
+         setBtnTxt("Reset Password")
+         return
+      }
       if (password !== confirmPassword) {
          setMessage("Passwords do not match!")
+         setBtnTxt("Reset Password")
          return
       }
 
@@ -42,14 +48,14 @@ const ResetPassword = () => {
                type="password"
                placeholder="New Password"
                value={password}
-               onChange={e => setPassword(e.target.value)}
+               onChange={e => setPassword(e.target.value?.trim())}
                required
             />
             <input
                type="password"
                placeholder="Confirm Password"
                value={confirmPassword}
-               onChange={e => setConfirmPassword(e.target.value)}
+               onChange={e => setConfirmPassword(e.target.value?.trim())}
                required
             />
             <button type="submit">{btnTxt}</button>

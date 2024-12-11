@@ -2,15 +2,18 @@ import { useEffect, useState } from 'react'
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { getCookie } from '../utils/userCookie'
+import NewUrlCard from './NewUrlCard'
 
 const Shortener = ({ user, setUser }) => {
    document.title = "Shorten - Lonks"
    const [slug, setSlug] = useState("")
    const [originalUrl, setOriginalUrl] = useState("")
+   const [destination, setDestination] = useState("")
    const [slugUrl, setSlugUrl] = useState(null)
    const [expires, setExpires] = useState("never")
    const [error, setError] = useState(null)
    const [buttonTxt, setButtonTxt] = useState("Shorten URL")
+   const [urlCreated, setUrlCreated] = useState(false)
 
    const navigate = useNavigate()
    useEffect(() => {
@@ -47,8 +50,10 @@ const Shortener = ({ user, setUser }) => {
          const { data } = await axios.post("/url/create", { slug, originalUrl, expires })
          setSlug("")
          setError("")
+         setDestination(originalUrl)
          setOriginalUrl("")
          setExpires("never")
+         setUrlCreated(true)
          setSlugUrl(data.slugUrl)
       } catch (err) {
          setSlugUrl(null)
@@ -93,12 +98,12 @@ const Shortener = ({ user, setUser }) => {
                <option value="7d">7 days</option>
             </select>
             <button type="submit">{buttonTxt}</button>
-            {slugUrl && 
-               <div className="result">
-                  <p>Shortened URL: <a href={slugUrl} target="_blank" rel="noopener noreferrer">
-                     {window.location.origin}/{slugUrl}
-                  </a></p>
-               </div>
+            {urlCreated &&
+               <NewUrlCard slug={slugUrl}
+                  destination={destination}
+                  setUrlCreated={setUrlCreated}
+                  expires={expires}
+               />
             }
          </form>
       </div>

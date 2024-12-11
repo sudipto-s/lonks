@@ -113,6 +113,7 @@ export const forgotPassword = async (req, res) => {
    
       res.status(200).json({ message: "Reset link sent to your email" })
    } catch (err) {
+      console.log(err)
       res.status(500).json({ message: err.message })
    }
 }
@@ -122,6 +123,10 @@ export const resetPassword = async (req, res) => {
    const { token, password } = req.body
    
    try {
+      // Check if token is present or not
+      if (!token)
+         return res.status(400).json({ message: "Invalid token" })
+
       const hashedToken = crypto.createHash("sha256").update(token).digest("hex")
       const user = await User.findOne({
          resetPasswordToken: hashedToken,
@@ -139,6 +144,7 @@ export const resetPassword = async (req, res) => {
       await user.save()
       res.status(200).json({ message: "Password reset successfully! Redirecting to login page." })
    } catch (err) {
+      console.log(err)
       res.status(500).json({ message: err.message })
    }
 }

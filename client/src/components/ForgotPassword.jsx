@@ -3,6 +3,7 @@ import axios from "axios"
 import "../css/Auth.css"
 import { useNavigate } from 'react-router-dom'
 import { getCookie } from "../utils/userCookie"
+import { isEmail } from "../utils/authUtils"
 
 const ForgotPassword = ({ user, setUser }) => {
    const [email, setEmail] = useState('')
@@ -21,6 +22,11 @@ const ForgotPassword = ({ user, setUser }) => {
    const handleForgotPassword = async e => {
       e.preventDefault()
       setBtnTxt("Loading..")
+
+      if (!isEmail(email)) {
+         setMessage("Please enter a valid Email format")
+         return
+      }
 
       try {
          const { data } = await axios.post("/api/v1/auth/forgot-password", { email })

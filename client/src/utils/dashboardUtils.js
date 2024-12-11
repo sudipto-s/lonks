@@ -51,7 +51,7 @@ export const getExpiresIn = expirationDate => {
 }
 
 // Copies link to clipboard
-export const copyLink = async (link, setCopySlug) => {
+export const copyLink = async (link, setCopySlug = f => f) => {
    try {
       await navigator.clipboard.writeText(link)
       setCopySlug(true)

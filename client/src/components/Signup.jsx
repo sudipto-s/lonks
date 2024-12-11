@@ -5,6 +5,7 @@ import { getCookie, setCookie } from '../utils/userCookie'
 import "../css/Auth.css"
 import SignupForm from './forms/SignupForm'
 import OtpForm from "./forms/OtpForm"
+import { isEmail } from "../utils/authUtils"
 
 const Signup = ({ user, setUser }) => {
    document.title = "Signup - Lonks"
@@ -28,8 +29,7 @@ const Signup = ({ user, setUser }) => {
       e.preventDefault()
       const { email, password, confirmPassword } = newUser
 
-      const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
-      if (!emailRegex.test(email)) {
+      if (!isEmail(email)) {
          setError("Please enter a valid Email format")
          return
       }

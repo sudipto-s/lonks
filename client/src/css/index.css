@@ -189,11 +189,80 @@ a {
 .url-card .url-links {
    width: 80%;
 }
-.error {
+.error, .message {
    color: red;
    font-size: 1.1rem;
    text-align: center;
    margin-bottom: 10px;
+}
+.message {
+   color: #28a745;
+}
+
+/* New Url card */
+/* Backdrop overlay to dim the background */
+.new-url-card-backdrop {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.5);
+   z-index: 999;
+   animation: fadeIn 0.3s ease-out;
+}
+.new-url-card {
+   font-size: 22px;
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%) scale(0.8);
+   background: white;
+   border-radius: 8px;
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+   width: 90%;
+   max-width: 400px;
+   z-index: 1000;
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+   padding: 10px;
+   animation: scaleUp 0.3s ease-out;
+}
+.new-url-card-header {
+   padding: 16px;
+   text-align: center;
+   border-bottom: 1px solid #e0e0e0;
+}
+.new-url-card-header img {
+   width: 50px;
+   height: 50px;
+   border-radius: 50%;
+}
+.new-url-card-bottom {
+   width: 80%;
+   margin: auto;
+   display: flex;
+   padding: 16px 20px;
+   justify-content: space-around;
+}
+@keyframes fadeIn {
+   from {
+     opacity: 0;
+   }
+   to {
+     opacity: 1;
+   }
+}
+@keyframes scaleUp {
+   from {
+     transform: translate(-50%, -50%) scale(0.8);
+     opacity: 0.8;
+   }
+   to {
+     transform: translate(-50%, -50%) scale(1);
+     opacity: 1;
+   }
 }
 
 /* EditUrlModal Styles */

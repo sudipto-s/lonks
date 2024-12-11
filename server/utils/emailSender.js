@@ -22,7 +22,8 @@ const emailSender = async (to, subject, html) => {
       return response.messageId
    } catch (err) {
       console.log(err)
-      return null
+      if (err.responseCode === 535)
+         throw new Error("Something went wrong! Please try after some times.")
    }
 }
 
