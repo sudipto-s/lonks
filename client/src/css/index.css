@@ -230,13 +230,13 @@ a {
    animation: scaleUp 0.3s ease-out;
 }
 .new-url-card-header {
-   padding: 16px;
+   padding: 10px;
    text-align: center;
    border-bottom: 1px solid #e0e0e0;
 }
 .new-url-card-header img {
-   width: 50px;
-   height: 50px;
+   width: 80px;
+   height: 80px;
    border-radius: 50%;
 }
 .new-url-card-bottom {
@@ -245,6 +245,7 @@ a {
    display: flex;
    padding: 16px 20px;
    justify-content: space-around;
+   cursor: pointer;
 }
 @keyframes fadeIn {
    from {
