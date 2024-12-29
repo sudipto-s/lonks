@@ -18,14 +18,14 @@ const LoginForm = ({ identifier, setIdentifier, password, setPassword, error, bu
                onChange={e => setPassword(e.target.value)} 
                required 
             />
-            <button type="submit">{buttonText}</button>
+            <button type="submit" disabled={buttonText === "Loading.."}>{buttonText}</button>
          </div>
          <div className="forgot-password">
-            <Link to="/app/forgot-password">Forgot password?</Link>
+            <Link to="/auth/forgot-password">Forgot password?</Link>
          </div>
          <div className="dont-have-account form-links">
             <span>Don&apos;t have an account? </span>
-            <Link className="signup-link" to="/app/signup">Signup</Link>
+            <Link className="signup-link" to="/auth/signup">Signup</Link>
          </div>
       </form>
    );

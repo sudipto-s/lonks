@@ -22,8 +22,8 @@ const Header = ({ user, setUser }) => {
          <nav className="nav">
             <ul>
                {!user?.logged && <li><Link to="/">Home</Link></li>}
-               {!user?.logged && <li><Link to="/app/login">Login</Link></li>}
-               {!user?.logged && <li><Link to="/app/signup">Signup</Link></li>}
+               {!user?.logged && <li><Link to="/auth/login">Login</Link></li>}
+               {!user?.logged && <li><Link to="/auth/signup">Signup</Link></li>}
                {user?.logged && <li><Link to="/app/dashboard">Dashboard</Link></li>}
                {user?.logged && <li><Link to="/app/shorten">Shorten</Link></li>}
                {user?.logged && <li><span className="logout-btn"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 
 const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
@@ -7,7 +7,7 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
    const [error, setError] = useState(null)
    const [btnText, setBtnText] = useState("Save Changes")
 
-   const handleUpdate = async e => {
+   const handleUpdate = useCallback(async e => {
       e.preventDefault()
 
       if (newSlug === "app") {
@@ -51,7 +51,7 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
          else
             setError(err.response?.data?.message || "A server error has occured")
       }
-   }
+   }, [link, newSlug, newOriginalUrl, setModalOpen, setUrls])
 
    useEffect(() => {
       const handleKeyDown = e => {

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import axios from "axios"
 import "../css/Auth.css"
@@ -12,7 +12,7 @@ const ResetPassword = () => {
    const [searchParams] = useSearchParams()
    const token = searchParams.get("token")
 
-   const handleSubmit = async e => {
+   const handleSubmit = useCallback(async e => {
       e.preventDefault()
       setBtnTxt("Loading..")
       if (password.length < 6) {
@@ -31,13 +31,13 @@ const ResetPassword = () => {
             token, password
          })
          setMessage(data.message)
-         setTimeout(() => navigate("/app/login"), 2000)
+         setTimeout(() => navigate("/auth/login"), 2000)
       } catch (err) {
          setMessage(err.response?.data?.message || "Something went wrong!")
       } finally {
          setBtnTxt("Reset Password")
       }
-   }
+   }, [password, confirmPassword, token, navigate])
 
    return (
       <div className="auth-container">
@@ -58,7 +58,7 @@ const ResetPassword = () => {
                onChange={e => setConfirmPassword(e.target.value?.trim())}
                required
             />
-            <button type="submit">{btnTxt}</button>
+            <button type="submit" disabled={btnTxt === "Loading.."}>{btnTxt}</button>
          </form>
       </div>
    )

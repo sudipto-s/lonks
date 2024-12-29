@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { getCookie, setCookie } from '../utils/userCookie'
@@ -25,7 +25,7 @@ const Signup = ({ user, setUser }) => {
       cok && setUser({ ...cok })
    }, [setUser, navigate])
 
-   const handleSubmit = async (e) => {
+   const handleSubmit = useCallback(async e => {
       e.preventDefault()
       const { email, password, confirmPassword } = newUser
 
@@ -57,9 +57,9 @@ const Signup = ({ user, setUser }) => {
       } finally {
          setButtonText("Signup")
       }
-   }
+   }, [newUser])
 
-   const handleOtpVerify = async e => {
+   const handleOtpVerify = useCallback(async e => {
       e.preventDefault()
       const { username, email, password } = newUser
       
@@ -74,7 +74,7 @@ const Signup = ({ user, setUser }) => {
          console.error(err)
          setError(err.response?.data?.message || 'OTP verification failed')
       }
-   }
+   }, [newUser, otp, setUser])
 
    return (
       <div className="auth-container">

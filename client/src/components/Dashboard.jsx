@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getCookie } from "../utils/userCookie"
 import axios from "axios"
@@ -36,7 +36,7 @@ const Dashboard = ({ user, setUser }) => {
 
    const navigate = useNavigate()
    useEffect(() => {
-      navigate(user?.logged || "/app/login")
+      navigate(user?.logged || "/auth/login")
    }, [user, navigate])
    useEffect(() => {
       const cok = getCookie()
@@ -60,7 +60,7 @@ const Dashboard = ({ user, setUser }) => {
       user?.email && fetchUrls()
    }, [user])
 
-   const handleDelete = async slug => {
+   const handleDelete = useCallback(async slug => {
       if (confirm(`Do you want to delete /${slug}`)) {
          try {
             const { data } = await axios.delete(`/url/delete/${slug}`)
@@ -78,7 +78,7 @@ const Dashboard = ({ user, setUser }) => {
             alert(err.response?.data?.message)
          }
       }
-   }
+   }, [])
 
    return (
       <div className="dashboard-container">

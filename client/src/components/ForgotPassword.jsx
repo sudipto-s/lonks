@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react' 
+import { useState, useEffect, useCallback } from 'react' 
 import axios from "axios" 
 import "../css/Auth.css"
 import { useNavigate } from 'react-router-dom'
@@ -19,7 +19,7 @@ const ForgotPassword = ({ user, setUser }) => {
       cok && setUser({ ...cok })
    }, [setUser])
 
-   const handleForgotPassword = async e => {
+   const handleForgotPassword = useCallback(async e => {
       e.preventDefault()
       setBtnTxt("Loading..")
 
@@ -39,7 +39,7 @@ const ForgotPassword = ({ user, setUser }) => {
       } finally {
          setBtnTxt("Continue")
       }
-   }
+   }, [email])
 
    return (
       <div className="auth-container">

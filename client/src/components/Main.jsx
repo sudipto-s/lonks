@@ -12,12 +12,12 @@ const Main = ({ user, setUser }) => {
    return (
       <Routes>
          <Route path="/" element={ <Home user={user} setUser={setUser} /> } />
-         <Route path="/app/login" element={ <Login user={user} setUser={setUser} />} />
-         <Route path="/app/signup" element={ <Signup user={user} setUser={setUser} /> } />
+         <Route path="/auth/login" element={ <Login user={user} setUser={setUser} />} />
+         <Route path="/auth/signup" element={ <Signup user={user} setUser={setUser} /> } />
          <Route path="/app/dashboard" element={ <Dashboard user={user} setUser={setUser} /> } />
          <Route path="/app/shorten" element={ <Shortener user={user} setUser={setUser} /> } />
-         <Route path="/app/forgot-password" element={ <ForgotPassword user={user} setUser={setUser} /> } />
-         <Route path="/app/reset-password" element={ <ResetPassword /> } />
+         <Route path="/auth/forgot-password" element={ <ForgotPassword user={user} setUser={setUser} /> } />
+         <Route path="/auth/reset-password" element={ <ResetPassword /> } />
          <Route path="*" element={ <NotFound /> } />
       </Routes>
    );

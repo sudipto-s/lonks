@@ -30,11 +30,11 @@ const SignupForm = ({ newUser, setNewUser, buttonText }) => {
                } 
                required 
             />
-            <button type="submit">{buttonText}</button>
+            <button type="submit" disabled={buttonText === "Loading.."}>{buttonText}</button>
          </div>
          <div className="already-have-account form-links">
             <span>Already have an account? </span>
-            <Link className="login-link" to="/app/login">Login</Link>
+            <Link className="login-link" to="/auth/login">Login</Link>
          </div>
       </>
    )

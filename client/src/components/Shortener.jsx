@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { getCookie } from '../utils/userCookie'
@@ -17,14 +17,14 @@ const Shortener = ({ user, setUser }) => {
 
    const navigate = useNavigate()
    useEffect(() => {
-      navigate(!user?.logged && "/app/login")
+      navigate(!user?.logged && "/auth/login")
    }, [user, navigate])
    useEffect(() => {
       const cok = getCookie()
       cok && setUser({ ...cok })
    }, [setUser, navigate])
 
-   const handleSubmit = async e => {
+   const handleSubmit = useCallback(async e => {
       e.preventDefault()
       if (!originalUrl) {
          alert("Please enter original url")
@@ -67,7 +67,7 @@ const Shortener = ({ user, setUser }) => {
       } finally {
          setButtonTxt("Shorten URL")
       }
-   }
+   }, [slug, originalUrl, expires])
 
    return (
       <div className="shortener-form-container">
@@ -97,7 +97,7 @@ const Shortener = ({ user, setUser }) => {
                <option value="2d">2 days</option>
                <option value="7d">7 days</option>
             </select>
-            <button type="submit">{buttonTxt}</button>
+            <button type="submit" disabled={buttonTxt === "Loading.."}>{buttonTxt}</button>
             {urlCreated &&
                <NewUrlCard slug={slugUrl}
                   destination={destination}

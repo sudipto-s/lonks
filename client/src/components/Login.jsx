@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import "../css/Auth.css"
@@ -21,7 +21,7 @@ const Login = ({ user, setUser }) => {
       cok && setUser({ ...cok })
    }, [setUser, navigate])
 
-   const handleSubmit = async (e) => {
+   const handleSubmit = useCallback(async e => {
       e.preventDefault()
 
       try {
@@ -37,7 +37,7 @@ const Login = ({ user, setUser }) => {
       } finally {
          setButtonText("Login")
       }
-   }
+   }, [identifier, password, setUser])
 
    return (
       <div className="auth-container">
