@@ -8,15 +8,15 @@ import Dashboard from "./Dashboard";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 
-const Main = ({ user, setUser }) => {
+const Main = () => {
    return (
       <Routes>
-         <Route path="/" element={ <Home user={user} setUser={setUser} /> } />
-         <Route path="/auth/login" element={ <Login user={user} setUser={setUser} />} />
-         <Route path="/auth/signup" element={ <Signup user={user} setUser={setUser} /> } />
-         <Route path="/app/dashboard" element={ <Dashboard user={user} setUser={setUser} /> } />
-         <Route path="/app/shorten" element={ <Shortener user={user} setUser={setUser} /> } />
-         <Route path="/auth/forgot-password" element={ <ForgotPassword user={user} setUser={setUser} /> } />
+         <Route path="/" element={ <Home /> } />
+         <Route path="/auth/login" element={ <Login />} />
+         <Route path="/auth/signup" element={ <Signup /> } />
+         <Route path="/app/dashboard" element={ <Dashboard /> } />
+         <Route path="/app/shorten" element={ <Shortener /> } />
+         <Route path="/auth/forgot-password" element={ <ForgotPassword /> } />
          <Route path="/auth/reset-password" element={ <ResetPassword /> } />
          <Route path="*" element={ <NotFound /> } />
       </Routes>

@@ -1,9 +1,13 @@
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import '../css/HeaderFooter.css'
 import axios from "axios"
 import logout from "../utils/logout"
+import { AppContext } from "../context/AppContext"
 
-const Header = ({ user, setUser }) => {
+const Header = () => {
+   const { user, setUser } = useContext(AppContext)
+   
    const handleLogout = async () => {
       try {
          await axios.post("/api/v1/auth/logout")

@@ -1,10 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { getCookie } from '../utils/userCookie'
 import NewUrlCard from './NewUrlCard'
+import { AppContext } from "../context/AppContext"
 
-const Shortener = ({ user, setUser }) => {
+const Shortener = () => {
+   const { user, setUser } = useContext(AppContext)
+
    document.title = "Shorten - Lonks"
    const [slug, setSlug] = useState("")
    const [originalUrl, setOriginalUrl] = useState("")

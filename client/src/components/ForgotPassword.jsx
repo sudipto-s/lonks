@@ -1,11 +1,14 @@
-import { useState, useEffect, useCallback } from 'react' 
+import { useState, useEffect, useCallback, useContext } from 'react' 
 import axios from "axios" 
 import "../css/Auth.css"
 import { useNavigate } from 'react-router-dom'
 import { getCookie } from "../utils/userCookie"
 import { isEmail } from "../utils/authUtils"
+import { AppContext } from "../context/AppContext"
 
-const ForgotPassword = ({ user, setUser }) => {
+const ForgotPassword = () => {
+   const { user, setUser } = useContext(AppContext)
+
    const [email, setEmail] = useState('')
    const [btnTxt, setBtnTxt] = useState("Continue")
    const [message, setMessage] = useState(null)

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { getCookie, setCookie } from '../utils/userCookie'
@@ -6,8 +6,11 @@ import "../css/Auth.css"
 import SignupForm from './forms/SignupForm'
 import OtpForm from "./forms/OtpForm"
 import { isEmail } from "../utils/authUtils"
+import { AppContext } from "../context/AppContext"
 
-const Signup = ({ user, setUser }) => {
+const Signup = () => {
+   const { user, setUser } = useContext(AppContext)
+
    document.title = "Signup - Lonks"
    const [newUser, setNewUser] = useState({username:"",email:"",password:"",confirmPassword:""})
    const [otp, setOtp] = useState("")

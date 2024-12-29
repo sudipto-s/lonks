@@ -1,8 +1,11 @@
-import { useEffect } from "react"
+import { useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { getCookie } from "../utils/userCookie"
+import { AppContext } from "../context/AppContext"
 
-const Home = ({ user, setUser }) => {
+const Home = () => {
+   const { user, setUser } = useContext(AppContext)
+
    const navigate = useNavigate()
    useEffect(() => {
       navigate(user?.logged && "/app/dashboard")

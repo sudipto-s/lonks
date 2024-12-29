@@ -1,11 +1,14 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import "../css/Auth.css"
 import { getCookie, setCookie } from '../utils/userCookie'
 import LoginForm from './forms/LoginForm'
+import { AppContext } from "../context/AppContext"
 
-const Login = ({ user, setUser }) => {
+const Login = () => {
+   const { user, setUser } = useContext(AppContext)
+   
    document.title = "Login - Lonks"
    const [identifier, setIdentifier] = useState("")
    const [password, setPassword] = useState("")

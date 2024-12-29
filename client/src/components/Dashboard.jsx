@@ -1,12 +1,15 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getCookie } from "../utils/userCookie"
 import axios from "axios"
 import EditUrlModal from "./EditUrlModal"
 import { io } from "socket.io-client"
 import UrlCard from "./UrlCard"
+import { AppContext } from "../context/AppContext"
 
-const Dashboard = ({ user, setUser }) => {
+const Dashboard = () => {
+   const { user, setUser } = useContext(AppContext)
+
    document.title = "Dashboard - Lonks"
    const [urls, setUrls] = useState(null)
    const [error, setError] = useState("")
