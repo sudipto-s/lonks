@@ -8,21 +8,17 @@ const NetworkStatus = () => {
    }
 
    useEffect(() => {
-      navigator.connection.addEventListener("change", updateOnlineStatus)
+      window.addEventListener("online", updateOnlineStatus);
+      window.addEventListener("offline", updateOnlineStatus)
       
       return () => {
-         navigator.connection.removeEventListener("change", updateOnlineStatus)
+         window.removeEventListener("online", updateOnlineStatus);
+         window.removeEventListener("offline", updateOnlineStatus)
       }
    }, [])
 
-   // return !isOnline ?
-   // (
-   //    <div className="network-status">
-   //       You are OFFline! Try connection to the internet..
-   //    </div>
-   // ) : null
    return <div className={`network-status ${!isOnline ? "show" : ""}`}>
-         {!isOnline ? "You are offline. Please check your connection!" : ""}
+         {!isOnline ? "You are offline!" : ""}
    </div>
 }
 

@@ -31,7 +31,7 @@ a {
 /* Network status */
 .network-status {
    position: fixed;
-   top: -100%; /* Start hidden above the viewport */
+   top: -100%;
    left: 0;
    width: 100%;
    background: repeating-linear-gradient(
@@ -40,22 +40,31 @@ a {
       #ffc107 10px,
       #ffcd38 10px,
       #ffcd38 20px
-   ); /* Striped warning background */
+   );
    z-index: 1000;
    display: flex;
    justify-content: center;
    align-items: center;
    color: #000;
    font-size: 20px;
-   font-weight: bold;
+   padding: 15px 0;
    text-align: center;
-   padding: 15px;
    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-   transition: top 0.5s ease, opacity 0.5s ease; /* Smooth animations for both */
-   opacity: 0; /* Start fully transparent */
+   transition: top 0.6s ease, opacity 0.5s ease;
+   opacity: 0;
+   background-size: 200% 100%;
+   animation: move-stripes 150s linear infinite;
+}
+@keyframes move-stripes {
+   from {
+      background-position: 0 0;
+   }
+   to {
+      background-position: 200% 0;
+   }
 }
 .network-status.show {
-   top: 0; /* Fully visible in viewport */
+   top: 0;
    opacity: 1;
 }
 
