@@ -28,6 +28,37 @@ a {
    text-decoration: none;
 }
 
+/* Network status */
+.network-status {
+   position: fixed;
+   top: -100%; /* Start hidden above the viewport */
+   left: 0;
+   width: 100%;
+   background: repeating-linear-gradient(
+      45deg,
+      #ffc107,
+      #ffc107 10px,
+      #ffcd38 10px,
+      #ffcd38 20px
+   ); /* Striped warning background */
+   z-index: 1000;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   color: #000;
+   font-size: 20px;
+   font-weight: bold;
+   text-align: center;
+   padding: 15px;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+   transition: top 0.5s ease, opacity 0.5s ease; /* Smooth animations for both */
+   opacity: 0; /* Start fully transparent */
+}
+.network-status.show {
+   top: 0; /* Fully visible in viewport */
+   opacity: 1;
+}
+
 /* Home page */
 .Home {
    font-family: "Rutan";
