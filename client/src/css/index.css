@@ -72,6 +72,7 @@ a {
 .Home {
    font-family: "Rutan";
    display: flex;
+   flex-direction: column;
    justify-content: center;
    align-items: center;
    text-align: center;
@@ -81,6 +82,65 @@ a {
 }
 .Home h2 {
    font-size: 2.5rem;
+}
+.Home .swiper-group {
+   display: flex;
+   gap: 5px;
+   flex-direction: row;
+   justify-content: center;
+}
+.Home .swiper-group h2 {
+   margin: 5px 0 0;
+   font-size: 1.9rem;
+}
+.Home .swiper {
+   height: 1.7rem;
+   margin: 0;
+   padding: .4rem 0;
+   font-size: large;
+}
+.swiper p {
+   font-size: 1.5rem;
+   margin: 0;
+   text-shadow: 0 0 7px rgba(255, 255, 255, 0.302),
+               0 0 3px rgba(255, 255, 255, 0.3);
+}
+.swiper-inner {
+   height: 2.9rem;
+   overflow: hidden;
+}
+.swiper-inner > div > span {
+   display: block;
+   width: 8.5rem;
+   height: 2.4rem;
+   padding: .4rem .75rem;
+   margin: 0 0 1.2rem;
+   white-space: nowrap;
+   color: #fff;
+   border-radius: 10px;
+}
+.first span {
+   background: linear-gradient(45deg, #1498c6, #0f7fa6);
+}
+.second span {
+   background: linear-gradient(45deg, #ff9900, #e67e00);
+}
+.third span {
+   background: linear-gradient(45deg, #fb383e, #d32f2f);
+}
+.fourth span {
+   background: linear-gradient(45deg, #28a745, #1e7b31);
+}
+.swiper-inner > div {
+   margin: 2px 0 0;
+   animation: text-animation 10s infinite;
+}
+@keyframes text-animation {
+   0%, 20% { transform: translateY(0); }
+   25%, 45% { transform: translateY(-3.55rem); }
+   50%, 70% { transform: translateY(-7.2rem); }
+   75%, 95% { transform: translateY(-10.8rem); }
+   100% { transform: translateY(0); }
 }
 
 /* Container styling for the dashboard */

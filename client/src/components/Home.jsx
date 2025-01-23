@@ -17,7 +17,27 @@ const Home = () => {
 
    return (
       <div className="Home">
-         <h2>Lonks <br /> A Simple Link Shortener</h2>
+         <h2>Lonks</h2>
+         <h2>Link Shortener</h2>
+         <div className="swiper-group">
+            <div className="swiper">
+               <div className="swiper-inner">
+                  <div className="first">
+                     <span>Shorten</span>
+                  </div>
+                  <div className="second">
+                     <span>Edit</span>
+                  </div>
+                  <div className="third">
+                     <span>Delete</span>
+                  </div>
+                  <div className="fourth">
+                     <span>Share</span>
+                  </div>
+               </div>
+            </div>
+            <h2>links</h2>
+         </div>
       </div>
    );
 }
