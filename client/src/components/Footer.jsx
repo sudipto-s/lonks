@@ -5,9 +5,8 @@ const Footer = () => {
       <footer className="footer">
          <p className="s-lonk">
             &copy; {new Date().getFullYear()} &nbsp;
-            <a target="_blank" rel="noopener noreferrer"
-               href="//github.com/sudipto-s/lonks"
-            >Lonks</a>. All rights reserved.
+            <span target="_blank" rel="noopener noreferrer"
+            >Lonks</span>. All rights reserved.
             @Sudipto
          </p>
          <div className="social-media">

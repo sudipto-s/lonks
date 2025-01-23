@@ -116,8 +116,10 @@ export const deleteUrl = async (req, res) => {
 // Get slugs
 export const getAll = async (req, res) => {
    const { assoc } = req.body
-   if (!res.user)
-      return res.status(401).json({ message: "Unauthorized! Please re-login" })
+
+   // Check if user is authenticated & the requested email is same as the actual email
+   if (!res.user || res.user.email !== assoc)
+      return res.status(401).json({ message: "Unauthorized access detected! Please re-login" })
 
    try {
       const urls = await Url.find({ assoc })

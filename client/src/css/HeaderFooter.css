@@ -21,17 +21,39 @@
    display: flex;
    gap: 15px;
 }
-.header .nav ul li a {
+.header .logout-btn {
+   cursor: pointer;
+}
+.header .logout-btn:hover {
+   color: #ddd;
+}
+.header a {
    color: white;
    text-decoration: none;
    font-size: 1rem;
+   position: relative;
    transition: color 0.3s;
 }
-.header .nav ul li a:hover {
-   color: #ddd;
+.header a::after {
+   content: "";
+   position: absolute;
+   bottom: 0px;
+   left: 0;
+   width: 0;
+   height: 2px;
+   background-color: white;
+   transition: width 0.4s ease, left 0.4s ease;
 }
-.header .logout-btn {
-   cursor: pointer;
+.header a:hover {
+   color: #eee;
+}
+.header a:hover::after {
+   width: 100%;
+   left: 0;
+}
+.header a:not(:hover)::after {
+   width: 0;
+   left: 0;
 }
 
 /* Footer Styles */
@@ -54,6 +76,7 @@
 .footer a  {
    color: white;
    text-decoration: underline;
+   transition: color 0.2s;
 }
 
 .footer .social-media {
