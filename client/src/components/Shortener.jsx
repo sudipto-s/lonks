@@ -20,7 +20,7 @@ const Shortener = () => {
 
    const navigate = useNavigate()
    useEffect(() => {
-      navigate(!user?.logged && "/auth/login")
+      navigate(!user?.logged && "/auth/login", { replace: true })
    }, [user, navigate])
    useEffect(() => {
       const cok = getCookie()
@@ -30,10 +30,13 @@ const Shortener = () => {
    const handleSubmit = useCallback(async e => {
       e.preventDefault()
       if (!originalUrl) {
-         alert("Please enter original url")
+         setError("Please enter original url")
          return
       }
-
+      if (slug && slug.length < 3) {
+         setError("Slug should be minimum 3 characters long")
+         return
+      }
       if (slug === "app") {
          setError("Slug 'app' is restricted")
          return
@@ -96,9 +99,9 @@ const Shortener = () => {
                onChange={e => setExpires(e.target.value)}
             >
                <option value="never">Never</option>
-               <option value="1d">1 day</option>
-               <option value="2d">2 days</option>
-               <option value="7d">7 days</option>
+               <option value="1">1 day</option>
+               <option value="2">2 days</option>
+               <option value="7">7 days</option>
             </select>
             <button type="submit" disabled={buttonTxt === "Loading.."}>{buttonTxt}</button>
             {urlCreated &&

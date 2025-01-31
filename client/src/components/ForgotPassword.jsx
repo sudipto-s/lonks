@@ -15,7 +15,7 @@ const ForgotPassword = () => {
 
    const navigate = useNavigate()
    useEffect(() => {
-      navigate(user?.logged && "/app/dashboard")
+      navigate(user?.logged && "/app/dashboard", { replace: true })
    }, [user, navigate])
    useEffect(() => {
       const cok = getCookie()

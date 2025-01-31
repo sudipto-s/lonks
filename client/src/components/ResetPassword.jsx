@@ -1,9 +1,13 @@
-import { useCallback, useState } from "react"
+import { useCallback, useState, useEffect, useContext } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import axios from "axios"
 import "../css/Auth.css"
+import { getCookie } from "../utils/userCookie"
+import { AppContext } from "../context/AppContext"
 
 const ResetPassword = () => {
+   const { user, setUser } = useContext(AppContext)
+
    const [password, setPassword] = useState("")
    const [confirmPassword, setConfirmPassword] = useState("")
    const [message, setMessage] = useState("")
@@ -11,6 +15,15 @@ const ResetPassword = () => {
    const navigate = useNavigate()
    const [searchParams] = useSearchParams()
    const token = searchParams.get("token")
+
+   useEffect(() => {
+      setUser(getCookie())
+      navigate(user?.logged && "/app/dashboard", { replace: true })
+   }, [user, setUser, navigate])
+   useEffect(() => {
+      const cok = getCookie()
+      cok && setUser({ ...cok })
+   }, [setUser, navigate])
 
    const handleSubmit = useCallback(async e => {
       e.preventDefault()

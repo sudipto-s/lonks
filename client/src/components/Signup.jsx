@@ -21,7 +21,7 @@ const Signup = () => {
    const navigate = useNavigate()
    useEffect(() => {
       setUser(getCookie())
-      navigate(user?.logged && "/app/dashboard")
+      navigate(user?.logged && "/app/dashboard", { replace: true })
    }, [user, setUser, navigate])
    useEffect(() => {
       const cok = getCookie()

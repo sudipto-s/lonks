@@ -1,0 +1,28 @@
+{
+	"short_name": "Lonks",
+	"name": "Lonks - Link Shortener",
+	"icons": [
+		{
+			"src": "favicon.ico",
+			"sizes": "48x48",
+			"type": "image/x-icon",
+			"purpose": "any maskable"
+		},
+		{
+			"src": "android-chrome-192x192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "android-chrome-512x512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "/",
+	"display": "standalone",
+	"theme_color": "#000000",
+	"background_color": "#ffffff",
+   "orientation": "portrait",
+   "description": "Lonks - Link Shortener"
+}

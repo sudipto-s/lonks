@@ -150,8 +150,8 @@ export const resetPassword = async (req, res) => {
 }
 
 /* Create JWT */
-const maxAge = 4 * 24 * 60 * 60 * 1000
+const maxAge = 15 * 24 * 60 * 60 * 1000    // 15 days
 const createToken = (userId, email) =>
    jwt.sign({ userId, email }, process.env.JWT_SECRET, {
-      expiresIn: "4d"   // 4 days
+      expiresIn: "15d"   // 15 days
    })

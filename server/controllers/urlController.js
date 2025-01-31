@@ -13,6 +13,9 @@ export const createUrl = async (req, res) => {
    // Generate a 4 character unique slug if user doesn't provide
    if (!slug)
       slug = await generateShortId()
+   // Check if slug is less than 3 characters
+   if (slug.length < 3)
+      return res.status(400).json({ message: "Slug must be at least 3 characters" })
 
    try {
       const newUrl = new Url({ slug, originalUrl, assoc })
@@ -21,8 +24,7 @@ export const createUrl = async (req, res) => {
       if (expires === "never")
          newUrl.expires = null
       else {
-         const days = expires.split("d")[0]
-         newUrl.expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000)
+         newUrl.expires = new Date(Date.now() + expires * 24 * 60 * 60 * 1000)
       }
 
       await newUrl.save()
@@ -122,7 +124,8 @@ export const getAll = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized access detected! Please re-login" })
 
    try {
-      const urls = await Url.find({ assoc })
+      // Find links associated with the email, sorted by 'createdAt' in descending order
+      const urls = await Url.find({ assoc }).sort({ createdAt: -1 })
       if (!urls)
          return res.status(404).send({ message: "No URLs found" })
       return res.status(200).send(urls)

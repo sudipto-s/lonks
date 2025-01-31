@@ -10,10 +10,10 @@ const Footer = () => {
             @Sudipto
          </p>
          <div className="social-media">
-            <a href="//github.com/sudipto-s" target="_blank" rel="noopener noreferrer">GitHub</a> |
-            <a href="//instagram.com/sudipto_.s" target="_blank" rel="noopener noreferrer">Instagram</a> |
-            <a href="//linkedin.com/in/sudipto-singha" target="_blank" rel="noopener noreferrer">LinkedIn</a> |
-            <a href="//iconoir.com" target="_blank" rel="noopener noreferrer">Iconoir</a>
+            <a href="https://github.com/sudipto-s" target="_blank" rel="noopener noreferrer">GitHub</a> |
+            <a href="https://instagram.com/sudipto_.s" target="_blank" rel="noopener noreferrer">Instagram</a> |
+            <a href="https://linkedin.com/in/sudipto-singha" target="_blank" rel="noopener noreferrer">LinkedIn</a> |
+            <a href="https://iconoir.com" target="_blank" rel="noopener noreferrer">Iconoir</a>
          </div>
       </footer>
    );

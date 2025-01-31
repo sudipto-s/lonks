@@ -3,6 +3,7 @@ import edit from "../assets/edit.svg"
 import share from "../assets/share.svg"
 import copy from "../assets/copy.svg"
 import deleteimg from "../assets/delete.svg"
+import { CountUp } from "./ReactBits"
 import {
    copyLink, getDaysCreatedAge, getExpiresIn, getFaviconUrl, shareLink
 } from "../utils/dashboardUtils"
@@ -23,7 +24,15 @@ const UrlCard = ({ link, setModalOpen, handleDelete, setCopySlug }) => {
          </div>
       </div>
       <div className="middle">
-         <span className="clicks">{link.clicks} click{link.clicks > 1 ? "s" : ""}</span>
+         <span className="clicks">
+         <CountUp
+            from={0}
+            to={link.clicks}
+            separator=","
+            direction="up"
+            duration={1}
+            className="count-up-text"
+         />&nbsp;click{link.clicks > 1 ? "s" : ""}</span>
          <span className="created"> | Created {getDaysCreatedAge(link.createdAt)}</span>
          { link?.expires && <span className="expires"> | Expires {getExpiresIn(link.expires)}</span>}
       </div>

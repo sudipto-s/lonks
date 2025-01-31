@@ -39,7 +39,7 @@ const Dashboard = () => {
 
    const navigate = useNavigate()
    useEffect(() => {
-      navigate(user?.logged || "/auth/login")
+      navigate(user?.logged || "/auth/login", { replace: true })
    }, [user, navigate])
    useEffect(() => {
       const cok = getCookie()
