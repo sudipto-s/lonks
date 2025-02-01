@@ -105,8 +105,8 @@ const Dashboard = () => {
             !loading && <p>No shortened links yet. Start by creating one!</p>
          ) : (
             <div className="url-container">
-            {urls?.map((link, i) =>
-               <UrlCard key={i} link={link}
+            {urls?.map(link =>
+               <UrlCard key={link._id} link={link}
                   handleDelete={handleDelete}
                   setModalOpen={setModalOpen}
                   setCopySlug={setCopySlug}

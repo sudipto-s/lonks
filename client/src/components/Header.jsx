@@ -4,6 +4,7 @@ import '../css/HeaderFooter.css'
 import axios from "axios"
 import logout from "../utils/logout"
 import { AppContext } from "../context/AppContext"
+import { ShinyText } from './ReactBits'
 
 const Header = () => {
    const { user, setUser } = useContext(AppContext)
@@ -21,7 +22,9 @@ const Header = () => {
    return (
       <header className="header">
          <div className="logo">
-            <Link to="/"><h1>Lonks</h1></Link>
+            <Link to="/"><h1>
+               <ShinyText text="Lonks" disabled={false} speed={3} className='custom-class' />
+            </h1></Link>
          </div>
          <nav className="nav">
             <ul>
