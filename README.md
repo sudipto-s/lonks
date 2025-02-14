@@ -13,5 +13,6 @@
 ### 4. Get a Real-Time click counter & know when the shorts are expiring.
 
 ## Attributions
+- Logo by [Turbologo](https://turbologo.com)
 - Icons by [Icons8](https://icons8.com) and [Iconoir](https://iconoir.com)
-- Text animation by [React Bits](https://reactbits.com)
+- Text animation by [React Bits](https://reactbits.dev)
