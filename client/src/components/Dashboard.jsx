@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom"
 import { getCookie } from "../utils/userCookie"
 import axios from "axios"
 import EditUrlModal from "./EditUrlModal"
-import { io } from "socket.io-client"
 import UrlCard from "./UrlCard"
 import { AppContext } from "../context/AppContext"
 
 const Dashboard = () => {
-   const { user, setUser } = useContext(AppContext)
+   const { user, setUser, socket } = useContext(AppContext)
 
    document.title = "Dashboard - Lonks"
    const [urls, setUrls] = useState(null)
@@ -19,14 +18,8 @@ const Dashboard = () => {
    const [isModalOpen, setModalOpen] = useState(null)
 
    useEffect(() => {
-      // Create a new socket connection
-      const newSocket = io(
-         import.meta.env.MODE === "development" ?
-         "http://localhost:5000" : window.location.origin
-      )
-
-      // Receive updated data from via socket
-      newSocket.on("click-update", ({ slug, clicks }) => {
+      // Receive updated data via socket
+      socket.on("click-update", ({ slug, clicks }) => {
          setUrls(prevUrls =>
             prevUrls?.map(url =>
                url.slug === slug ? { ...url, clicks } : url
@@ -34,8 +27,8 @@ const Dashboard = () => {
          )
       })
       
-      return () => newSocket.disconnect()
-   }, [])
+      return () => socket.off("click-update")
+   }, [socket])
 
    const navigate = useNavigate()
    useEffect(() => {
@@ -110,6 +103,7 @@ const Dashboard = () => {
                   handleDelete={handleDelete}
                   setModalOpen={setModalOpen}
                   setCopySlug={setCopySlug}
+                  onClick={() => navigate(`/s/${link.slug}`, { replace: true })}
                />
             )}
             </div>

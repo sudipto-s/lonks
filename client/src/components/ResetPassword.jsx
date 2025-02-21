@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect, useContext } from "react"
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
 import "../css/Auth.css"
 import { getCookie } from "../utils/userCookie"
@@ -13,8 +13,7 @@ const ResetPassword = () => {
    const [message, setMessage] = useState("")
    const [btnTxt, setBtnTxt] = useState("Reset Password")
    const navigate = useNavigate()
-   const [searchParams] = useSearchParams()
-   const token = searchParams.get("token")
+   const { token } = useParams()
 
    useEffect(() => {
       setUser(getCookie())

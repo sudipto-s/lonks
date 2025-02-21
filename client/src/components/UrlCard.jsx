@@ -8,14 +8,14 @@ import {
    copyLink, getDaysCreatedAge, getExpiresIn, getFaviconUrl, shareLink
 } from "../utils/dashboardUtils"
 
-const UrlCard = ({ link, setModalOpen, handleDelete, setCopySlug }) => {
+const UrlCard = ({ link, setModalOpen, handleDelete, setCopySlug, onClick = f => f }) => {
    return <div className="url-card">
       <div className="top">
          <div className="host-logo">
-            <img src={getFaviconUrl(link.originalUrl)} alt="host-logo" />
+            <img src={getFaviconUrl(link.originalUrl)} alt="host-logo" onClick={onClick} />
          </div>
          <div className="url-links">
-            <span className="short-url" title="Short link">
+            <span className="short-url" title="Short link" onClick={onClick}>
                {window.origin.replace(/https?:\/\//, "")}/{link.slug}
             </span>
             <p className="dest-url" title="Destination URL">

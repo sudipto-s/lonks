@@ -7,6 +7,7 @@ import NotFound from "./NotFound";
 import Dashboard from "./Dashboard";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
+import Analytics from "./charts/Analytics";
 
 const Main = () => {
    return (
@@ -17,7 +18,8 @@ const Main = () => {
          <Route path="/app/dashboard" element={ <Dashboard /> } />
          <Route path="/app/shorten" element={ <Shortener /> } />
          <Route path="/auth/forgot-password" element={ <ForgotPassword /> } />
-         <Route path="/auth/reset-password" element={ <ResetPassword /> } />
+         <Route path="/auth/reset-password/:token" element={ <ResetPassword /> } />
+         <Route path="/s/:slug" element={ <Analytics /> } />
          <Route path="*" element={ <NotFound /> } />
       </Routes>
    );

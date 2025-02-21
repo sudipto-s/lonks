@@ -78,7 +78,6 @@ const Shortener = () => {
    return (
       <div className="shortener-form-container">
          <form onSubmit={handleSubmit} className="shortener-form">
-            <h2>URL Shortener</h2>
             {error && <p className="error">{error}</p>}
             <label htmlFor="originalUrl">Original URL:</label>
             <input 

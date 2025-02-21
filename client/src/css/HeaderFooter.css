@@ -10,6 +10,7 @@
    background-color: #007bff;
    padding: 10px 20px;
    color: white;
+   z-index: 1;
 }
 .header .logo h1 {
    font-family: "Rutan";
@@ -60,12 +61,14 @@
 .footer {
    font-family: "Rutan";
    background-color: #333;
+   background-color: #3b485c;
    color: white;
    padding: 15px 20px;
    text-align: center;
    position: fixed;
    width: 100%;
    bottom: 0;
+   box-shadow: 0 -2px 10px #6f6f6f;
 }
 
 .footer p {

@@ -2,6 +2,8 @@ import Url from "../models/Url.js"
 import generateShortId from "../utils/generateShortId.js"
 import botUserAgents from "../utils/botList.js"
 import { emitClickCountUpdate } from "../index.js"
+import geoip from "geoip-lite"
+import {UAParser} from "ua-parser-js"
 
 // Create a short link
 export const createUrl = async (req, res) => {
@@ -44,7 +46,7 @@ export const getUrl = async (req, res) => {
       return res.status(301).redirect("/")
 
    // Check if the request is from a bot or pre-fetching service
-   const userAgent = req.headers['user-agent']
+   const userAgent = req.headers['user-agent'] || ""
 
    // Check if the request comes from one of these bots
    const isBot = botUserAgents.some(bot => userAgent.toLowerCase().includes(bot.toLowerCase()))
@@ -55,6 +57,19 @@ export const getUrl = async (req, res) => {
       if (!url)
          return res.status(404).send("Url not found")
 
+      // Extract user details
+      const ip = req.headers["x-forwarded-for"]?.split(",")[0] || req.connection.remoteAddress
+      const geo = geoip.lookup(ip)
+      const ua = UAParser(req.headers["user-agent"])
+      // Click data
+      const clickData = {
+         referrer: req.get("Referer") || "Direct",
+         country: geo?.country || "Unknown",
+         browser: ua.browser.name || "Unknown",
+         os: ua.os.name || "Unknown",
+         device: ua.device.type || "Desktop"
+      }
+
       // Increment the click count if request is not from a bot
       if (!isBot) {
          url.clicks++
@@ -62,8 +77,19 @@ export const getUrl = async (req, res) => {
 
          // Emit the updated click count to connected clients
          emitClickCountUpdate(slug, url.clicks)
-      }
 
+         // Update the other refs
+         await Url.updateOne({ slug },
+            { $inc: {
+               [`referrers.${clickData.referrer}`]: 1,
+               [`countryStats.${clickData.country}`]: 1,
+               [`deviceStats.${clickData.device}`]: 1,
+               [`osStats.${clickData.os}`]: 1,
+               [`browserStats.${clickData.browser}`]: 1
+            }}
+         )
+      }
+      
       return res.redirect(url.originalUrl)
    } catch (err) {
       console.log(err.message)
@@ -129,6 +155,25 @@ export const getAll = async (req, res) => {
       if (!urls)
          return res.status(404).send({ message: "No URLs found" })
       return res.status(200).send(urls)
+   } catch (err) {
+      console.log(err.message)
+      res.status(500).json({ message: err.message })
+   }
+}
+
+// Get one
+export const getOne = async (req, res) => {
+   const { assoc, slug } = req.body
+
+   // Check if user is authenticated & the requested email is same as the actual email
+   if (!res.user || res.user.email !== assoc)
+      return res.status(401).json({ message: "Unauthorized access detected! Please re-login" })
+
+   try {
+      const url = await Url.findOne({ slug })
+      if (!url)
+         return res.status(404).send({ message: "No URL found" })
+      return res.status(200).send(url)
    } catch (err) {
       console.log(err.message)
       res.status(500).json({ message: err.message })

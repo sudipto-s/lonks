@@ -144,7 +144,8 @@ a {
 }
 
 /* Container styling for the dashboard */
-.dashboard-container {
+.dashboard-container,
+.analytics-container {
    max-width: 1200px;
    height: 100svh;
    margin: 0 auto;
@@ -189,6 +190,7 @@ a {
    padding: 10px 20px;
    border-radius: 5px;
    opacity: 0;
+   z-index: 1;
    visibility: hidden;
    transition: all 0.8s ease-in-out;
 }
@@ -244,6 +246,7 @@ a {
    font-size: 20px;
    font-weight: 600 !important;
    word-break: break-all;
+   cursor: pointer;
 }
 .dashboard-container .short-url:hover {
    color: #111;
@@ -259,6 +262,7 @@ a {
    width: 50px;
    height: 50px;
    border-radius: 50%;
+   cursor: pointer;
 }
 .url-card .middle {
    margin: 5px 0 0 60px;
@@ -284,7 +288,7 @@ a {
    gap: 10px;
 }
 .url-card .bottom > * {
-   margin: 0 10px;
+   margin: 0 20px 0 0;
 }
 .url-card .url-links {
    width: 80%;
@@ -297,6 +301,11 @@ a {
 }
 .message {
    color: #28a745;
+}
+
+/* Analytics container */
+.analytics-container .analytics-details {
+   line-height: 2;
 }
 
 /* New Url card */

@@ -21,7 +21,13 @@ const urlSchema = new Schema({
    expires: {
       type: Date,
       default: null
-   }
+   },
+   referrers: { type: Map, of: Number, default: {} },
+   countryStats: { type: Map, of: Number, default: {} },
+   deviceStats: { type: Map, of: Number, default: {} },
+   osStats: { type: Map, of: Number, default: {} },
+   browserStats: { type: Map, of: Number, default: {} },
+   analyticsAvailableFrom: { type: Date, default: Date.now() },
 }, { timestamps: true })
 
 // Indexing for fast querying

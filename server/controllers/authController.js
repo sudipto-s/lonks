@@ -108,7 +108,7 @@ export const forgotPassword = async (req, res) => {
       await user.save()
    
       // Send reset link
-      const resetLink = `${req.protocol}://${req.get("host")}/app/reset-password?token=${resetToken}`
+      const resetLink = `${req.protocol}://${req.get("host")}/auth/reset-password/${resetToken}`
       await resetPasswordEmail(email, resetLink)
    
       res.status(200).json({ message: "Reset link sent to your email" })
