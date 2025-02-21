@@ -14,7 +14,7 @@ export const getDate = url => {
    const availableDate = new Date(url.analyticsAvailableFrom)
    const createdDate = new Date(url.createdAt)
    console.log(Math.abs(availableDate - createdDate))
-   if(Math.abs(availableDate - createdDate) < 10000)
+   if(Math.abs(availableDate - createdDate) < 600000)
       return null
    return availableDate.toLocaleDateString('en-IN')
 }

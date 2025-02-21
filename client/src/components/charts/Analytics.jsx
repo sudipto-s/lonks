@@ -109,7 +109,7 @@ const Analytics = () => {
             <>
                <div className="analytics-details">
                   <h1 style={{ textAlign: "center" }}>Analytics for /{url.slug}</h1>
-                  {<h3>Link created at <span>{new Date(url.createdAt).toLocaleDateString()}</span></h3>}
+                  {<h3>Link created at <span>{new Date(url.createdAt).toLocaleDateString('en-IN')}</span></h3>}
                   {analyticsAvDiff && <h3>Analytics available from <span>{analyticsAvDiff}</span></h3>}
                   <h3>Total Clicks:&nbsp;
                   <CountUp

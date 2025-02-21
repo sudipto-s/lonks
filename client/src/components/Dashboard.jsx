@@ -103,7 +103,7 @@ const Dashboard = () => {
                   handleDelete={handleDelete}
                   setModalOpen={setModalOpen}
                   setCopySlug={setCopySlug}
-                  onClick={() => navigate(`/s/${link.slug}`, { replace: true })}
+                  onClick={() => navigate(`/s/${link.slug}`)}
                />
             )}
             </div>
