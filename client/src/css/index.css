@@ -307,6 +307,11 @@ a {
 .analytics-container .analytics-details {
    line-height: 2;
 }
+code {
+   padding: 5px;
+   border-radius: 5px;
+   background-color: #e1e0e0;
+}
 
 /* New Url card */
 /* Backdrop overlay to dim the background */

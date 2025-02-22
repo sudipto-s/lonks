@@ -74,7 +74,7 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
                   <input
                      type="url"
                      value={newOriginalUrl} required
-                     onChange={e => setNewOriginalUrl(e.target.value?.trim().toLocaleLowerCase())}
+                     onChange={e => setNewOriginalUrl(e.target.value?.trim())}
                   />
                </label>
                <label>

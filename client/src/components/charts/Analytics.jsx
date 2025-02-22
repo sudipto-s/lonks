@@ -16,9 +16,6 @@ const Analytics = () => {
    const [url, setUrl] = useState(null)
    const [error, setError] = useState("")
    const [loading, setLoading] = useState(false)
-   const [copySlug, setCopySlug] = useState(null) 
-   const [deleteSlug, setDeleteSlug] = useState(null)
-   const [isModalOpen, setModalOpen] = useState(null)
 
    const { slug } = useParams()
 
@@ -69,46 +66,15 @@ const Analytics = () => {
 
    const analyticsAvDiff = useMemo(() => getDate(url), [url])
 
-   const handleDelete = useCallback(async slug => {
-      if (confirm(`Do you want to delete /${slug}`)) {
-         try {
-            const { data } = await axios.delete(`/url/delete/${slug}`)
-            console.log(data)
-            setDeleteSlug(slug)
-            setError("")
-            setTimeout(() => setDeleteSlug(null), 2500)
-
-            // Update the URLs state to remove the deleted URL
-            navigate("/app/dashboard")
-         } catch (err) {
-            console.log(err)
-            setDeleteSlug(null)
-            setError(err.response?.data?.message)
-            alert(err.response?.data?.message)
-         }
-      }
-   }, [navigate])
-
    return (
       <div className="analytics-container">
          {loading && <h2 style={{ textAlign: "center" }}>Loading...</h2>}
-
-         {copySlug && (
-            <h3 className={`delete-slug-msg ${copySlug ? 'show' : ''}`}>
-               Link copied successfully!
-            </h3>
-         )}
-         {deleteSlug && (
-            <h3 className={`delete-slug-msg ${deleteSlug ? 'show' : ''}`}>
-               Slug /{deleteSlug} deleted successfully!
-            </h3>
-         )}
 
          {error && <p className="error">{error}</p>}
          {url &&
             <>
                <div className="analytics-details">
-                  <h1 style={{ textAlign: "center" }}>Analytics for /{url.slug}</h1>
+                  <h1 style={{ textAlign: "center" }}>Analytics for <code>/{url.slug}</code></h1>
                   {<h3>Link created at <span>{new Date(url.createdAt).toLocaleDateString('en-IN')}</span></h3>}
                   {analyticsAvDiff && <h3>Analytics available from <span>{analyticsAvDiff}</span></h3>}
                   <h3>Total Clicks:&nbsp;

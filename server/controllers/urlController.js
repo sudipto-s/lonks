@@ -4,7 +4,7 @@ import botUserAgents from "../utils/botList.js"
 import { emitClickCountUpdate } from "../index.js"
 import geoip from "geoip-lite"
 import {UAParser} from "ua-parser-js"
-import { extractDomain } from "../utils/utils.js"
+import { getCountryId, extractDomain } from "../utils/utils.js"
 
 // Create a short link
 export const createUrl = async (req, res) => {
@@ -65,7 +65,7 @@ export const getUrl = async (req, res) => {
       // Click data
       const clickData = {
          referrer: extractDomain(req.get("Referer")) || "Direct",
-         country: geo?.country || "Unknown",
+         country: getCountryId(geo?.country) || "Unknown",
          browser: ua.browser.name || "Unknown",
          os: ua.os.name || "Unknown",
          device: ua.device.type || "Desktop"

@@ -11,3 +11,8 @@
    border: 2px solid goldenrod;
    border-radius: 25px;
 }
+
+.worldmap-recom {
+   position: absolute;
+   top: 20px;
+}

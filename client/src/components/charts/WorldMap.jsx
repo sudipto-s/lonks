@@ -10,6 +10,7 @@ const WorldMap = ({ countryStats }) => {
 
    return (
       <div className="analytics-worldmap" style={{ position: "relative" }}>
+         <span className="worldmap-recom">ℹ️ Desktop recommended for better view.</span>
          {tooltip && (
          <div
             style={{
@@ -33,7 +34,7 @@ const WorldMap = ({ countryStats }) => {
          >
          <Sphere stroke="#E4E5E6" strokeWidth={0.9} />
          <Graticule stroke="#E4E5E6" strokeWidth={0.9} />
-         <Geographies geography={"/world-110m.json"}>
+         <Geographies geography={"https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"}>
             {({ geographies }) =>
                geographies.map((geo) => {
                const countryCode = geo.id

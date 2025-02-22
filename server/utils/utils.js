@@ -1,3 +1,5 @@
+import lookup from "country-code-lookup"
+
 export const extractDomain = (url) => {
    if(!url)
       return null
@@ -7,4 +9,11 @@ export const extractDomain = (url) => {
    } catch (e) {
       return "Unknown"
    }
+}
+
+export const getCountryId = c => {
+   if(!c) return null
+   const countryData = lookup.byIso(c)
+   console.log(countryData)
+   return countryData ? countryData.isoNo : null
 }
