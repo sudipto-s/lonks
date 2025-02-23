@@ -17,15 +17,20 @@ const Shortener = () => {
    const [error, setError] = useState(null)
    const [buttonTxt, setButtonTxt] = useState("Shorten URL")
    const [urlCreated, setUrlCreated] = useState(false)
+   const [authChecked, setAuthChecked] = useState(false)
 
    const navigate = useNavigate()
    useEffect(() => {
-      navigate(!user?.logged && "/auth/login", { replace: true })
-   }, [user, navigate])
+      (async function() {
+         const savedUser = getCookie()
+            setUser(savedUser)
+         setAuthChecked(true)
+      })()
+   }, [setUser])
    useEffect(() => {
-      const cok = getCookie()
-      cok && setUser({ ...cok })
-   }, [setUser, navigate])
+      if (authChecked && !user?.logged)
+         navigate("/auth/login", { replace: true })
+   }, [user, navigate, authChecked])
 
    const handleSubmit = useCallback(async e => {
       e.preventDefault()

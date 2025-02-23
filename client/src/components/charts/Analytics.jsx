@@ -16,6 +16,7 @@ const Analytics = () => {
    const [url, setUrl] = useState(null)
    const [error, setError] = useState("")
    const [loading, setLoading] = useState(false)
+   const [authChecked, setAuthChecked] = useState(false)
 
    const { slug } = useParams()
 
@@ -31,13 +32,16 @@ const Analytics = () => {
 
    const navigate = useNavigate()
    useEffect(() => {
-      const cok = getCookie()
-      cok && setUser({ ...cok })
+      (async function() {
+         const savedUser = getCookie()
+            setUser(savedUser)
+         setAuthChecked(true)
+      })()
    }, [setUser])
    useEffect(() => {
-      if(!user?.logged)
+      if (authChecked && !user?.logged)
          navigate("/auth/login", { replace: true })
-   }, [user, navigate])
+   }, [user, navigate, authChecked])
 
    useEffect(() => {
       const fetchUrls = async () => {
@@ -46,10 +50,6 @@ const Analytics = () => {
             const { data } = await axios.post("/url/getone", { assoc: user?.email, slug })
             setUrl(data)
             setError(null)
-            if(!isAnalyticsAvailable(data)) {
-               setUrl(null)
-               setError(`No analytics available for /${slug}`)
-            }
          } catch (err) {
             setUrl(null)
             console.log(err)
@@ -74,23 +74,27 @@ const Analytics = () => {
          {url &&
             <>
                <div className="analytics-details">
-                  <h1 style={{ textAlign: "center" }}>Analytics for <code>/{url.slug}</code></h1>
-                  {<h3>Link created at <span>{new Date(url.createdAt).toLocaleDateString('en-IN')}</span></h3>}
-                  {analyticsAvDiff && <h3>Analytics available from <span>{analyticsAvDiff}</span></h3>}
-                  <h3>Total Clicks:&nbsp;
+                  <h2 style={{ textAlign: "center" }}>Analytics for <code>/{url.slug}</code></h2>
+                  <p className="dest-url" title="Destination URL">
+                     {url.originalUrl}
+                  </p>
+                  <p>Total Clicks:&nbsp;
                   <CountUp
-                     from={0}
                      to={url.clicks}
-                     separator=","
-                     direction="up"
                      duration={1}
                      className="count-up-text"
-                  /></h3>
-                  {url?.expires && <h3>Link expires at {new Date(url.expires).toLocaleDateString()}</h3>}
+                  /></p>
+                  <p>Created: <span>{new Date(url.createdAt).toLocaleDateString('en-IN')}</span></p>
+                  <p>Last updated: <span>{new Date(url.updatedAt).toLocaleString('en-IN')}</span></p>
+                  {analyticsAvDiff && <p>Analytics available: <span>{analyticsAvDiff}</span></p>}
+                  {url?.expires && <p>Expires: {new Date(url.expires).toLocaleString('en-IN')}</p>}
                </div>
 
-               <AnalyticsRechart url={url} />
-               <WorldMapAnalytics countryStats={url.countryStats} />
+               {isAnalyticsAvailable(url) ? <>
+                  <AnalyticsRechart url={url} />
+                  <WorldMapAnalytics countryStats={url.countryStats} />
+               </> :
+               <h2 style={{textAlign:"center"}}>Full analytics not available</h2> }
             </>
          }
       </div>

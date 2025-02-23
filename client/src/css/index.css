@@ -306,6 +306,12 @@ a {
 /* Analytics container */
 .analytics-container .analytics-details {
    line-height: 2;
+   font-size: large;
+}
+.analytics-details .dest-url {
+   color: cadetblue;
+   line-height: normal;
+   word-break: break-all;
 }
 code {
    padding: 5px;

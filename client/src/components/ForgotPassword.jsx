@@ -12,15 +12,20 @@ const ForgotPassword = () => {
    const [email, setEmail] = useState('')
    const [btnTxt, setBtnTxt] = useState("Continue")
    const [message, setMessage] = useState(null)
+   const [authChecked, setAuthChecked] = useState(false)
 
    const navigate = useNavigate()
    useEffect(() => {
-      navigate(user?.logged && "/app/dashboard", { replace: true })
-   }, [user, navigate])
-   useEffect(() => {
-      const cok = getCookie()
-      cok && setUser({ ...cok })
+      (async function() {
+         const savedUser = getCookie()
+            setUser(savedUser)
+         setAuthChecked(true)
+      })()
    }, [setUser])
+   useEffect(() => {
+      if (authChecked && user?.logged)
+         navigate("/app/dashboard", { replace: true })
+   }, [user, navigate, authChecked])
 
    const handleForgotPassword = useCallback(async e => {
       e.preventDefault()

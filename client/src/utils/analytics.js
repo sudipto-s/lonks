@@ -1,5 +1,4 @@
 export const isAnalyticsAvailable = (data) => {
-   if (!data.analyticsAvailableFrom) return false
    if (!data.countryStats || !Object.keys(data.countryStats).length) return false
    if (!data.deviceStats || !Object.keys(data.deviceStats).length) return false
    if (!data.osStats || !Object.keys(data.osStats).length) return false

@@ -12,17 +12,22 @@ const ResetPassword = () => {
    const [confirmPassword, setConfirmPassword] = useState("")
    const [message, setMessage] = useState("")
    const [btnTxt, setBtnTxt] = useState("Reset Password")
+   const [authChecked, setAuthChecked] = useState(false)
+
    const navigate = useNavigate()
    const { token } = useParams()
 
    useEffect(() => {
-      setUser(getCookie())
-      navigate(user?.logged && "/app/dashboard", { replace: true })
-   }, [user, setUser, navigate])
+      (async function() {
+         const savedUser = getCookie()
+            setUser(savedUser)
+         setAuthChecked(true)
+      })()
+   }, [setUser])
    useEffect(() => {
-      const cok = getCookie()
-      cok && setUser({ ...cok })
-   }, [setUser, navigate])
+      if (authChecked && user?.logged)
+         navigate("/app/dashboard", { replace: true })
+   }, [user, navigate, authChecked])
 
    const handleSubmit = useCallback(async e => {
       e.preventDefault()

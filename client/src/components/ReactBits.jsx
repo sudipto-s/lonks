@@ -192,7 +192,7 @@ export const CountUp = ({
    duration = 2, // Duration of the animation in seconds
    className = "",
    startWhen = true,
-   separator = "",
+   separator = ",",
    onStart,
    onEnd,
 }) => {

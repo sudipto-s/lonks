@@ -17,16 +17,20 @@ const Signup = () => {
    const [otpSent, setOtpSent] = useState(false)
    const [error, setError] = useState("")
    const [buttonText, setButtonText] = useState("Signup")
+   const [authChecked, setAuthChecked] = useState(false)
    
    const navigate = useNavigate()
    useEffect(() => {
-      setUser(getCookie())
-      navigate(user?.logged && "/app/dashboard", { replace: true })
-   }, [user, setUser, navigate])
+      (async function() {
+         const savedUser = getCookie()
+            setUser(savedUser)
+         setAuthChecked(true)
+      })()
+   }, [setUser])
    useEffect(() => {
-      const cok = getCookie()
-      cok && setUser({ ...cok })
-   }, [setUser, navigate])
+      if (authChecked && user?.logged)
+         navigate("/app/dashboard", { replace: true })
+   }, [user, navigate, authChecked])
 
    const handleSubmit = useCallback(async e => {
       e.preventDefault()

@@ -16,6 +16,7 @@ const Dashboard = () => {
    const [copySlug, setCopySlug] = useState(null) 
    const [deleteSlug, setDeleteSlug] = useState(null)
    const [isModalOpen, setModalOpen] = useState(null)
+   const [authChecked, setAuthChecked] = useState(false)
 
    useEffect(() => {
       // Receive updated data via socket
@@ -32,12 +33,16 @@ const Dashboard = () => {
 
    const navigate = useNavigate()
    useEffect(() => {
-      navigate(user?.logged || "/auth/login", { replace: true })
-   }, [user, navigate])
-   useEffect(() => {
-      const cok = getCookie()
-      cok && setUser({ ...cok })
+      (async function() {
+         const savedUser = getCookie()
+            setUser(savedUser)
+         setAuthChecked(true)
+      })()
    }, [setUser])
+   useEffect(() => {
+      if (authChecked && !user?.logged)
+         navigate("/auth/login", { replace: true })
+   }, [user, navigate, authChecked])
 
    useEffect(() => {
       const fetchUrls = async () => {

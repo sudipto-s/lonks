@@ -14,15 +14,20 @@ const Login = () => {
    const [password, setPassword] = useState("")
    const [error, setError] = useState("")
    const [buttonText, setButtonText] = useState("Login")
+   const [authChecked, setAuthChecked] = useState(false)
 
    const navigate = useNavigate()
    useEffect(() => {
-      navigate(user?.logged && "/app/dashboard", { replace: true })
-   }, [user, navigate])
+      (async function() {
+         const savedUser = getCookie()
+            setUser(savedUser)
+         setAuthChecked(true)
+      })()
+   }, [setUser])
    useEffect(() => {
-      const cok = getCookie()
-      cok && setUser({ ...cok })
-   }, [setUser, navigate])
+      if (authChecked && user?.logged)
+         navigate("/app/dashboard", { replace: true })
+   }, [user, navigate, authChecked])
 
    const handleSubmit = useCallback(async e => {
       e.preventDefault()
