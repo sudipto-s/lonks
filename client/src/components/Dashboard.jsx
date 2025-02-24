@@ -5,6 +5,7 @@ import axios from "axios"
 import EditUrlModal from "./EditUrlModal"
 import UrlCard from "./UrlCard"
 import { AppContext } from "../context/AppContext"
+import { FaInfoCircle } from "react-icons/fa"
 
 const Dashboard = () => {
    const { user, setUser, socket } = useContext(AppContext)
@@ -20,15 +21,16 @@ const Dashboard = () => {
 
    useEffect(() => {
       // Receive updated data via socket
-      socket.on("click-update", ({ slug, clicks }) => {
+      socket.on("analytics-update", (updatedUrl) => {
+         const updUrl = JSON.parse(updatedUrl)
          setUrls(prevUrls =>
             prevUrls?.map(url =>
-               url.slug === slug ? { ...url, clicks } : url
+               url.slug === updUrl.slug ? { ...url, clicks: updUrl.clicks } : url
             )
          )
       })
       
-      return () => socket.off("click-update")
+      return () => socket.off("analytics-update")
    }, [socket])
 
    const navigate = useNavigate()
@@ -97,7 +99,16 @@ const Dashboard = () => {
             </h3>
          )}
 
-         {error || loading ? <p className="error">{error}</p> : <h3>Your Shortened Links</h3>}
+         {error || loading ?
+            <p className="error">{error}</p>
+            : <div className="loader-container">
+               <h3>Your Shortened Links</h3>
+               <div className="tooltip-container">
+                  <FaInfoCircle className="info-icon" />
+                  <span className="tooltip-text">Click on the shortened link or favicon to get analytics</span>
+               </div>
+              </div>
+         }
 
          {!urls?.length ? (
             !loading && <p>No shortened links yet. Start by creating one!</p>

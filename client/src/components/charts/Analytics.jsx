@@ -22,12 +22,13 @@ const Analytics = () => {
 
    useEffect(() => {
       // Receive updated data via socket
-      socket.on("click-update", ({ slug: updatedSlug, clicks }) => {
-         if(slug === updatedSlug)
-            setUrl(prevVal => ({ ...prevVal, clicks }))
+      socket.on("analytics-update", (updatedUrl) => {
+         const updUrl = JSON.parse(updatedUrl)
+         if(slug === updUrl.slug)
+            setUrl(prevVal => ({ ...prevVal, ...updUrl }))
       })
       
-      return () => socket.off("click-update")
+      return () => socket.off("analytics-update")
    }, [socket, slug])
 
    const navigate = useNavigate()
@@ -78,12 +79,7 @@ const Analytics = () => {
                   <p className="dest-url" title="Destination URL">
                      {url.originalUrl}
                   </p>
-                  <p>Total Clicks:&nbsp;
-                  <CountUp
-                     to={url.clicks}
-                     duration={1}
-                     className="count-up-text"
-                  /></p>
+                  <p>Total Clicks: {url.clicks}</p>
                   <p>Created: <span>{new Date(url.createdAt).toLocaleDateString('en-IN')}</span></p>
                   <p>Last updated: <span>{new Date(url.updatedAt).toLocaleString('en-IN')}</span></p>
                   {analyticsAvDiff && <p>Analytics available: <span>{analyticsAvDiff}</span></p>}

@@ -76,9 +76,6 @@ export const getUrl = async (req, res) => {
          url.clicks++
          await url.save()
 
-         // Emit the updated click count to connected clients
-         emitClickCountUpdate(slug, url.clicks)
-
          // Update the other refs
          await Url.updateOne({ slug },
             { $inc: {
@@ -89,6 +86,9 @@ export const getUrl = async (req, res) => {
                [`browserStats.${clickData.browser}`]: 1
             }}
          )
+
+         // Emit the updated url to connected clients
+         emitClickCountUpdate(JSON.stringify(url))
       }
       
       return res.redirect(url.originalUrl)

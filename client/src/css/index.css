@@ -173,6 +173,46 @@ a {
    border-radius: 10px;
    border: 2px solid #f9f9f9; /* Space around scrollbar thumb */
 }
+
+.loader-container {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   
+}
+.tooltip-container {
+   position: relative;
+   display: inline-block;
+}
+.info-icon {
+   color: gray;
+   cursor: pointer;
+   transition: color 0.2s ease-in-out;
+}
+.info-icon:hover {
+   color: black;
+}
+.tooltip-text {
+   width: 200px;
+   visibility: hidden;
+   opacity: 0;
+   background-color: #000000bb;
+   color: white;
+   text-align: center;
+   padding: 6px 10px;
+   border-radius: 5px;
+   position: absolute;
+   bottom: 100%;
+   left: 50%;
+   transform: translateX(-100%);
+   font-size: 12px;
+   transition: opacity 0.2s ease-in-out, visibility 0.2s;
+}
+.tooltip-container:hover .tooltip-text {
+   visibility: visible;
+   opacity: 1;
+}
+
 .dashboard-container h2 {
    text-align: center;
    margin-bottom: 1rem;
@@ -310,6 +350,7 @@ a {
 }
 .analytics-details .dest-url {
    color: cadetblue;
+   margin: 0 auto 5px;
    line-height: normal;
    word-break: break-all;
 }

@@ -36,8 +36,8 @@ app.use("*", (req, res) => {
 })
 
 // Emit updated data to client
-export const emitClickCountUpdate = (slug, clicks) =>
-   io.emit("click-update", { slug, clicks })
+export const emitClickCountUpdate = (updatedUrl) =>
+   io.emit("analytics-update", updatedUrl)
 
 // Constants
 const PORT = process.env.PORT || 5000
