@@ -14,6 +14,5 @@ export const extractDomain = (url) => {
 export const getCountryId = c => {
    if(!c) return null
    const countryData = lookup.byIso(c)
-   console.log(countryData)
    return countryData ? countryData.isoNo : null
 }

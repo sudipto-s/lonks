@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts"
+import { generateBrightColor } from "../../utils/analytics"
 
 // Responsive styling using a function, apply single column layout
 const getResponsiveStyle = () => {
@@ -13,10 +14,20 @@ const formatChartData = obj =>
 
 const PieChartComponent = ({ url: { referrers, deviceStats, osStats, browserStats } }) => {
    const [responsiveStyle, setResponsiveStyle] = useState(getResponsiveStyle())
+   const [colorMap, setColorMap] = useState({})
 
    // Listen for screen resize to update styles dynamically
    useEffect(() => {
-      setResponsiveStyle(getResponsiveStyle());
+      const handleResize = () => {
+         setResponsiveStyle(getResponsiveStyle())
+      }
+   
+      window.addEventListener("resize", handleResize)
+      handleResize()
+   
+      return () => {
+         window.removeEventListener("resize", handleResize)
+      }
    }, [])
    
    const data = useMemo(() => ({ browserStats, deviceStats, osStats, referrers }), [browserStats, osStats, deviceStats, referrers])
@@ -29,41 +40,46 @@ const PieChartComponent = ({ url: { referrers, deviceStats, osStats, browserStat
       }))
    }, [data])
 
-   // Memoized function to generate colors
-   const generateColors = useCallback((num) => {
-      return Array.from({ length: num }, () =>
-         `#${Math.floor(Math.random() * 16777215).toString(16)}`
-      )
-   }, [])
+   // Effect to initialize colors on first render or when new items are added
+   useEffect(() => {
+      setColorMap(prevColorMap => {
+         const newColorMap = { ...prevColorMap }
+
+         chartData.forEach(({ data }) => {
+            data.forEach(({ name }) => {
+               if (!newColorMap[name])
+                  newColorMap[name] = generateBrightColor()
+            })
+         })
+
+         return newColorMap // Only add new colors without changing existing ones
+      })
+   }, [chartData])
 
    return (
       <div className="analytics-chart Recharts" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", ...responsiveStyle }}>
-         {chartData.map(({ category, data }, index) => {
-            const colors = generateColors(data.length)
-
-            return (
-               <div key={index} style={{ textAlign: "center" }}>
-                  <h3>{category.replace(/([A-Z])/g, " $1").trim()}</h3>
-                  <PieChart width={350} height={350}>          {/* .recharts-container */}
-                  <Pie
-                     data={data}
-                     cx="50%"
-                     cy="50%"
-                     outerRadius={100}
-                     fill="#8884d8"
-                     dataKey="value"
-                     label
-                  >                                            {/* .recharts-surface */}
-                     {data.map((entry, idx) => (
-                        <Cell key={idx} fill={colors[idx]} />
-                     ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                  </PieChart>
-               </div>
-            )
-         })}
+         {chartData.map(({ category, data }, index) => (
+            <div key={index} style={{ textAlign: "center" }}>
+               <h3>{category.replace(/([A-Z])/g, " $1").trim()}</h3>
+               <PieChart width={350} height={350}>          {/* .recharts-container */}
+               <Pie
+                  data={data}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label
+               >                                            {/* .recharts-surface */}
+                  {data.map((entry, idx) => (
+                     <Cell key={idx} fill={colorMap[entry.name]} />
+                  ))}
+               </Pie>
+               <Tooltip />
+               <Legend />
+               </PieChart>
+            </div>
+         ))}
       </div>
    )
 }

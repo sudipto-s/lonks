@@ -181,10 +181,12 @@ a {
    
 }
 .tooltip-container {
+   display: flex;
+   align-items: center;
    position: relative;
-   display: inline-block;
 }
 .info-icon {
+   width: 20px;
    color: gray;
    cursor: pointer;
    transition: color 0.2s ease-in-out;

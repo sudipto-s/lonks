@@ -5,7 +5,7 @@ import axios from "axios"
 import EditUrlModal from "./EditUrlModal"
 import UrlCard from "./UrlCard"
 import { AppContext } from "../context/AppContext"
-import { FaInfoCircle } from "react-icons/fa"
+import info from "../assets/info.svg"
 
 const Dashboard = () => {
    const { user, setUser, socket } = useContext(AppContext)
@@ -104,7 +104,7 @@ const Dashboard = () => {
             : <div className="loader-container">
                <h3>Your Shortened Links</h3>
                <div className="tooltip-container">
-                  <FaInfoCircle className="info-icon" />
+                  <img src={info} className="info-icon" alt="info" />
                   <span className="tooltip-text">Click on the shortened link or favicon to get analytics</span>
                </div>
               </div>

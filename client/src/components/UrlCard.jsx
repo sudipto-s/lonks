@@ -3,12 +3,23 @@ import edit from "../assets/edit.svg"
 import share from "../assets/share.svg"
 import copy from "../assets/copy.svg"
 import deleteimg from "../assets/delete.svg"
-import { CountUp } from "./ReactBits"
 import {
    copyLink, getDaysCreatedAge, getExpiresIn, getFaviconUrl, shareLink
 } from "../utils/dashboardUtils"
+import NumberFlow from "@number-flow/react"
+import { useState, useEffect } from "react"
 
 const UrlCard = ({ link, setModalOpen, handleDelete, setCopySlug, onClick = f => f }) => {
+   const [animatedClicks, setAnimatedClicks] = useState(0)
+
+   useEffect(() => {
+      const timeout = setTimeout(() => {
+         setAnimatedClicks(link.clicks)
+      }, 300)
+
+      return () => clearTimeout(timeout)
+   }, [link])
+
    return <div className="url-card">
       <div className="top">
          <div className="host-logo">
@@ -25,13 +36,8 @@ const UrlCard = ({ link, setModalOpen, handleDelete, setCopySlug, onClick = f =>
       </div>
       <div className="middle">
          <span className="clicks">
-         <CountUp
-            from={0}
-            to={link.clicks}
-            separator=","
-            direction="up"
-            duration={1}
-            className="count-up-text"
+         <NumberFlow
+            value={animatedClicks}
          />&nbsp;click{link.clicks > 1 ? "s" : ""}</span>
          <span className="created"> | Created {getDaysCreatedAge(link.createdAt)}</span>
          { link?.expires && <span className="expires"> | Expires {getExpiresIn(link.expires)}</span>}

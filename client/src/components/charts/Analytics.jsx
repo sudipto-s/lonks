@@ -7,7 +7,7 @@ import AnalyticsRechart from "./Recharts"
 import WorldMapAnalytics from "./WorldMap"
 import "../../css/Chart.css"
 import { getDate, isAnalyticsAvailable } from "../../utils/analytics"
-import { CountUp } from "../ReactBits"
+import NumberFlow from "@number-flow/react"
 
 const Analytics = () => {
    const { user, setUser, socket } = useContext(AppContext)
@@ -17,6 +17,7 @@ const Analytics = () => {
    const [error, setError] = useState("")
    const [loading, setLoading] = useState(false)
    const [authChecked, setAuthChecked] = useState(false)
+   const [animatedClicks, setAnimatedClicks] = useState(0)
 
    const { slug } = useParams()
 
@@ -25,7 +26,7 @@ const Analytics = () => {
       socket.on("analytics-update", (updatedUrl) => {
          const updUrl = JSON.parse(updatedUrl)
          if(slug === updUrl.slug)
-            setUrl(prevVal => ({ ...prevVal, ...updUrl }))
+            setUrl(updUrl) // prevVal => ({ ...prevVal, ...updUrl }) //
       })
       
       return () => socket.off("analytics-update")
@@ -35,7 +36,7 @@ const Analytics = () => {
    useEffect(() => {
       (async function() {
          const savedUser = getCookie()
-            setUser(savedUser)
+         setUser(savedUser)
          setAuthChecked(true)
       })()
    }, [setUser])
@@ -43,6 +44,14 @@ const Analytics = () => {
       if (authChecked && !user?.logged)
          navigate("/auth/login", { replace: true })
    }, [user, navigate, authChecked])
+
+   useEffect(() => {
+      const timeout = setTimeout(() => {
+         setAnimatedClicks(url?.clicks || 0)
+      }, 300)
+
+      return () => clearTimeout(timeout)
+   }, [url])
 
    useEffect(() => {
       const fetchUrls = async () => {
@@ -79,7 +88,7 @@ const Analytics = () => {
                   <p className="dest-url" title="Destination URL">
                      {url.originalUrl}
                   </p>
-                  <p>Total Clicks: {url.clicks}</p>
+                  <p>Total Clicks: <NumberFlow value={animatedClicks} /></p>
                   <p>Created: <span>{new Date(url.createdAt).toLocaleDateString('en-IN')}</span></p>
                   <p>Last updated: <span>{new Date(url.updatedAt).toLocaleString('en-IN')}</span></p>
                   {analyticsAvDiff && <p>Analytics available: <span>{analyticsAvDiff}</span></p>}

@@ -10,15 +10,19 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
    const handleUpdate = useCallback(async e => {
       e.preventDefault()
 
-      if (newSlug === "app") {
-         setError("Slug 'app' is restricted")
+      if (newSlug && newSlug.length < 3) {
+         setError("Slug should be minimum 3 characters long")
+         return
+      }
+      if (["app", "auth"].includes(newSlug)) {
+         setError("This slug is restricted")
          return
       }
       if (!/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s]*)?$/.test(newOriginalUrl)) {
          setError("Invalid url format")
          return
       }
-      if (newSlug.includes("/") || newSlug.includes("\\")) {
+      if (newSlug && !/^(?![-_])[a-zA-Z0-9-_]{1,50}(?<![-_])$/.test(newSlug)) {
          setError("Invalid slug format")
          return
       }

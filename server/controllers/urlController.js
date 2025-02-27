@@ -16,6 +16,8 @@ export const createUrl = async (req, res) => {
    // Generate a 4 character unique slug if user doesn't provide
    if (!slug)
       slug = await generateShortId()
+   // Change slug to lower case
+   slug = slug.toLowerCase()
    // Check if slug is less than 3 characters
    if (slug.length < 3)
       return res.status(400).json({ message: "Slug must be at least 3 characters" })
@@ -41,9 +43,11 @@ export const createUrl = async (req, res) => {
 }
 
 // Redirect to original url
+const redirects = ["app", "auth", "s"]
 export const getUrl = async (req, res) => {
-   const { slug } = req.params
-   if (slug === "app")
+   let { slug } = req.params
+   slug = slug.toLowerCase()
+   if (redirects.includes(slug))
       return res.status(301).redirect("/")
 
    // Check if the request is from a bot or pre-fetching service
@@ -53,11 +57,6 @@ export const getUrl = async (req, res) => {
    const isBot = botUserAgents.some(bot => userAgent.toLowerCase().includes(bot.toLowerCase()))
 
    try {
-      const url = await Url.findOne({ slug })
-
-      if (!url)
-         return res.status(404).send("Url not found")
-
       // Extract user details
       const ip = req.headers["x-forwarded-for"]?.split(",")[0] || req.connection.remoteAddress
       const geo = geoip.lookup(ip)
@@ -71,27 +70,28 @@ export const getUrl = async (req, res) => {
          device: ua.device.type || "Desktop"
       }
 
-      // Increment the click count if request is not from a bot
-      if (!isBot) {
-         url.clicks++
-         await url.save()
-
-         // Update the other refs
-         await Url.updateOne({ slug },
-            { $inc: {
-               [`referrers.${clickData.referrer}`]: 1,
-               [`countryStats.${clickData.country}`]: 1,
-               [`deviceStats.${clickData.device}`]: 1,
-               [`osStats.${clickData.os}`]: 1,
-               [`browserStats.${clickData.browser}`]: 1
-            }}
-         )
-
-         // Emit the updated url to connected clients
-         emitClickCountUpdate(JSON.stringify(url))
-      }
+      // Increment the counts if request is not from a bot
+      const updatedUrl = await Url.findOneAndUpdate({ slug },
+         isBot ? {} :
+         { $inc: {
+            clicks: 1,
+            [`referrers.${clickData.referrer}`]: 1,
+            [`countryStats.${clickData.country}`]: 1,
+            [`deviceStats.${clickData.device}`]: 1,
+            [`osStats.${clickData.os}`]: 1,
+            [`browserStats.${clickData.browser}`]: 1
+         }},
+         { new: true }
+      )
       
-      return res.redirect(url.originalUrl)
+      if (!updatedUrl)
+         return res.status(404).send("Url not found")
+
+      // Emit the updated url to connected clients if not bot
+      if (!isBot)
+         emitClickCountUpdate(JSON.stringify(updatedUrl))
+
+      res.redirect(updatedUrl.originalUrl)
    } catch (err) {
       console.log(err.message)
       res.status(500).json({ messgae: err.message })

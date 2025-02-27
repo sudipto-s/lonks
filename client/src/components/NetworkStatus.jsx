@@ -8,10 +8,12 @@ const NetworkStatus = () => {
    }
 
    useEffect(() => {
-      navigator.connection.addEventListener("change", updateOnlineStatus)
-      
-      return () => {
-         navigator.connection.removeEventListener("change", updateOnlineStatus)
+      if(navigator.connection) {
+         navigator.connection.addEventListener("change", updateOnlineStatus)
+         
+         return () => {
+            navigator.connection.removeEventListener("change", updateOnlineStatus)
+         }
       }
    }, [])
 

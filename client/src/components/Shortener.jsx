@@ -42,15 +42,15 @@ const Shortener = () => {
          setError("Slug should be minimum 3 characters long")
          return
       }
-      if (slug === "app") {
-         setError("Slug 'app' is restricted")
+      if (["app", "auth"].includes(slug)) {
+         setError("This slug is restricted")
          return
       }
       if (!/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s]*)?$/.test(originalUrl)) {
          setError("Invalid url format")
          return
       }
-      if (slug.includes("/") || slug.includes("\\")) {
+      if (slug && !/^(?![-_])[a-zA-Z0-9-_]{1,50}(?<![-_])$/.test(slug)) {
          setError("Invalid slug format")
          return
       }
@@ -70,7 +70,7 @@ const Shortener = () => {
          setSlugUrl(null)
          console.log(err)
          if (err.status === 409)
-            setError(`Slug '${slug}' already exists! Please choose another one or leave empty`)
+            setError(`Slug is not available!`)
          else if (err.status === 429)
             setError("Only 5 requests per minute is allowed")
          else
@@ -95,7 +95,7 @@ const Shortener = () => {
             <input 
                type="text" value={slug}
                placeholder="Enter a custom slug" 
-               onChange={e => setSlug(e.target.value?.trim().toLocaleLowerCase())} 
+               onChange={e => setSlug(e.target.value?.trim())} 
             />
             <label htmlFor="expiresin">Expires in:</label>
             <select
