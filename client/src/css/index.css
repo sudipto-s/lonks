@@ -402,6 +402,9 @@ code {
    height: 80px;
    border-radius: 50%;
 }
+.new-url-card-links {
+   text-align: center;
+}
 .new-url-card-bottom {
    width: 80%;
    margin: auto;
@@ -521,21 +524,22 @@ input[type="text"]:focus {
 }
 
 /* Container for the shortener form */
-.shortener-form-container {
+.shortener-form-container,
+.profileContainer {
    display: flex;
    justify-content: center;
    align-items: center;
    height: 100svh;
    background-color: #f4f4f9;
 }
-.shortener-form {
+.shortener-form,
+.profile-card {
    background-color: #fff;
    padding: 20px;
    border-radius: 10px;
    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
    width: 85%;
    max-width: 400px;
-   text-align: center;
 }
 .shortener-form h2 {
    margin-bottom: 20px;
@@ -585,6 +589,58 @@ input[type="text"]:focus {
 }
 .result a:hover {
    text-decoration: underline;
+}
+
+/* Profile */
+.profileContainer .password-title {
+   text-align: center;
+}
+.profileContainer .userInfo {
+   display: flex;
+   align-items: center;
+   gap: 15px;
+}
+.profileContainer .avatar {
+   width: 70px;
+   border-radius: 50%;
+}
+.profileContainer h2 {
+   margin: 0;
+   font-size: 1.5rem;
+}
+.profileContainer p {
+   margin: 5px 0 0;
+}
+
+.profileContainer hr {
+   width: 85%;
+   margin: 20px auto;
+}
+.profileContainer form {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+   margin: 0 0 15px;
+}
+.profileContainer .password-title {
+   margin: 0 0 10px;
+}
+.profileContainer input {
+   width: 100%;
+   padding: 8px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+}
+.profileContainer button {
+   padding: 10px;
+   border: none;
+   background: #007bff;
+   color: white;
+   border-radius: 5px;
+   cursor: pointer;
+}
+.profileContainer button:hover {
+   background: #0056b3;
 }
 
 /* Not found page */

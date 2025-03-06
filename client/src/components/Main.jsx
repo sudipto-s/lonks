@@ -8,15 +8,17 @@ import Dashboard from "./Dashboard";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import Analytics from "./charts/Analytics";
+import Profile from "./Profile"
 
 const Main = () => {
    return (
       <Routes>
          <Route path="/" element={ <Home /> } />
-         <Route path="/auth/login" element={ <Login />} />
-         <Route path="/auth/signup" element={ <Signup /> } />
          <Route path="/app/dashboard" element={ <Dashboard /> } />
          <Route path="/app/shorten" element={ <Shortener /> } />
+         <Route path="/u/:username" element={ <Profile />} />
+         <Route path="/auth/login" element={ <Login />} />
+         <Route path="/auth/signup" element={ <Signup /> } />
          <Route path="/auth/forgot-password" element={ <ForgotPassword /> } />
          <Route path="/auth/reset-password/:token" element={ <ResetPassword /> } />
          <Route path="/s/:slug" element={ <Analytics /> } />

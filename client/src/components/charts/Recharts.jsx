@@ -67,7 +67,6 @@ const PieChartComponent = ({ url: { referrers, deviceStats, osStats, browserStat
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  fill="#8884d8"
                   dataKey="value"
                   label
                >                                            {/* .recharts-surface */}
@@ -76,7 +75,10 @@ const PieChartComponent = ({ url: { referrers, deviceStats, osStats, browserStat
                   ))}
                </Pie>
                <Tooltip />
-               <Legend />
+               <Legend verticalAlign="bottom" height={100} wrapperStyle={{
+                  bottom: 0, overflowY: "auto", maxHeight: "60px",
+                  scrollbarWidth: "none"
+               }} className="legend" />
                </PieChart>
             </div>
          ))}

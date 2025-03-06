@@ -22,17 +22,12 @@ export const createUrl = async (req, res) => {
    if (slug.length < 3)
       return res.status(400).json({ message: "Slug must be at least 3 characters" })
 
-   try {
-      const newUrl = new Url({ slug, originalUrl, assoc })
+   try {      
+      await Url.create({
+         slug, originalUrl, assoc,
+         expires: expires === "never" ? null : new Date(Date.now() + expires * 24 * 60 * 60 * 1000),
+      })
 
-      // Set expiry of url
-      if (expires === "never")
-         newUrl.expires = null
-      else {
-         newUrl.expires = new Date(Date.now() + expires * 24 * 60 * 60 * 1000)
-      }
-
-      await newUrl.save()
       res.status(201).json({ slugUrl: slug })
    } catch (err) {
       console.log(err.message)
@@ -43,7 +38,7 @@ export const createUrl = async (req, res) => {
 }
 
 // Redirect to original url
-const redirects = ["app", "auth", "s"]
+const redirects = ["app", "auth", "s", "u"]
 export const getUrl = async (req, res) => {
    let { slug } = req.params
    slug = slug.toLowerCase()

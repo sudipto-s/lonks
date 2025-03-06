@@ -11,6 +11,14 @@
    border: 2px solid goldenrod;
    border-radius: 25px;
 }
+.legend {
+   position: absolute;
+   width: 100%;
+   -ms-overflow-style: none;
+}
+.legend::-webkit-scrollbar {
+   display: none;
+}
 
 .worldmap-recom {
    position: absolute;

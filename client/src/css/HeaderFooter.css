@@ -17,11 +17,6 @@
    font-size: 1.5rem;
    color: white;
 }
-.header .nav ul {
-   list-style: none;
-   display: flex;
-   gap: 15px;
-}
 .header .logout-btn {
    cursor: pointer;
 }
@@ -55,6 +50,86 @@
 .header a:not(:hover)::after {
    width: 0;
    left: 0;
+}
+.menu-icon img {
+   width: 26px;
+   display: block;
+   cursor: pointer;
+}
+/* Side Navigation Menu */
+.sidenav {
+   position: fixed;
+   top: 0;
+   right: -200px;
+   width: 200px;
+   height: 100%;
+   background: #333;
+   transition: transform 0.3s ease-in-out;
+   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+   padding-top: 10px;
+   z-index: 1000;
+}
+.sidenav.open {
+   transform: translateX(-200px);
+}
+.sidenav-header {
+   display: flex;
+   justify-content: flex-end;
+   padding: 0 10px 10px;
+}
+/* Overlay Effect */
+.sidenav-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: rgba(0, 0, 0, 0.5);
+   transition: opacity 0.3s ease-in-out;
+   opacity: 0;
+   pointer-events: none;
+   z-index: 999;
+}
+.sidenav-overlay.show {
+   opacity: 1;
+   pointer-events: all;
+}
+.close-btn {
+   cursor: pointer;
+   font-size: 28px;
+}
+.sidenav nav ul {
+   list-style: none;
+   padding: 0;
+   margin: 0;
+}
+.sidenav nav ul li {
+   text-align: right;
+   width: 85%;
+   margin: auto;
+   padding: 10px 20px;
+   border-bottom: 1px solid #555;
+}
+
+/* Hide sidenav & menu-icon on large screens */
+@media screen and (min-width: 700px) {
+   .sidenav {
+      position: absolute;
+      right: 160px;
+      background: #007bff;
+      box-shadow: none;
+      transition: none;
+   }
+   .sidenav nav ul li {
+      padding: 10px 15px;
+      border-bottom: none;
+   }
+   .menu-icon {
+      display: none;
+   }
+   .header nav ul {
+      display: flex;
+   }
 }
 
 /* Footer Styles */

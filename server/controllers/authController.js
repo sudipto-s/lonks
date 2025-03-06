@@ -149,6 +149,36 @@ export const resetPassword = async (req, res) => {
    }
 }
 
+// Update password
+export const updatePassword = async (req, res) => {
+  const { oldPassword, newPassword, assoc } = req.body
+   
+   // Check if user is authenticated & the requested email is same as the actual email
+   if (!res.user || res.user.email !== assoc)
+      return res.status(401).json({ message: "Unauthorized access detected! Please re-login" })
+
+   try {
+      const user = await User.findOne({ email: res.user.email })
+      
+      if(!user)
+         res.status(404).json({ message: "User not found" })
+
+      // Verify old password
+      const isMatch = await bcrypt.compare(oldPassword, user.password)
+      if (!isMatch)
+         return res.status(400).json({ message: "Incorrect old password" })
+
+      // Hash new password and update
+      user.password = await bcrypt.hash(newPassword, 10)
+      await user.save()
+      
+      res.json({ message: "Password updated successfully" })
+   } catch (err) {
+      console.log(err.message)
+      res.status(500).json({ message: err.message })
+   }
+}
+
 /* Create JWT */
 const maxAge = 15 * 24 * 60 * 60 * 1000    // 15 days
 const createToken = (userId, email) =>
