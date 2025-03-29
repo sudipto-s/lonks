@@ -55,7 +55,7 @@ const Header = () => {
                   {!user?.logged && <li><Link to="/" onClick={() => setIsOpen(false)}>Home</Link></li>}
                   {!user?.logged && <li><Link to="/auth/login" onClick={() => setIsOpen(false)}>Login</Link></li>}
                   {!user?.logged && <li><Link to="/auth/signup" onClick={() => setIsOpen(false)}>Signup</Link></li>}
-                  {user?.logged && <li><Link to={`/u/${user?.username}`} onClick={() => setIsOpen(false)}>Profile</Link></li>}
+                  {user?.logged && <li><Link to={"/u/profile"} onClick={() => setIsOpen(false)}>Profile</Link></li>}
                   {user?.logged && <li><Link to="/app/dashboard" onClick={() => setIsOpen(false)}>Dashboard</Link></li>}
                   {user?.logged && <li><Link to="/app/shorten" onClick={() => setIsOpen(false)}>Shorten</Link></li>}
                   {user?.logged && (

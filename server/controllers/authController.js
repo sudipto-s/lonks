@@ -15,7 +15,7 @@ export const login = async (req, res) => {
          return res.status(401).json({ message: "User is not registered!" })
       const isPassMatch = await bcrypt.compare(password, user.password)
       if (!isPassMatch)
-         return res.status(401).json({ message: "Please provide a valid password." })
+         return res.status(401).json({ message: "Invalid password" })
 
       const token = createToken(user._id, identifier)
       res.cookie("lonks-jwt", token, { httpOnly: true, maxAge })

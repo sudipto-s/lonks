@@ -6,6 +6,10 @@ import EditUrlModal from "./EditUrlModal"
 import UrlCard from "./UrlCard"
 import { AppContext } from "../context/AppContext"
 import info from "../assets/info.svg"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/ReactToastify.css"
+import NProgress from "nprogress"
+import "nprogress/nprogress.css"
 
 const Dashboard = () => {
    const { user, setUser, socket } = useContext(AppContext)
@@ -20,8 +24,8 @@ const Dashboard = () => {
    const [authChecked, setAuthChecked] = useState(false)
 
    useEffect(() => {
-      // Receive updated data via socket
-      socket.on("analytics-update", (updatedUrl) => {
+      // Listen for analytics update
+      socket.on("analytics-update", updatedUrl => {
          const updUrl = JSON.parse(updatedUrl)
          setUrls(prevUrls =>
             prevUrls?.map(url =>
@@ -30,8 +34,42 @@ const Dashboard = () => {
          )
       })
       
-      return () => socket.off("analytics-update")
-   }, [socket])
+      // Listen for url insertion
+      socket.on("urlChange-insert", data => {
+         const insrtUrl = JSON.parse(data)
+         if(insrtUrl.assoc === user?.email) {
+            setUrls(prevUrls => [insrtUrl, ...prevUrls])
+            toast.info("An URL was added")
+         }
+      })
+
+      // Listen for url updations
+      socket.on("urlChange-update", data => {
+         const updUrl = JSON.parse(data)
+         setUrls(prevUrls =>
+            prevUrls?.map(url =>
+               url._id === updUrl._id ? { ...url, ...updUrl } : url
+            )
+         )
+         NProgress.start()
+         setTimeout(() => NProgress.done(), 200)
+      })
+
+      // Listen for any url deletions
+      socket.on("urlChange-delete", data => {
+         const dltUrlId = JSON.parse(data)
+         setUrls(prevUrls => prevUrls?.filter(url => url._id !== dltUrlId))
+         if(!deleteSlug)
+            toast.info(`A slug was removed!`)
+      })
+      
+      return () => {
+         socket.off("analytics-update")
+         socket.off("urlChange-insert")
+         socket.off("urlChange-update")
+         socket.off("urlChange-delete")
+      }
+   }, [socket, deleteSlug, user])
 
    const navigate = useNavigate()
    useEffect(() => {
@@ -66,11 +104,12 @@ const Dashboard = () => {
    const handleDelete = useCallback(async slug => {
       if (confirm(`Do you want to delete /${slug}`)) {
          try {
+            setDeleteSlug(slug)
             const { data } = await axios.delete(`/url/delete/${slug}`)
             console.log(data)
-            setDeleteSlug(slug)
             setError("")
-            setTimeout(() => setDeleteSlug(null), 2500)
+            toast.info(`Slug /${slug} deleted successfully!`)
+            setTimeout(() => setDeleteSlug(null), 2000)
 
             // Update the URLs state to remove the deleted URL
             setUrls(prevUrls => prevUrls.filter(link => link.slug !== slug))
@@ -85,17 +124,16 @@ const Dashboard = () => {
 
    return (
       <div className="dashboard-container">
+         <ToastContainer
+            position="top-center" autoClose={2000}
+            hideProgressBar={true}
+         />
          <h2>Welcome, {user?.username}! ✨</h2>
          {loading && <p>Loading your shortened links...</p>}
 
          {copySlug && (
             <h3 className={`delete-slug-msg ${copySlug ? 'show' : ''}`}>
                Link copied successfully!
-            </h3>
-         )}
-         {deleteSlug && (
-            <h3 className={`delete-slug-msg ${deleteSlug ? 'show' : ''}`}>
-               Slug /{deleteSlug} deleted successfully!
             </h3>
          )}
 

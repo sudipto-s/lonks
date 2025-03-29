@@ -1,7 +1,7 @@
 import Url from "../models/Url.js"
 import generateShortId from "../utils/generateShortId.js"
 import botUserAgents from "../utils/botList.js"
-import { emitClickCountUpdate } from "../index.js"
+import { io } from "../index.js"
 import geoip from "geoip-lite"
 import {UAParser} from "ua-parser-js"
 import { getCountryId, extractDomain } from "../utils/utils.js"
@@ -84,7 +84,7 @@ export const getUrl = async (req, res) => {
 
       // Emit the updated url to connected clients if not bot
       if (!isBot)
-         emitClickCountUpdate(JSON.stringify(updatedUrl))
+         io.emit("analytics-update", JSON.stringify(updatedUrl))
 
       res.redirect(updatedUrl.originalUrl)
    } catch (err) {

@@ -16,7 +16,7 @@ const Main = () => {
          <Route path="/" element={ <Home /> } />
          <Route path="/app/dashboard" element={ <Dashboard /> } />
          <Route path="/app/shorten" element={ <Shortener /> } />
-         <Route path="/u/:username" element={ <Profile />} />
+         <Route path="/u/profile" element={ <Profile />} />
          <Route path="/auth/login" element={ <Login />} />
          <Route path="/auth/signup" element={ <Signup /> } />
          <Route path="/auth/forgot-password" element={ <ForgotPassword /> } />

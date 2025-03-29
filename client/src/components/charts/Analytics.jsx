@@ -8,6 +8,8 @@ import WorldMapAnalytics from "./WorldMap"
 import "../../css/Chart.css"
 import { getDate, isAnalyticsAvailable } from "../../utils/analytics"
 import NumberFlow from "@number-flow/react"
+import NProgress from "nprogress"
+import "nprogress/nprogress.css"
 
 const Analytics = () => {
    const { user, setUser, socket } = useContext(AppContext)
@@ -20,18 +22,27 @@ const Analytics = () => {
    const [animatedClicks, setAnimatedClicks] = useState(0)
 
    const { slug } = useParams()
-
+   
    useEffect(() => {
       // Receive updated data via socket
       socket.on("analytics-update", (updatedUrl) => {
          const updUrl = JSON.parse(updatedUrl)
          if(slug === updUrl.slug)
-            setUrl(updUrl) // prevVal => ({ ...prevVal, ...updUrl }) //
+            setUrl(prevVal => ({ ...prevVal, ...updUrl }))
+      })
+
+      // Listen for url updations
+      socket.on("urlChange-update", () => {
+         NProgress.start()
+         setTimeout(() => NProgress.done(), 200)
       })
       
-      return () => socket.off("analytics-update")
+      return () => {
+         socket.off("analytics-update")
+         socket.off("urlChange-update")
+      }
    }, [socket, slug])
-
+   
    const navigate = useNavigate()
    useEffect(() => {
       (async function() {
@@ -44,7 +55,7 @@ const Analytics = () => {
       if (authChecked && !user?.logged)
          navigate("/auth/login", { replace: true })
    }, [user, navigate, authChecked])
-
+   
    useEffect(() => {
       const timeout = setTimeout(() => {
          setAnimatedClicks(url?.clicks || 0)

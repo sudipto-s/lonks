@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 import http from "http"
 import { Server } from "socket.io"
 import dbConnect from "./utils/dbConnect.js"
+import "./stream/changeStream.js"
 
 // Routes
 import urlRoutes from "./routes/urlRoutes.js"
@@ -13,7 +14,7 @@ import authRoutes from "./routes/authRoutes.js"
 
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server, {
+export const io = new Server(server, {
    cors: {
       methods: ['GET', 'POST', 'PATCH', "DELETE"],
    }
@@ -34,10 +35,6 @@ app.use("/api/v1/auth", authRoutes)
 app.use("*", (req, res) => {
    res.sendFile(path.join(__dirname, "client/dist/index.html"))
 })
-
-// Emit updated data to client
-export const emitClickCountUpdate = (updatedUrl) =>
-   io.emit("analytics-update", updatedUrl)
 
 // Constants
 const PORT = process.env.PORT || 5000

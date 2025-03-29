@@ -1,3 +1,16 @@
+#nprogress .bar {
+   background: #abc71e !important;
+   height: 4px !important;
+   z-index: 9999;
+}
+#nprogress .peg {
+   box-shadow: 0 0 10px #abc71e, 0 0 5px #abc71e;
+}
+#nprogress .spinner {
+   display: none !important;
+}
+
+
 /* Header Styles */
 .header {
    display: flex;
