@@ -9,7 +9,7 @@ import {
 import NumberFlow from "@number-flow/react"
 import { useState, useEffect } from "react"
 
-const UrlCard = ({ link, setModalOpen, handleDelete, setCopySlug, onClick = f => f }) => {
+const UrlCard = ({ link, setModalOpen, handleDelete, onClick = f => f }) => {
    const [animatedClicks, setAnimatedClicks] = useState(0)
 
    useEffect(() => {
@@ -54,7 +54,7 @@ const UrlCard = ({ link, setModalOpen, handleDelete, setCopySlug, onClick = f =>
          <span onClick={() => shareLink(`${window.origin}/${link.slug}`)} title="Share link">
             <img src={share} className="link-share" alt="share" />
          </span>
-         <span onClick={() => copyLink(`${window.origin}/${link.slug}`, setCopySlug)} title="Copy link">
+         <span onClick={() => copyLink(`${window.origin}/${link.slug}`)} title="Copy link">
             <img src={copy} className="link-copy" alt="copy" />
          </span>
          <span onClick={() => handleDelete(link.slug)} title="Delete link">

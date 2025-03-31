@@ -1,4 +1,5 @@
 import defaultLink from "../assets/default-link.png"
+import { toast } from 'react-toastify'
 
 // Returns favicon of the host
 export const getFaviconUrl = originalUrl => {
@@ -54,8 +55,7 @@ export const getExpiresIn = expirationDate => {
 export const copyLink = async (link, setCopySlug = f => f) => {
    try {
       await navigator.clipboard.writeText(link)
-      setCopySlug(true)
-      setTimeout(() => setCopySlug(false), 1500)
+      toast.info('Link copied successfully')
    } catch (err) {
       console.log(err)
    }

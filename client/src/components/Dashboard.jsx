@@ -131,12 +131,6 @@ const Dashboard = () => {
          <h2>Welcome, {user?.username}! ✨</h2>
          {loading && <p>Loading your shortened links...</p>}
 
-         {copySlug && (
-            <h3 className={`delete-slug-msg ${copySlug ? 'show' : ''}`}>
-               Link copied successfully!
-            </h3>
-         )}
-
          {error || loading ?
             <p className="error">{error}</p>
             : <div className="loader-container">
@@ -156,7 +150,6 @@ const Dashboard = () => {
                <UrlCard key={link._id} link={link}
                   handleDelete={handleDelete}
                   setModalOpen={setModalOpen}
-                  setCopySlug={setCopySlug}
                   onClick={() => navigate(`/s/${link.slug}`)}
                />
             )}
