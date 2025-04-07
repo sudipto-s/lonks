@@ -6,6 +6,7 @@ import http from "http"
 import { Server } from "socket.io"
 import dbConnect from "./utils/dbConnect.js"
 import "./stream/changeStream.js"
+import "./utils/cron.js"
 
 // Routes
 import urlRoutes from "./routes/urlRoutes.js"
