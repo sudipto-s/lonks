@@ -7,7 +7,7 @@ const PING_URL = "https://lonks.onrender.com/"
 if(process.env.NODE_ENV === "production") {
    cron.schedule("*/13 * * * *", async () => {
       try {
-         const response = await axios.head(PING_URL)
+         const response = await axios.get(PING_URL)
          console.log("Server Pinged:", response.status)
       } catch (error) {
          console.error("Ping failed:", error.message)
