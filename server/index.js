@@ -44,3 +44,9 @@ const PORT = process.env.PORT || 5000
 dbConnect(process.env.DATABASE_URL)
   .then(() => server.listen(PORT, () => console.log(`http://localhost:${PORT}`)))
   .catch((err) => console.log(err))
+
+// Handle termination signals for graceful shutdown
+const shutdown = () => console.log("Server closing..")
+
+process.on('SIGINT', shutdown)  // Ctrl+C in terminal
+process.on('SIGTERM', shutdown) // Used by platforms like Render

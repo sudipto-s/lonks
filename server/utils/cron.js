@@ -3,8 +3,8 @@ import axios from "axios"
 
 const PING_URL = "https://lonks.onrender.com/"
 
-// Schedule a task to send a request every 13 minutes
-if(process.env.NODE_ENV === "production") {
+// Schedule a task to send a request every 10 minutes
+if (process.env.EN_CRON == "true") {
    cron.schedule("*/10 * * * *", async () => {
       try {
          const response = await axios.get(PING_URL)
