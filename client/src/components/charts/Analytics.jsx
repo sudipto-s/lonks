@@ -4,6 +4,7 @@ import { getCookie } from "../../utils/userCookie"
 import axios from "axios"
 import { AppContext } from "../../context/AppContext"
 import AnalyticsRechart from "./Recharts"
+import CountryBarChart from "./CountryBarChart"
 import "../../css/Chart.css"
 import { getDate, isAnalyticsAvailable } from "../../utils/analytics"
 import NumberFlow from "@number-flow/react"
@@ -107,6 +108,7 @@ const Analytics = () => {
 
                {isAnalyticsAvailable(url) ? <>
                   <AnalyticsRechart url={url} />
+                  <CountryBarChart url={url} />
                </> :
                <h2 style={{textAlign:"center"}}>Full analytics not available</h2> }
             </>

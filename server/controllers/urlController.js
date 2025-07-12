@@ -4,7 +4,7 @@ import botUserAgents from "../utils/botList.js"
 import { io } from "../index.js"
 import geoip from "geoip-lite"
 import {UAParser} from "ua-parser-js"
-import { getCountryId, extractDomain } from "../utils/utils.js"
+import { getCountryName, extractDomain } from "../utils/utils.js"
 
 // Create a short link
 export const createUrl = async (req, res) => {
@@ -59,25 +59,29 @@ export const getUrl = async (req, res) => {
       // Click data
       const clickData = {
          referrer: extractDomain(req.get("Referer")) || "Direct",
-         country: getCountryId(geo?.country) || "Unknown",
+         country: getCountryName(geo?.country),
          browser: ua.browser.name || "Unknown",
          os: ua.os.name || "Unknown",
          device: ua.device.type || "Desktop"
       }
 
-      // Increment the counts if request is not from a bot
-      const updatedUrl = await Url.findOneAndUpdate({ slug },
-         isBot ? {} :
-         { $inc: {
-            clicks: 1,
-            [`referrers.${clickData.referrer}`]: 1,
-            [`countryStats.${clickData.country}`]: 1,
-            [`deviceStats.${clickData.device}`]: 1,
-            [`osStats.${clickData.os}`]: 1,
-            [`browserStats.${clickData.browser}`]: 1
-         }},
-         { new: true }
-      )
+      let updatedUrl
+      if (isBot)
+         updatedUrl = await Url.findOne({ slug })
+      else {
+         updatedUrl = await Url.findOneAndUpdate(
+            { slug },
+            { $inc: {
+               clicks: 1,
+               [`referrers.${clickData.referrer}`]: 1,
+               [`countryStats.${clickData.country}`]: 1,
+               [`deviceStats.${clickData.device}`]: 1,
+               [`osStats.${clickData.os}`]: 1,
+               [`browserStats.${clickData.browser}`]: 1
+            }},
+            { new: true }
+         )
+      }
       
       if (!updatedUrl)
          return res.status(404).send("Url not found")
