@@ -170,7 +170,7 @@ export const getOne = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized access detected! Please re-login" })
 
    try {
-      const url = await Url.findOne({ slug })
+      const url = await Url.findOne({ slug, assoc })
       if (!url)
          return res.status(404).send({ message: "No URL found" })
       return res.status(200).send(url)
