@@ -5,6 +5,7 @@ import "../css/Auth.css"
 import { getCookie, setCookie } from '../utils/userCookie'
 import LoginForm from './forms/LoginForm'
 import { AppContext } from "../context/AppContext"
+import { toast } from "sonner"
 
 const Login = () => {
    const { user, setUser } = useContext(AppContext)
@@ -33,15 +34,14 @@ const Login = () => {
       e.preventDefault()
 
       try {
-         setError(null)
          setButtonText("Loading..")
          const { data } = await axios.post("/api/v1/auth/login", { identifier, password })
          setUser({ ...data, logged: true })
          setCookie({ ...data, logged: true })
-         setError("")
+         toast.success("Logged in successfully!", { duration: 2000 })
       } catch (err) {
          console.error(err)
-         setError(err.response?.data?.message || "Login failed")
+         toast.error(err.response?.data?.message || "Login failed")
       } finally {
          setButtonText("Login")
       }
@@ -52,7 +52,7 @@ const Login = () => {
          <LoginForm
             identifier={identifier} setIdentifier={setIdentifier}
             password={password} setPassword={setPassword}
-            error={error} buttonText={buttonText}
+            buttonText={buttonText}
             handleSubmit={handleSubmit}
          />
       </div>

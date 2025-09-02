@@ -4,6 +4,7 @@ import { AppContext } from "../context/AppContext"
 import { useNavigate } from "react-router-dom"
 import { getCookie } from "../utils/userCookie"
 import axios from "axios"
+import { toast } from "sonner"
 
 const Profile = () => {
    const { user, setUser } = useContext(AppContext)
@@ -14,7 +15,6 @@ const Profile = () => {
       newPassword: "",
       confirmPassword: ""
    })
-   const [error, setError] = useState("")
    const [buttonText, setButtonText] = useState("Change Password")
    const [authChecked, setAuthChecked] = useState(false)
 
@@ -38,23 +38,21 @@ const Profile = () => {
    const handleSubmit = useCallback(async e => {
       e.preventDefault()
       if (passwords.newPassword !== passwords.confirmPassword) {
-         setError("Passwords do not match!")
+         toast.error("Passwords do not match!")
          return
       }
       
       try {
-         setError(null)
          setButtonText("Updating..")
          await axios.post("/api/v1/auth/update-password", {
             oldPassword: passwords.current,
             newPassword: passwords.newPassword,
             assoc: user?.email
          })
-         setError("")
-         alert("Password Updated!")
+         toast.success("Password Updated!")
       } catch (err) {
          console.error(err)
-         setError(err.response?.data?.message || "Login failed")
+         toast.error(err.response?.data?.message || "Login failed")
       } finally {
          setTimeout(() => {
             setButtonText("Change Password")
@@ -106,7 +104,6 @@ const Profile = () => {
                />
                <button type="submit">{buttonText}</button>
             </form>
-            {error && <p className="error">{error}</p>}
             </div>
          </div>
       </div>

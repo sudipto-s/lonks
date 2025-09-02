@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { getCookie } from '../utils/userCookie'
 import NewUrlCard from './NewUrlCard'
 import { AppContext } from "../context/AppContext"
+import { toast } from "sonner"
 
 const Shortener = () => {
    const { user, setUser } = useContext(AppContext)
@@ -14,7 +15,6 @@ const Shortener = () => {
    const [destination, setDestination] = useState("")
    const [slugUrl, setSlugUrl] = useState(null)
    const [expires, setExpires] = useState("never")
-   const [error, setError] = useState(null)
    const [buttonTxt, setButtonTxt] = useState("Shorten URL")
    const [urlCreated, setUrlCreated] = useState(false)
    const [authChecked, setAuthChecked] = useState(false)
@@ -35,32 +35,37 @@ const Shortener = () => {
    const handleSubmit = useCallback(async e => {
       e.preventDefault()
       if (!originalUrl) {
-         setError("Please enter original url")
+         toast.error("Please enter original url")
          return
       }
       if (slug && slug.length < 3) {
-         setError("Slug should be minimum 3 characters long")
+         toast.error("Slug should be minimum 3 characters long")
          return
       }
       if (["app", "auth"].includes(slug)) {
-         setError("This slug is restricted")
+         toast.error("This slug is restricted")
          return
       }
       if (!/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s]*)?$/.test(originalUrl)) {
-         setError("Invalid url format")
+         toast.error("Invalid url format")
          return
       }
       if (slug && !/^(?![-_])[a-zA-Z0-9-_]{1,50}(?<![-_])$/.test(slug)) {
-         setError("Invalid slug format")
+         toast.error("Slug can only contain letters, numbers, hyphens and underscores. It cannot start or end with hyphen or underscore.", {
+            duration: 5000
+         })
          return
       }
 
       try {
-         setError(null)
          setButtonTxt("Loading..")
+         toast.loading("Creating short url...", { id: "shortUrlToast" })
          const { data } = await axios.post("/url/create", { slug, originalUrl, expires })
+         toast.dismiss("shortUrlToast")
+         toast.success("Short URL created!", {
+            description: `Your short URL is: /${data.slugUrl}`
+         })
          setSlug("")
-         setError("")
          setDestination(originalUrl)
          setOriginalUrl("")
          setExpires("never")
@@ -70,11 +75,11 @@ const Shortener = () => {
          setSlugUrl(null)
          console.log(err)
          if (err.status === 409)
-            setError(`Slug is not available!`)
+            toast.error(`Slug is not available!`)
          else if (err.status === 429)
-            setError("Only 5 requests per minute is allowed")
+            toast.error("Only 5 requests per minute is allowed")
          else
-            setError(err.response?.data?.message || "A server error has occured")
+            toast.error(err.response?.data?.message || "A server error has occured")
       } finally {
          setButtonTxt("Shorten URL")
       }
@@ -83,7 +88,6 @@ const Shortener = () => {
    return (
       <div className="shortener-form-container">
          <form onSubmit={handleSubmit} className="shortener-form">
-            {error && <p className="error">{error}</p>}
             <label htmlFor="originalUrl">Original URL:</label>
             <input 
                type="url" value={originalUrl}

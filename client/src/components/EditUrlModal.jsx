@@ -1,34 +1,33 @@
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
+import { toast } from "sonner"
 
 const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
    const [newOriginalUrl, setNewOriginalUrl] = useState(link.originalUrl)
    const [newSlug, setNewSlug] = useState(link.slug)
-   const [error, setError] = useState(null)
    const [btnText, setBtnText] = useState("Save Changes")
 
    const handleUpdate = useCallback(async e => {
       e.preventDefault()
 
       if (newSlug && newSlug.length < 3) {
-         setError("Slug should be minimum 3 characters long")
+         toast.error("Slug should be minimum 3 characters long")
          return
       }
       if (["app", "auth"].includes(newSlug)) {
-         setError("This slug is restricted")
+         toast.error("This slug is restricted")
          return
       }
       if (!/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s]*)?$/.test(newOriginalUrl)) {
-         setError("Invalid url format")
+         toast.error("Invalid url format")
          return
       }
       if (newSlug && !/^(?![-_])[a-zA-Z0-9-_]{1,50}(?<![-_])$/.test(newSlug)) {
-         setError("Invalid slug format")
+         toast.error("Invalid slug format")
          return
       }
 
       try {
-         setError(null)
          setBtnText("Updating..")
 
          const { data } = await axios.patch('/url/update', {
@@ -44,16 +43,16 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
             )
          )
          setModalOpen(null)
-         setError(null)
+         toast.success("URL updated successfully")
       } catch (err) {
          setBtnText("Save Changes")
          console.error(err)
          if (err.status === 409)
-            setError(`Slug '${newSlug}' already exists! Please choose another one or leave empty`)
+            toast.error(`Slug '${newSlug}' already exists! Please choose another one or leave empty`)
          else if (err.status === 429)
-            setError("Only 5 requests per minute is allowed")
+            toast.error("Only 5 requests per minute is allowed")
          else
-            setError(err.response?.data?.message || "A server error has occured")
+            toast.error(err.response?.data?.message || "A server error has occured")
       }
    }, [link, newSlug, newOriginalUrl, setModalOpen, setUrls])
 
@@ -71,7 +70,6 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
       <div className="modal-overlay">
          <div className="modal-content">
             <h2>Edit URL</h2>
-            {error && <p className="error">{error}</p>}
             <form onSubmit={handleUpdate}>
                <label>
                   Original URL:

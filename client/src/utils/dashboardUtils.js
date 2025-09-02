@@ -1,5 +1,5 @@
 import defaultLink from "../assets/default-link.png"
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 
 // Returns favicon of the host
 export const getFaviconUrl = originalUrl => {

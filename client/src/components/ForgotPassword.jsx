@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom'
 import { getCookie } from "../utils/userCookie"
 import { isEmail } from "../utils/authUtils"
 import { AppContext } from "../context/AppContext"
+import { toast } from "sonner"
 
 const ForgotPassword = () => {
    const { user, setUser } = useContext(AppContext)
 
    const [email, setEmail] = useState('')
    const [btnTxt, setBtnTxt] = useState("Continue")
-   const [message, setMessage] = useState(null)
    const [authChecked, setAuthChecked] = useState(false)
 
    const navigate = useNavigate()
@@ -32,7 +32,7 @@ const ForgotPassword = () => {
       setBtnTxt("Loading..")
 
       if (!isEmail(email)) {
-         setMessage("Please enter a valid Email format")
+         toast.error("Please enter a valid Email format")
          return
       }
 
@@ -40,10 +40,10 @@ const ForgotPassword = () => {
          const { data } = await axios.post("/api/v1/auth/forgot-password", { email })
          console.log(data)
          setEmail("")
-         setMessage(data.message)
+         toast.success(data.message)
       } catch (err) {
          console.log(err)
-         setMessage(err.response?.data?.message || "Something went wrong!")
+         toast.error(err.response?.data?.message || "Something went wrong!")
       } finally {
          setBtnTxt("Continue")
       }
@@ -53,7 +53,6 @@ const ForgotPassword = () => {
       <div className="auth-container">
          <form onSubmit={handleForgotPassword} className="auth-form">
             <h2>Recover Password</h2>
-            {message && <p className="error">{message}</p>}
             <div>
                <input
                   type="email" value={email}

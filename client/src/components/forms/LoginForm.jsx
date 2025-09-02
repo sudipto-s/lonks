@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom"
 
-const LoginForm = ({ identifier, setIdentifier, password, setPassword, error, buttonText, handleSubmit }) => {
+const LoginForm = ({ identifier, setIdentifier, password, setPassword, buttonText, handleSubmit }) => {
    return (
       <form onSubmit={handleSubmit} className="auth-form">
          <h2>Login</h2>
-         {error && <p className="error">{error}</p>}
          <div>
             <input 
                type="text" value={identifier}

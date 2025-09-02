@@ -6,8 +6,7 @@ import EditUrlModal from "./EditUrlModal"
 import UrlCard from "./UrlCard"
 import { AppContext } from "../context/AppContext"
 import info from "../assets/info.svg"
-import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/ReactToastify.css"
+import { toast } from "sonner"
 import NProgress from "nprogress"
 import "nprogress/nprogress.css"
 
@@ -90,10 +89,9 @@ const Dashboard = () => {
             setLoading(true)
             const { data } = await axios.post("/url/all", { assoc: user?.email })
             setUrls(data)
-            setError(null)
          } catch (err) {
             setUrls(null)
-            setError(err.response?.data?.message)
+            toast.error(err.response?.data?.message)
          } finally {
             setLoading(false)
          }
@@ -102,32 +100,35 @@ const Dashboard = () => {
    }, [user])
 
    const handleDelete = useCallback(async slug => {
-      if (confirm(`Do you want to delete /${slug}`)) {
-         try {
-            setDeleteSlug(slug)
-            const { data } = await axios.delete(`/url/delete/${slug}`)
-            console.log(data)
-            setError("")
-            toast.info(`Slug /${slug} deleted successfully!`)
-            setTimeout(() => setDeleteSlug(null), 2000)
+      toast(`Do you want to delete /${slug}?`, {
+         action: {
+            label: "Yes",
+            onClick: () => handleDeleteUrlToast(slug),
+            disabled: deleteSlug === slug,
+         },
+         icon: "🗑️",
+      })
+   }, [deleteSlug])
 
-            // Update the URLs state to remove the deleted URL
-            setUrls(prevUrls => prevUrls.filter(link => link.slug !== slug))
-         } catch (err) {
-            console.log(err)
-            setDeleteSlug(null)
-            setError(err.response?.data?.message)
-            alert(err.response?.data?.message)
-         }
+   const handleDeleteUrlToast = async slug => {
+      try {
+         setDeleteSlug(slug)
+         const { data } = await axios.delete(`/url/delete/${slug}`)
+         console.log(data)
+         toast.info(`Slug /${slug} deleted successfully!`)
+         setTimeout(() => setDeleteSlug(null), 2000)
+
+         // Update the URLs state to remove the deleted URL
+         setUrls(prevUrls => prevUrls.filter(link => link.slug !== slug))
+      } catch (err) {
+         console.log(err)
+         setDeleteSlug(null)
+         toast.error(err.response?.data?.message)
       }
-   }, [])
+   }
 
    return (
       <div className="dashboard-container">
-         <ToastContainer
-            position="top-center" autoClose={2000}
-            hideProgressBar={true}
-         />
          <h2>Welcome, {user?.username}! ✨</h2>
          {loading && <p>Loading your shortened links...</p>}
 
