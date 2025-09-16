@@ -13,7 +13,6 @@ const Login = () => {
    document.title = "Login - Lonks"
    const [identifier, setIdentifier] = useState("")
    const [password, setPassword] = useState("")
-   const [error, setError] = useState("")
    const [buttonText, setButtonText] = useState("Login")
    const [authChecked, setAuthChecked] = useState(false)
 
@@ -34,6 +33,7 @@ const Login = () => {
       e.preventDefault()
 
       try {
+         toast.dismiss()
          setButtonText("Loading..")
          const { data } = await axios.post("/api/v1/auth/login", { identifier, password })
          setUser({ ...data, logged: true })

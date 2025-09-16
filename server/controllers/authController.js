@@ -1,4 +1,5 @@
 import User from "../models/User.js"
+import Otp from "../models/Otp.js"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import crypto from "crypto"
@@ -36,7 +37,6 @@ export const logout = async (req, res) => {
    }
 }
 
-let otpStore = {}
 export const signup = async (req, res) => {
    try {
       const { email } = req.body
@@ -47,8 +47,12 @@ export const signup = async (req, res) => {
       
       const otp = crypto.randomInt(100000, 999999).toString() // 6-digit OTP
 
-      // Store the OTP in memory
-      otpStore[email] = { otp, expiresAt: Date.now() + 10 * 60 * 1000 } // OTP expires in 10 minutes
+      // Find emial, if exists, update otp or create new one
+      await Otp.findOneAndUpdate(
+         { email }, // Find by email
+         { otp }, // Update OTP
+         { upsert: true } // Create if not found
+      )
 
       // Send OTP via email
       await otpSender(email, otp)
@@ -63,7 +67,7 @@ export const signup = async (req, res) => {
 export const verifyOtp = async (req, res) => {
    const { email, otp, username, password } = req.body
 
-   const storedOtp = otpStore[email]
+   const storedOtp = await Otp.findOne({ email })
 
    if (!storedOtp || storedOtp.expiresAt < Date.now())
       return res.status(400).json({ message: 'OTP expired or invalid!' })
@@ -72,18 +76,27 @@ export const verifyOtp = async (req, res) => {
       return res.status(400).json({ message: 'Incorrect OTP!' })
 
    try {
+      const storedOtp = await Otp.findOne({ email })
+
+      // Check expiry
+      if (storedOtp && storedOtp.expires < new Date())
+         return res.status(400).json({ message: 'OTP expired or invalid!' })
+
+      if (storedOtp.otp != otp)
+         return res.status(400).json({ message: 'Incorrect OTP!' })
+
       // OTP verified, create user
       const newUser = await User.create({ username, email, password: await bcrypt.hash(password, 10) })
 
       // Generate JWT
       const token = createToken(newUser._id)
       res.cookie('lonks-jwt', token, { httpOnly: true, maxAge })
-
-      // Remove OTP from memory
-      delete otpStore[email]
-
+      
       // Send welcome email
-      await welcomeSender(email, username)
+      await welcomeSender(email, username, req)
+
+      // Remove OTP from DB
+      await Otp.deleteMany({ email })
 
       res.status(201).json({ userId: newUser._id })
    } catch (err) {

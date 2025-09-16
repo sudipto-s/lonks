@@ -1,6 +1,6 @@
 import Url from "../models/Url.js"
 import generateShortId from "../utils/generateShortId.js"
-import botUserAgents from "../utils/botList.js"
+import { isbot } from "isbot"
 import { io } from "../index.js"
 import geoip from "geoip-lite"
 import {UAParser} from "ua-parser-js"
@@ -49,7 +49,7 @@ export const getUrl = async (req, res) => {
    const userAgent = req.headers['user-agent'] || ""
 
    // Check if the request comes from one of these bots
-   const isBot = botUserAgents.some(bot => userAgent.toLowerCase().includes(bot.toLowerCase()))
+   const isBot = isbot(userAgent)
 
    try {
       // Extract user details

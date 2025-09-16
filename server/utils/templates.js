@@ -191,7 +191,7 @@ export const WELCOME_TEMPLATE = `<!DOCTYPE html>
          <p>Your username is:</p>
          <div class="username">[[USERNAME]]</div>
          <p>Feel free to explore your dashboard and start creating your shortened links today!</p>
-         <a href="https://lonks.onrender.com/app/dashboard" target="_blank">Go to Your Dashboard</a>
+         <a href="[[DOMAIN]]/app/dashboard" target="_blank">Go to Your Dashboard</a>
       </div>
       <div class="footer">
          <p>&copy;

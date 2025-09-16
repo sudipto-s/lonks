@@ -58,10 +58,10 @@ const Shortener = () => {
       }
 
       try {
+         toast.dismiss()
          setButtonTxt("Loading..")
          toast.loading("Creating short url...", { id: "shortUrlToast" })
          const { data } = await axios.post("/url/create", { slug, originalUrl, expires })
-         toast.dismiss("shortUrlToast")
          toast.success("Short URL created!", {
             description: `Your short URL is: /${data.slugUrl}`
          })
@@ -77,11 +77,12 @@ const Shortener = () => {
          if (err.status === 409)
             toast.error(`Slug is not available!`)
          else if (err.status === 429)
-            toast.error("Only 5 requests per minute is allowed")
+            toast.error("Only 5 requests per minute is allowed! Try after a minute")
          else
             toast.error(err.response?.data?.message || "A server error has occured")
       } finally {
          setButtonTxt("Shorten URL")
+         toast.dismiss("shortUrlToast")
       }
    }, [slug, originalUrl, expires])
 

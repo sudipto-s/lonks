@@ -8,7 +8,6 @@ import { AppContext } from "../context/AppContext"
 import info from "../assets/info.svg"
 import { toast } from "sonner"
 import NProgress from "nprogress"
-import "nprogress/nprogress.css"
 
 const Dashboard = () => {
    const { user, setUser, socket } = useContext(AppContext)
@@ -17,7 +16,6 @@ const Dashboard = () => {
    const [urls, setUrls] = useState(null)
    const [error, setError] = useState("")
    const [loading, setLoading] = useState(false)
-   const [copySlug, setCopySlug] = useState(null) 
    const [deleteSlug, setDeleteSlug] = useState(null)
    const [isModalOpen, setModalOpen] = useState(null)
    const [authChecked, setAuthChecked] = useState(false)
@@ -51,15 +49,19 @@ const Dashboard = () => {
             )
          )
          NProgress.start()
-         setTimeout(() => NProgress.done(), 200)
+         setTimeout(() => NProgress.done(), 100)
       })
 
       // Listen for any url deletions
       socket.on("urlChange-delete", data => {
          const dltUrlId = JSON.parse(data)
          setUrls(prevUrls => prevUrls?.filter(url => url._id !== dltUrlId))
-         if(!deleteSlug)
-            toast.info(`A slug was removed!`)
+         // Show delete toast only to the user whose URL was deleted
+         // Find the deleted URL from previous state
+         const deletedUrl = urls?.find(url => url._id === dltUrlId)
+         if(deletedUrl && deletedUrl.assoc === user?.email && !deleteSlug) {
+            toast.warning(`Your slug /${deletedUrl.slug} was removed!`)
+         }
       })
       
       return () => {
@@ -68,7 +70,7 @@ const Dashboard = () => {
          socket.off("urlChange-update")
          socket.off("urlChange-delete")
       }
-   }, [socket, deleteSlug, user])
+   }, [socket, deleteSlug, user, urls])
 
    const navigate = useNavigate()
    useEffect(() => {
@@ -91,7 +93,7 @@ const Dashboard = () => {
             setUrls(data)
          } catch (err) {
             setUrls(null)
-            toast.error(err.response?.data?.message)
+            toast.error(err.response?.data?.message || "A server error has occured!")
          } finally {
             setLoading(false)
          }
@@ -112,6 +114,7 @@ const Dashboard = () => {
 
    const handleDeleteUrlToast = async slug => {
       try {
+         toast.dismiss()
          setDeleteSlug(slug)
          const { data } = await axios.delete(`/url/delete/${slug}`)
          console.log(data)
@@ -123,7 +126,7 @@ const Dashboard = () => {
       } catch (err) {
          console.log(err)
          setDeleteSlug(null)
-         toast.error(err.response?.data?.message)
+         toast.error(err.response?.data?.message || "A server error has occured!")
       }
    }
 

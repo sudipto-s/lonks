@@ -52,7 +52,7 @@ const Signup = () => {
       setNewUser(prev => ({ ...prev, username }))
 
       try {
-         toast.error(null)
+         toast.dismiss()
          setButtonText("Loading..")
          const { data } = await axios.post("/api/v1/auth/signup", { email })
          console.log(data)
@@ -71,15 +71,21 @@ const Signup = () => {
       const { username, email, password } = newUser
       
       try {
-         toast.error(null)
+         toast.dismiss()
          setButtonText("Verifying OTP..")
+         toast.loading("Please wait while we verify your OTP..", { id: "create-toast" })
          const { data } = await axios.post("/api/v1/auth/verify", { username, email, otp, password })
+         toast.success("Account created successfully!", {
+            icon: "🥳"
+         })
          setUser({ ...data, username, email, logged: true })
          setCookie({ ...data, username, email, logged: true })
       } catch (err) {
          setButtonText('Verify')
          console.error(err)
          toast.error(err.response?.data?.message || 'OTP verification failed')
+      } finally {
+         toast.dismiss("create-toast")
       }
    }, [newUser, otp, setUser])
 

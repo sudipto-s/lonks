@@ -4,13 +4,15 @@ import share from "../assets/share.svg"
 import copy from "../assets/copy.svg"
 import deleteimg from "../assets/delete.svg"
 import {
-   copyLink, getDaysCreatedAge, getExpiresIn, getFaviconUrl, shareLink
+   copyLink, getDaysCreatedAge, getExpiresIn, getFaviconUrls, shareLink
 } from "../utils/dashboardUtils"
 import NumberFlow from "@number-flow/react"
 import { useState, useEffect } from "react"
 
 const UrlCard = ({ link, setModalOpen, handleDelete, onClick = f => f }) => {
    const [animatedClicks, setAnimatedClicks] = useState(0)
+   const [faviconIdx, setFaviconIdx] = useState(0)
+   const favicons = getFaviconUrls(link.originalUrl)
 
    useEffect(() => {
       const timeout = setTimeout(() => {
@@ -23,7 +25,12 @@ const UrlCard = ({ link, setModalOpen, handleDelete, onClick = f => f }) => {
    return <div className="url-card">
       <div className="top">
          <div className="host-logo">
-            <img src={getFaviconUrl(link.originalUrl)} alt="host-logo" onClick={onClick} />
+            <img
+               src={favicons[faviconIdx]}
+               onError={() => setFaviconIdx(idx => idx + 1)}
+               onClick={onClick}
+               alt="host logo"
+            />
          </div>
          <div className="url-links">
             <span className="short-url" title="Short link" onClick={onClick}>

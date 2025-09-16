@@ -8,18 +8,22 @@ import CountryBarChart from "./CountryBarChart"
 import "../../css/Chart.css"
 import { getDate, isAnalyticsAvailable } from "../../utils/analytics"
 import NumberFlow from "@number-flow/react"
-import NProgress from "nprogress"
-import "nprogress/nprogress.css"
+import { getFaviconUrls } from "../../utils/dashboardUtils"
+import { toast } from "sonner"
 
 const Analytics = () => {
    const { user, setUser, socket } = useContext(AppContext)
 
    document.title = "Analytics - Lonks"
    const [url, setUrl] = useState(null)
-   const [error, setError] = useState("")
-   const [loading, setLoading] = useState(false)
+   const [error, setError] = useState(null)
    const [authChecked, setAuthChecked] = useState(false)
    const [animatedClicks, setAnimatedClicks] = useState(0)
+   const [faviconIdx, setFaviconIdx] = useState(0)
+   const favicons = useMemo(() => {
+      if(!url?.originalUrl) return []
+      return getFaviconUrls(url.originalUrl)
+   }, [url])
 
    const { slug } = useParams()
    
@@ -30,16 +34,9 @@ const Analytics = () => {
          if(slug === updUrl.slug)
             setUrl(prevVal => ({ ...prevVal, ...updUrl }))
       })
-
-      // Listen for url updations
-      socket.on("urlChange-update", () => {
-         NProgress.start()
-         setTimeout(() => NProgress.done(), 200)
-      })
       
       return () => {
          socket.off("analytics-update")
-         socket.off("urlChange-update")
       }
    }, [socket, slug])
    
@@ -67,19 +64,16 @@ const Analytics = () => {
    useEffect(() => {
       const fetchUrls = async () => {
          try {
-            setLoading(true)
+            setError(null)
+            toast.loading("Fetching analytics...", { id: "fetch-toast" })
             const { data } = await axios.post("/url/getone", { assoc: user?.email, slug })
             setUrl(data)
-            setError(null)
          } catch (err) {
             setUrl(null)
             console.log(err)
-            if(err.status === 404)
-               setError("Slug not found")
-            else
-               setError(err.response?.data?.message)
+            setError(err?.response?.data?.message || "Something went wrong")
          } finally {
-            setLoading(false)
+            toast.dismiss("fetch-toast")
          }
       }
       user?.email && fetchUrls()
@@ -89,13 +83,19 @@ const Analytics = () => {
 
    return (
       <div className="analytics-container">
-         {loading && <h2 style={{ textAlign: "center" }}>Loading...</h2>}
-
          {error && <p className="error">{error}</p>}
+
          {url &&
             <>
                <div className="analytics-details">
-                  <h2 style={{ textAlign: "center" }}>Analytics for <code>/{url.slug}</code></h2>
+                  <div className="analytics-favicon-slug">
+                     <img
+                        src={favicons[faviconIdx]}
+                        alt="favicon"
+                        onError={() => setFaviconIdx(idx => idx + 1)}
+                     />
+                     <h2 style={{ margin: 0 }}>/{url.slug}</h2>
+                  </div>
                   <p className="dest-url" title="Destination URL">
                      {url.originalUrl}
                   </p>

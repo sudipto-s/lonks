@@ -23,11 +23,14 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
          return
       }
       if (newSlug && !/^(?![-_])[a-zA-Z0-9-_]{1,50}(?<![-_])$/.test(newSlug)) {
-         toast.error("Invalid slug format")
+         toast.error("Slug can only contain letters, numbers, hyphens and underscores. It cannot start or end with hyphen or underscore.", {
+            duration: 5000
+         })
          return
       }
 
       try {
+         toast.dismiss()
          setBtnText("Updating..")
 
          const { data } = await axios.patch('/url/update', {
@@ -50,7 +53,7 @@ const EditUrlModal = ({ link, setUrls, setModalOpen }) => {
          if (err.status === 409)
             toast.error(`Slug '${newSlug}' already exists! Please choose another one or leave empty`)
          else if (err.status === 429)
-            toast.error("Only 5 requests per minute is allowed")
+            toast.error("Only 5 requests per minute is allowed! Try after a minute")
          else
             toast.error(err.response?.data?.message || "A server error has occured")
       }

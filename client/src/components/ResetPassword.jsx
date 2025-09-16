@@ -4,13 +4,13 @@ import axios from "axios"
 import "../css/Auth.css"
 import { getCookie } from "../utils/userCookie"
 import { AppContext } from "../context/AppContext"
+import { toast } from "sonner"
 
 const ResetPassword = () => {
    const { user, setUser } = useContext(AppContext)
 
    const [password, setPassword] = useState("")
    const [confirmPassword, setConfirmPassword] = useState("")
-   const [message, setMessage] = useState("")
    const [btnTxt, setBtnTxt] = useState("Reset Password")
    const [authChecked, setAuthChecked] = useState(false)
 
@@ -33,24 +33,25 @@ const ResetPassword = () => {
       e.preventDefault()
       setBtnTxt("Loading..")
       if (password.length < 6) {
-         setMessage("Minimun passoword length is 6")
+         toast.error("Minimun passoword length is 6")
          setBtnTxt("Reset Password")
          return
       }
       if (password !== confirmPassword) {
-         setMessage("Passwords do not match!")
+         toast.error("Passwords do not match!")
          setBtnTxt("Reset Password")
          return
       }
 
       try {
+         toast.dismiss()
          const { data } = await axios.post("/api/v1/auth/reset-password", {
             token, password
          })
-         setMessage(data.message)
+         toast.success(data.message)
          setTimeout(() => navigate("/auth/login"), 2000)
       } catch (err) {
-         setMessage(err.response?.data?.message || "Something went wrong!")
+         toast.error(err.response?.data?.message || "Something went wrong!")
       } finally {
          setBtnTxt("Reset Password")
       }
@@ -60,7 +61,6 @@ const ResetPassword = () => {
       <div className="auth-container">
          <form onSubmit={handleSubmit} className="auth-form">
             <h2>Reset Password</h2>
-            {message && <p className="error">{message}</p>}
             <input
                type="password"
                placeholder="New Password"

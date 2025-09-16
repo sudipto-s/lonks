@@ -1,14 +1,17 @@
 import defaultLink from "../assets/default-link.png"
 import { toast } from 'sonner'
 
-// Returns favicon of the host
-export const getFaviconUrl = originalUrl => {
+// Returns list of favicons of the host
+export const getFaviconUrls = originalUrl => {
    try {
       const url = new URL(originalUrl)
-      return `https://icon.horse/icon/${url.hostname}`
+      return [
+         `${url.origin}/favicon.ico`,
+         `https://icon.horse/icon/${url.hostname}`
+      ]
    } catch (err) {
       console.log(err)
-      return defaultLink
+      return [defaultLink]
    }
 }
 

@@ -43,6 +43,7 @@ const Profile = () => {
       }
       
       try {
+         toast.dismiss()
          setButtonText("Updating..")
          await axios.post("/api/v1/auth/update-password", {
             oldPassword: passwords.current,
@@ -54,6 +55,11 @@ const Profile = () => {
          console.error(err)
          toast.error(err.response?.data?.message || "Login failed")
       } finally {
+         setPasswords({
+            current: "",
+            newPassword: "",
+            confirmPassword: ""
+         })
          setTimeout(() => {
             setButtonText("Change Password")
          }, 1000)

@@ -21,6 +21,7 @@
       "express": "^4.19.2",
       "express-rate-limit": "^7.4.0",
       "geoip-lite": "^1.4.10",
+      "isbot": "^5.1.30",
       "jsonwebtoken": "^9.0.2",
       "mongoose": "^8.6.3",
       "nanoid": "^5.0.9",

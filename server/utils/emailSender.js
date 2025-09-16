@@ -35,11 +35,14 @@ export const otpSender = async (to, otp) => {
    )
 }
 
-export const welcomeSender = async (to, username) => {
+export const welcomeSender = async (to, username, req) => {
+   const domain = `${req.protocol}://${req.get("host")}`
    return await emailSender(
       to,
       "Welcome to Lonks",
-      WELCOME_TEMPLATE.replace("[[USERNAME]]", username),
+      WELCOME_TEMPLATE
+      .replace("[[USERNAME]]", username)
+      .replace("[[DOMAIN]]", domain)
    )
 }
 

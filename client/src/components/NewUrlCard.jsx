@@ -1,12 +1,15 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import visit from "../assets/visit.svg"
 import share from "../assets/share.svg"
 import copy from "../assets/copy.svg"
 import {
-   copyLink, getFaviconUrl, shareLink
+   copyLink, getFaviconUrls, shareLink
 } from "../utils/dashboardUtils"
 
 export default function NewUrlCard({ slug, destination, setUrlCreated }) {
+   const [faviconIdx, setFaviconIdx] = useState(0)
+   const favicons = getFaviconUrls(destination)
+
    useEffect(() => {
       const handleKeyDown = e => {
          if (e.keyCode === 27) setUrlCreated(false);
@@ -23,7 +26,11 @@ export default function NewUrlCard({ slug, destination, setUrlCreated }) {
 
          <div className="url-card new-url-card">
             <div className="new-url-card-header">
-               <img src={getFaviconUrl(destination)} alt="host logo" />
+               <img
+                  src={favicons[faviconIdx]}
+                  onError={() => setFaviconIdx(idx => idx + 1)}
+                  alt="host logo"
+               />
             </div>
             <div className="new-url-card-links">
                <span className="short-url" title="Short link">

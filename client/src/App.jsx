@@ -6,6 +6,7 @@ import { getCookie } from './utils/userCookie';
 import { AppContext } from "./context/AppContext"
 import NetworkStatus from './components/NetworkStatus';
 import { Toaster } from 'sonner';
+import "nprogress/nprogress.css"
 
 const App = () => {
    const { setUser } = useContext(AppContext)

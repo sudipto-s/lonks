@@ -37,6 +37,7 @@ const ForgotPassword = () => {
       }
 
       try {
+         toast.dismiss()
          const { data } = await axios.post("/api/v1/auth/forgot-password", { email })
          console.log(data)
          setEmail("")
