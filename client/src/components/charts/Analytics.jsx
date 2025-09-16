@@ -71,7 +71,13 @@ const Analytics = () => {
          } catch (err) {
             setUrl(null)
             console.log(err)
-            setError(err?.response?.data?.message || "Something went wrong")
+            if(err.status === 404) {
+               toast.error("Slug not found")
+               setError("Slug not found")
+            } else {
+               toast.error(err?.response?.data?.message || "Something went wrong")
+               setError(err?.response?.data?.message || "Something went wrong")
+            }
          } finally {
             toast.dismiss("fetch-toast")
          }
