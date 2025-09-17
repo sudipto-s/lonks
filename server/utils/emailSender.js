@@ -1,26 +1,35 @@
-import { Resend } from "resend"
+import nodemailer from "nodemailer"
 import { OTP_TEMPLATE, WELCOME_TEMPLATE } from "./templates.js"
-
-const resendClient = new Resend(process.env.RESEND_API_KEY)
 
 const emailSender = async (to, subject, html) => {
    try {
-      const { data, error } = await resendClient.emails.send({
-         from: `Lonks <onboarding@resend.dev>`,
-         to: [to],
-         replyTo: process.env.EMAIL,
+      const transporter = nodemailer.createTransport({
+         host: "smtp.gmail.com",
+         port: 465,
+         secure: true,
+         auth: {
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_APP_PASS,
+         },
+         connectionTimeout: 600   // Max setup time 6 seconds
+      })
+
+      const response = await transporter.sendMail({
+         from: `Lonks <${process.env.EMAIL}>`,
+         to,
          subject,
          html
       })
-      
-      if (error) {
-         console.log(error)
-         throw new Error("Something went wrong! Please try after some times.")
-      }
-      return data.id
+      return response.messageId
    } catch (err) {
       console.log(err)
-      throw new Error("Something went wrong! Please try after some times.")
+      if (err.responseCode === 535)
+         throw new Error("Something went wrong! Please try after some times.")
+      else if (err.code === 'ETIMEDOUT') {
+         throw new Error("Connection to email server timed out. Try again later.");
+      } else {
+         throw new Error("Failed to send email. Please try again.");
+      }
    }
 }
 
@@ -31,6 +40,7 @@ export const otpSender = async (to, otp) => {
       OTP_TEMPLATE.replace("[[OTP]]", otp)
    )
 }
+
 export const welcomeSender = async (to, username, req) => {
    const domain = `${req.protocol}://${req.get("host")}`
    return await emailSender(
@@ -41,6 +51,7 @@ export const welcomeSender = async (to, username, req) => {
       .replace("[[DOMAIN]]", domain)
    )
 }
+
 export const resetPasswordEmail = async (to, resetLink) =>
    await emailSender(
    to,
