@@ -1,29 +1,26 @@
-import nodemailer from "nodemailer"
+import { Resend } from "resend"
 import { OTP_TEMPLATE, WELCOME_TEMPLATE } from "./templates.js"
 
-const emailSender = async (to, subject, html) => {
-   const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-         user: process.env.EMAIL,
-         pass: process.env.EMAIL_APP_PASS,
-      }
-   })
+const resendClient = new Resend(process.env.RESEND_API_KEY)
 
+const emailSender = async (to, subject, html) => {
    try {
-      const response = await transporter.sendMail({
-         from: `Lonks <${process.env.EMAIL}>`,
-         to,
+      const { data, error } = await resendClient.emails.send({
+         from: `Lonks <onboarding@resend.dev>`,
+         to: [to],
+         replyTo: process.env.EMAIL,
          subject,
          html
       })
-      return response.messageId
+      
+      if (error) {
+         console.log(error)
+         throw new Error("Something went wrong! Please try after some times.")
+      }
+      return data.id
    } catch (err) {
       console.log(err)
-      if (err.responseCode === 535)
-         throw new Error("Something went wrong! Please try after some times.")
+      throw new Error("Something went wrong! Please try after some times.")
    }
 }
 
@@ -34,7 +31,6 @@ export const otpSender = async (to, otp) => {
       OTP_TEMPLATE.replace("[[OTP]]", otp)
    )
 }
-
 export const welcomeSender = async (to, username, req) => {
    const domain = `${req.protocol}://${req.get("host")}`
    return await emailSender(
@@ -45,7 +41,6 @@ export const welcomeSender = async (to, username, req) => {
       .replace("[[DOMAIN]]", domain)
    )
 }
-
 export const resetPasswordEmail = async (to, resetLink) =>
    await emailSender(
    to,

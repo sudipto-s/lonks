@@ -47,12 +47,11 @@ export const signup = async (req, res) => {
       
       const otp = crypto.randomInt(100000, 999999).toString() // 6-digit OTP
 
-      // Find emial, if exists, update otp or create new one
-      await Otp.findOneAndUpdate(
-         { email }, // Find by email
-         { otp }, // Update OTP
-         { upsert: true } // Create if not found
-      )
+      // Remove any existing OTP for this email
+      await Otp.deleteMany({ email })
+
+      // Create new OTP with expiry (handled by model default)
+      await Otp.create({ email, otp })
 
       // Send OTP via email
       await otpSender(email, otp)
@@ -72,7 +71,7 @@ export const verifyOtp = async (req, res) => {
    if (!storedOtp || storedOtp.expiresAt < Date.now())
       return res.status(400).json({ message: 'OTP expired or invalid!' })
 
-   if (storedOtp.otp !== otp)
+   if (storedOtp.otp != otp)
       return res.status(400).json({ message: 'Incorrect OTP!' })
 
    try {

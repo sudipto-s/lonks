@@ -25,6 +25,7 @@ const __dirname = path.resolve()
 //Middlewares
 app.use(cookieParser())
 app.use(express.json())
+app.set("trust proxy", 1) // trust first proxy
 app.use(express.static(path.join(__dirname, "client/dist")))
 
 // Routes
