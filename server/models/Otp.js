@@ -20,9 +20,6 @@ const otpSchema = new Schema({
    }
 }, { timestamps: true })
 
-// Indexing for fast querying
-otpSchema.index({ email: 1 })
-
 // Create a TTL index on expires field
 otpSchema.index({ expires: 1 }, { expireAfterSeconds: 0 })
 
