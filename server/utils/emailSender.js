@@ -11,7 +11,7 @@ const emailSender = async (to, subject, html) => {
             user: process.env.EMAIL,
             pass: process.env.EMAIL_APP_PASS,
          },
-         connectionTimeout: 600   // Max setup time 6 seconds
+         connectionTimeout: 6000   // Max setup time 6 seconds
       })
 
       const response = await transporter.sendMail({
