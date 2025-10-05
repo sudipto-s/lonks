@@ -45,7 +45,7 @@ const ResetPassword = () => {
 
       try {
          toast.dismiss()
-         const { data } = await axios.post("/api/v1/auth/reset-password", {
+         const { data } = await axios.post(`${import.meta.env.VITE_EMAIL_BACKEND_URL}/api/v1/auth/reset-password`, {
             token, password
          })
          toast.success(data.message)

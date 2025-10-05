@@ -54,7 +54,7 @@ const Signup = () => {
       try {
          toast.dismiss()
          setButtonText("Loading..")
-         const { data } = await axios.post("/api/v1/auth/signup", { email })
+         const { data } = await axios.post(`${import.meta.env.VITE_EMAIL_BACKEND_URL}/api/v1/auth/signup`, { email })
          console.log(data)
          setOtpSent(true)
          toast.success("OTP sent to your email")
